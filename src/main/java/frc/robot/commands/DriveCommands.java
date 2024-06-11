@@ -27,13 +27,10 @@ import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
-  private static final double DEADBAND = 0.1;
+  private static final double DEADBAND = 0.15;
 
   private DriveCommands() {}
 
-  /**
-   * Field relative drive command using two joysticks (controlling linear and angular velocities).
-   */
   public static Command joystickDrive(
       Drive drive,
       DoubleSupplier xSupplier,
@@ -49,28 +46,32 @@ public class DriveCommands {
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
-          // Square values
-          linearMagnitude = linearMagnitude * linearMagnitude;
+          // Square values for finer control at low speeds
+          linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
           omega = Math.copySign(omega * omega, omega);
 
-          // Calcaulate new linear velocity
+          // Calculate new linear velocity
           Translation2d linearVelocity =
               new Pose2d(new Translation2d(), linearDirection)
-                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                  .transformBy(
+                      new Transform2d(new Translation2d(linearMagnitude, 0.0), new Rotation2d()))
                   .getTranslation();
 
           // Convert to field relative speeds & send command
           boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-          drive.runVelocity(
+              DriverStation.getAlliance().map(alliance -> alliance == Alliance.Red).orElse(false);
+
+          Rotation2d fieldRelativeRotation =
+              isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation();
+
+          ChassisSpeeds fieldRelativeSpeeds =
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                   omega * drive.getMaxAngularSpeedRadPerSec(),
-                  isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
+                  fieldRelativeRotation);
+
+          drive.runVelocity(fieldRelativeSpeeds);
         },
         drive);
   }

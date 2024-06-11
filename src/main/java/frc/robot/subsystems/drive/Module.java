@@ -45,9 +45,9 @@ public class Module {
     switch (Constants.currentMode) {
       case REAL:
       case REPLAY:
-        driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
-        driveFeedback = new PIDController(0.05, 0.0, 0.0);
-        turnFeedback = new PIDController(7.0, 0.0, 0.0);
+        driveFeedforward = new SimpleMotorFeedforward(0.6, 0.2, 0.08);
+        driveFeedback = new PIDController(0.006, 0.0, 0.001); // Ajustar esse PID
+        turnFeedback = new PIDController(7, 0.0, 0.0);
         break;
       case SIM:
         driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
@@ -62,7 +62,7 @@ public class Module {
     }
 
     turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
-    setBrakeMode(true);
+    setBrakeMode(false);
   }
 
   public void periodic() {
@@ -83,12 +83,12 @@ public class Module {
       // Run closed loop drive control
       // Only allowed if closed loop turn control is running
       if (speedSetpoint != null) {
-        // Scale velocity based on turn error
-        //
-        // When the error is 90°, the velocity setpoint should be 0. As the wheel turns
-        // towards the setpoint, its velocity should increase. This is achieved by
-        // taking the component of the velocity in the direction of the setpoint.
-        double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
+        // Calculate the adjustment factor based on the turn error
+        double turnError = turnFeedback.getPositionError();
+        double adjustmentFactor = Math.max(0.0, 1.0 - Math.abs(turnError) / (Math.PI / 2));
+
+        // Scale velocity based on the adjustment factor
+        double adjustSpeedSetpoint = speedSetpoint * adjustmentFactor;
 
         // Run drive controller
         double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
