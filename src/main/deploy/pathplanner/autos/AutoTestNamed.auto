@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.610173614713427,
-      "y": 7.183134366268733
+      "x": 3.4429589985940536,
+      "y": 6.691732820085359
     },
     "rotation": 0
   },
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1"
+            "pathName": "NamedTest"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2"
+            "name": "Run Flywheel"
           }
         }
       ]
