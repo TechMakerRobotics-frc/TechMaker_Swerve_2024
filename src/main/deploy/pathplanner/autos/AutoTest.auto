@@ -5,7 +5,7 @@
       "x": 0.610173614713427,
       "y": 7.183134366268733
     },
-    "rotation": -178.6677801461304
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -21,12 +21,6 @@
           "type": "path",
           "data": {
             "pathName": "2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3"
           }
         }
       ]
