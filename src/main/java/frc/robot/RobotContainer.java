@@ -93,7 +93,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Run Flywheel",
         Commands.startEnd(
-                () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel)
+                () -> flywheel.runVolts(flywheelSpeedInput.get()), flywheel::stop, flywheel)
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
@@ -124,9 +124,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
     controller
         .a()
-        .onTrue(
-            Commands.startEnd(
-                () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
+        .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
+        .onFalse(new InstantCommand(flywheel::stop, flywheel));
   }
 
   /**

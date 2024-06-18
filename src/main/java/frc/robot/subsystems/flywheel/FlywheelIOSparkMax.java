@@ -13,12 +13,10 @@
 
 package frc.robot.subsystems.flywheel;
 
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -26,10 +24,10 @@ import edu.wpi.first.math.util.Units;
  * "CANSparkFlex".
  */
 public class FlywheelIOSparkMax implements FlywheelIO {
-  private static final double GEAR_RATIO = 1.5;
+  private static final double GEAR_RATIO = 1;
 
-  private final CANSparkMax leader = new CANSparkMax(15, MotorType.kBrushless);
-  private final CANSparkMax follower = new CANSparkMax(13, MotorType.kBrushless);
+  private final CANSparkMax leader = new CANSparkMax(13, MotorType.kBrushless);
+  private final CANSparkMax follower = new CANSparkMax(15, MotorType.kBrushless);
   private final RelativeEncoder encoder = leader.getEncoder();
   private final SparkPIDController pid = leader.getPIDController();
 
@@ -41,7 +39,7 @@ public class FlywheelIOSparkMax implements FlywheelIO {
     follower.setCANTimeout(250);
 
     leader.setInverted(false);
-    follower.follow(leader, false);
+    // follower.follow(leader, false);
 
     leader.enableVoltageCompensation(12.0);
     leader.setSmartCurrentLimit(30);
@@ -66,12 +64,13 @@ public class FlywheelIOSparkMax implements FlywheelIO {
 
   @Override
   public void setVelocity(double velocityRadPerSec, double ffVolts) {
-    pid.setReference(
-        Units.radiansPerSecondToRotationsPerMinute(velocityRadPerSec) * GEAR_RATIO,
-        ControlType.kVelocity,
-        0,
-        ffVolts,
-        ArbFFUnits.kVoltage);
+    leader.set(velocityRadPerSec);
+    /*pid.setReference(
+    Units.radiansPerSecondToRotationsPerMinute(velocityRadPerSec) * GEAR_RATIO,
+    ControlType.kVelocity,
+    0,
+    ffVolts,
+    ArbFFUnits.kVoltage);*/
   }
 
   @Override
@@ -84,6 +83,6 @@ public class FlywheelIOSparkMax implements FlywheelIO {
     pid.setP(kP, 0);
     pid.setI(kI, 0);
     pid.setD(kD, 0);
-    pid.setFF(0, 0);
+    pid.setFF(0.05, 0);
   }
 }
