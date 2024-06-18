@@ -1,6 +1,6 @@
 ## Hello everyone,
 
-### This is our swerve code for 2025. 
+### This is our swerve code for 2025.
 
 #### Some new features include:
 
