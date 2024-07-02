@@ -25,6 +25,10 @@ public class AlingCommand extends Command {
     photonTags.go();
   }
 
+  
+  /** 
+   * @param interrupted
+   */
   @Override
   public void end(boolean interrupted) {
     drive.stop();

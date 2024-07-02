@@ -96,6 +96,10 @@ public class PhotonTags {
     }
   }
 
+  
+  /** 
+   * @param degrees
+   */
   public void setPitchCameraDegrees(double degrees) {
     this.CAMERA_PITCH_RADIANS = Units.degreesToRadians(degrees);
   }

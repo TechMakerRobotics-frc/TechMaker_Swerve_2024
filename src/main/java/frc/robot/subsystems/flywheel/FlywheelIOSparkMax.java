@@ -48,6 +48,10 @@ public class FlywheelIOSparkMax implements FlywheelIO {
     follower.burnFlash();
   }
 
+  
+  /** 
+   * @param inputs
+   */
   @Override
   public void updateInputs(FlywheelIOInputs inputs) {
     inputs.positionRad = Units.rotationsToRadians(encoder.getPosition() / GEAR_RATIO);

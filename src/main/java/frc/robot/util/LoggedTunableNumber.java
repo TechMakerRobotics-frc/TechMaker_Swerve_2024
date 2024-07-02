@@ -116,6 +116,10 @@ public class LoggedTunableNumber implements DoubleSupplier {
     ifChanged(id, values -> action.run(), tunableNumbers);
   }
 
+  
+  /** 
+   * @return double
+   */
   @Override
   public double getAsDouble() {
     return get();
