@@ -131,6 +131,10 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnTalon.optimizeBusUtilization();
   }
 
+  
+  /** 
+   * @param inputs
+   */
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     BaseStatusSignal.refreshAll(

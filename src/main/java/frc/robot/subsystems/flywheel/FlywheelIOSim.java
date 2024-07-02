@@ -26,6 +26,10 @@ public class FlywheelIOSim implements FlywheelIO {
   private double ffVolts = 0.0;
   private double appliedVolts = 0.0;
 
+  
+  /** 
+   * @param inputs
+   */
   @Override
   public void updateInputs(FlywheelIOInputs inputs) {
     if (closedLoop) {

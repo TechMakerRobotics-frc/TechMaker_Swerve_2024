@@ -35,6 +35,10 @@ public class GyroIOPigeon2 implements GyroIO {
     pigeon.optimizeBusUtilization();
   }
 
+  
+  /** 
+   * @param inputs
+   */
   @Override
   public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = BaseStatusSignal.refreshAll(yaw, yawVelocity).equals(StatusCode.OK);

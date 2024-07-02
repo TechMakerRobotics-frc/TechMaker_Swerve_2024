@@ -51,6 +51,10 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     follower.optimizeBusUtilization();
   }
 
+  
+  /** 
+   * @param inputs
+   */
   @Override
   public void updateInputs(FlywheelIOInputs inputs) {
     BaseStatusSignal.refreshAll(
