@@ -117,8 +117,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     turnAbsolutePosition = cancoder.getAbsolutePosition();
   }
 
-  
-  /** 
+  /**
    * @param inputs
    */
   @Override

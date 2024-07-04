@@ -131,8 +131,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnTalon.optimizeBusUtilization();
   }
 
-  
-  /** 
+  /**
    * @param inputs
    */
   @Override

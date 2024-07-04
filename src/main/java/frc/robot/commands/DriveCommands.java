@@ -31,8 +31,7 @@ public class DriveCommands {
 
   private DriveCommands() {}
 
-  
-  /** 
+  /**
    * @param drive
    * @param xSupplier
    * @param ySupplier

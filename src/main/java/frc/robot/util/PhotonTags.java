@@ -56,7 +56,7 @@ public class PhotonTags {
     return result.getBestTarget();
   }
 
-  public PhotonTrackedTarget getBestTarget(){
+  public PhotonTrackedTarget getBestTarget() {
     return result.getBestTarget();
   }
 

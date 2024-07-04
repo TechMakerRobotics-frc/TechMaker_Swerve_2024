@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.photonvision.PhotonUtils;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -12,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.IdTargetHeight;
 import frc.robot.util.PhotonTags;
+import org.photonvision.PhotonUtils;
 
 public class AlingCommand extends Command {
 
@@ -50,7 +49,7 @@ public class AlingCommand extends Command {
     go();
   }
 
-  private void aling(){
+  private void aling() {
     double rotationSpeed;
     if (photonTags.hasTarget()) {
       // Calculate angular turn power
@@ -70,29 +69,29 @@ public class AlingCommand extends Command {
 
     drive.runVelocity(fieldRelativeSpeeds);
   }
-  
+
   public void go() {
     double forwardSpeed;
     if (photonTags.hasTarget()) {
-        // First calculate range
-        double range =
-            PhotonUtils.calculateDistanceToTargetMeters(
-                CAMERA_HEIGHT_METERS,
-                targetHeight.idToHeight(1),
-                CAMERA_PITCH,
-                Units.degreesToRadians(photonTags.getBestTarget().getPitch()));
+      // First calculate range
+      double range =
+          PhotonUtils.calculateDistanceToTargetMeters(
+              CAMERA_HEIGHT_METERS,
+              targetHeight.idToHeight(1),
+              CAMERA_PITCH,
+              Units.degreesToRadians(photonTags.getBestTarget().getPitch()));
 
-        forwardSpeed = range * drive.getMaxLinearSpeedMetersPerSec();
-        // Use this range as the measurement we give to the PID controller.
-        // -1.0 required to ensure positive PID controller effort _increases_ range
-        forwardSpeed = -controller.calculate(range, distanceGoal);
-        } else {
-        // If we have no targets, stay still.
-            forwardSpeed = 0;
-        }
+      forwardSpeed = range * drive.getMaxLinearSpeedMetersPerSec();
+      // Use this range as the measurement we give to the PID controller.
+      // -1.0 required to ensure positive PID controller effort _increases_ range
+      forwardSpeed = -controller.calculate(range, distanceGoal);
+    } else {
+      // If we have no targets, stay still.
+      forwardSpeed = 0;
     }
+  }
 
-  /** 
+  /**
    * @param interrupted
    */
   @Override
