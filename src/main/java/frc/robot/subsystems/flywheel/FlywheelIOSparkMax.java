@@ -48,8 +48,7 @@ public class FlywheelIOSparkMax implements FlywheelIO {
     follower.burnFlash();
   }
 
-  
-  /** 
+  /**
    * @param inputs
    */
   @Override

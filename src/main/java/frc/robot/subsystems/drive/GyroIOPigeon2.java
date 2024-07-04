@@ -35,8 +35,7 @@ public class GyroIOPigeon2 implements GyroIO {
     pigeon.optimizeBusUtilization();
   }
 
-  
-  /** 
+  /**
    * @param inputs
    */
   @Override

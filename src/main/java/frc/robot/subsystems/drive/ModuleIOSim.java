@@ -35,8 +35,7 @@ public class ModuleIOSim implements ModuleIO {
   private double driveAppliedVolts = 0.0;
   private double turnAppliedVolts = 0.0;
 
-  
-  /** 
+  /**
    * @param inputs
    */
   @Override
