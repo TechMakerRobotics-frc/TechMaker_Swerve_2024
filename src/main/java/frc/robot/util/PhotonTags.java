@@ -1,6 +1,5 @@
 package frc.robot.util;
 
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
@@ -19,27 +18,20 @@ public class PhotonTags {
   static PhotonTrackedTarget t = getBestTarget(result);
   static int tagId;
 
-  public PhotonTags() {}
-
-  public void setPitchCameraDegrees(double degrees) {
-    this.CAMERA_PITCH_RADIANS = Units.degreesToRadians(degrees);
-  }
-
   public static PhotonPipelineResult getLatestPipeline() {
-    return camera.getLatestResult(); // Certifique-se de que este método não retorne null
+    return camera != null? camera.getLatestResult() : null;
   }
 
   public static PhotonCamera getCamera() {
     return camera;
   }
 
-  public static boolean hasTarget(PhotonPipelineResult result) {
+  private static boolean hasTarget() {
     return result != null && result.hasTargets();
   }
 
-  public boolean hasTarget() {
-    PhotonPipelineResult result = getLatestPipeline();
-    return result != null && result.hasTargets();
+  public boolean hasTag(){
+    return hasTarget();
   }
 
   public static List<PhotonTrackedTarget> getTargets(PhotonPipelineResult result) {
@@ -54,20 +46,20 @@ public class PhotonTags {
     return result != null ? result.getBestTarget() : null;
   }
 
-  public static double getYaw(PhotonTrackedTarget target) {
+  private static double getYaw(PhotonTrackedTarget target) {
     return target.getYaw();
   }
 
-  public static double getPitch(PhotonTrackedTarget target) {
+  private static double getPitch(PhotonTrackedTarget target) {
     return target.getPitch();
   }
 
-  public static double getArea(PhotonTrackedTarget target) {
-    return target.getArea();
+  public static double getYaw(){
+    return getYaw();
   }
 
-  public static double getSkew(PhotonTrackedTarget target) {
-    return target.getSkew();
+  public static double getPitch(){
+    return getPitch();
   }
 
   public static List<TargetCorner> getBoundingCorners(PhotonTrackedTarget target) {
@@ -75,7 +67,7 @@ public class PhotonTags {
   }
 
   public static int getTargetId(PhotonTrackedTarget target) {
-    return target.getFiducialId();
+    return target != null? target.getFiducialId() : null;
   }
 
   public static double getPoseAbmiguity(PhotonTrackedTarget target) {
@@ -86,23 +78,14 @@ public class PhotonTags {
     return getTargetId(t);
   }
 
-  public static Transform3d getBestCamera(PhotonTrackedTarget target) {
-    return target.getBestCameraToTarget();
-  }
-
-  public static Transform3d getAlternateCamera(PhotonTrackedTarget target) {
-    return target.getAlternateCameraToTarget();
-  }
-
   public static void printToDashboard() {
-    PhotonPipelineResult p = getLatestPipeline();
-    if (hasTarget(p)) {
-      PhotonTrackedTarget t = getBestTarget(p);
+    PhotonPipelineResult latestPipeline = getLatestPipeline();
+    if (hasTarget()) {
+      PhotonTrackedTarget bestTarget = getBestTarget(latestPipeline);
       if (t != null) {
-        SmartDashboard.putNumber("TAG YAW", getYaw(t));
-        SmartDashboard.putNumber("TAG AREA", getArea(t));
-        SmartDashboard.putNumber("TAG PITCH", getPitch(t));
-        SmartDashboard.putNumber("TAG ID", getTargetId(t));
+        SmartDashboard.putNumber("TAG YAW", getYaw(bestTarget));
+        SmartDashboard.putNumber("TAG PITCH", getPitch(bestTarget));
+        SmartDashboard.putNumber("TAG ID", getTargetId(bestTarget));
       }
     }
   }
