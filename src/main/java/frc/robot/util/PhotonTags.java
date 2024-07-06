@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
@@ -81,7 +82,15 @@ public class PhotonTags {
   public int getTargetCurrentId() {
     return getTargetId(t);
   }
-
+  
+  public static Transform3d getBestCamera(PhotonTrackedTarget target) {
+    return target.getBestCameraToTarget();
+  }
+  
+  public Transform3d getCamera3d(){
+    return getBestCamera(t);
+  }
+  
   public static void printToDashboard() {
     PhotonPipelineResult latestPipeline = getLatestPipeline();
     if (hasTarget()) {

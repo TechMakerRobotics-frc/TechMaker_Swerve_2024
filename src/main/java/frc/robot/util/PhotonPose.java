@@ -29,7 +29,7 @@ public class PhotonPose {
         Rotation2d.fromDegrees(-vision.getPipelineToPose()), 
         drive.getRotation(), 
         targetPose,        //Falta adicionar um pose2d Aqui para funcionar
-        vision.getCamera() //Ainda falta adicionar um dado transform2d aqui para funcionar.
-        );
+        vision.getCamera3d() //Descobrir COMO CONSEGUIR 'pls!' (/•ิ_•ิ)/   um pose2d da câmera
+    );
     
 }
