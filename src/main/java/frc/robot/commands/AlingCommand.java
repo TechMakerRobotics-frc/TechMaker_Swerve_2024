@@ -47,7 +47,7 @@ public class AlingCommand extends Command {
 
   private void align() {
     double rotationSpeed = 0;
-    if (photonTags.hasTarget()) {
+    if (photonTags.hasTag()) {
       rotationSpeed = -turnController.calculate(photonTags.getBestTarget().getYaw(), 0);
       boolean isFlipped =
           DriverStation.getAlliance().map(alliance -> alliance == Alliance.Red).orElse(false);
@@ -62,7 +62,7 @@ public class AlingCommand extends Command {
 
   private void go() {
     double forwardSpeed = 0;
-    if (photonTags.hasTarget()) {
+    if (photonTags.hasTag()) {
       // First calculate range
       double range =
           PhotonUtils.calculateDistanceToTargetMeters(
