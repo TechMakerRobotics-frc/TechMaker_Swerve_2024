@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.IdTargetHeight;
 import frc.robot.util.PhotonTags;
+import frc.robot.util.UtilConstants.VisionConstants;
+
 import org.photonvision.PhotonUtils;
 
 public class AlingCommand extends Command {
@@ -18,8 +20,6 @@ public class AlingCommand extends Command {
   private final double distanceGoal;
   private final int tag;
   private final Drive drive;
-  private static final double CAMERA_PITCH = Units.degreesToRadians(30);
-  private static final double CAMERA_HEIGHT_METERS = 0.20;
   private IdTargetHeight targetHeight;
 
   // PID constants should be tuned per robot
@@ -66,9 +66,9 @@ public class AlingCommand extends Command {
       // First calculate range
       double range =
           PhotonUtils.calculateDistanceToTargetMeters(
-              CAMERA_HEIGHT_METERS,
+              VisionConstants.CAMERA_HEIGHT_METERS,
               targetHeight.idToHeight(tag),
-              CAMERA_PITCH,
+              VisionConstants.CAMERA_PITCH_RADIANS,
               Units.degreesToRadians(photonTags.getBestTarget().getPitch()));
       // Use this range as the measurement we give to the PID controller.
       forwardSpeed = -forwardController.calculate(range, distanceGoal);
