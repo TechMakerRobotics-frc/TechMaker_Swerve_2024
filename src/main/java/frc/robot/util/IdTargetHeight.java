@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
  */
 public class IdTargetHeight {
 
-  private double targetHeight;
+  private static double targetHeight;
 
   /**
    * Retorna a altura do alvo em metros com base no ID do AprilTag.
@@ -15,7 +15,7 @@ public class IdTargetHeight {
    * @param tagId o ID da AprilTag
    * @return a altura do alvo em metros
    */
-  public double idToHeight(int tagId) {
+  public static double idToHeight(int tagId) {
     switch (tagId) {
       case 1, 2, 5, 6, 9, 10 -> targetHeight = Units.inchesToMeters(53.38);
       case 3, 4, 7, 8 -> targetHeight = Units.inchesToMeters(57.13);

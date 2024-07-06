@@ -22,7 +22,11 @@ public class PhotonTags {
     return camera != null? camera.getLatestResult() : null;
   }
 
-  public static PhotonCamera getCamera() {
+  public double getPipelineToPose(){
+    return getBestTarget(getLatestPipeline()).getYaw();
+  }
+
+  public PhotonCamera getCamera() {
     return camera;
   }
 
