@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.*;
 import frc.robot.subsystems.drive.Drive;
 
+/**
+ * Command to move the robot to a specific position (X, Y) and heading using PID controllers.
+ */
 public class MoveXYHeading extends Command {
   private final Drive drive;
   private final double targetXMeters, targetYMeters, targetHeadingDegrees;
@@ -20,6 +23,14 @@ public class MoveXYHeading extends Command {
   private double lastTimestamp;
   private boolean finish = false;
 
+  /**
+   * Constructs a new MoveXYHeading command.
+   *
+   * @param drive The drive subsystem used by this command.
+   * @param xMeters The target position in meters on the X axis.
+   * @param yMeters The target position in meters on the Y axis.
+   * @param headingDegrees The target heading in degrees.
+   */
   public MoveXYHeading(Drive drive, double xMeters, double yMeters, double headingDegrees) {
     this.drive = drive;
     this.targetXMeters = xMeters;
@@ -28,11 +39,17 @@ public class MoveXYHeading extends Command {
     addRequirements(drive);
   }
 
+  /**
+   * Initializes the command by resetting the last timestamp.
+   */
   @Override
   public void initialize() {
     lastTimestamp = Timer.getFPGATimestamp();
   }
 
+  /**
+   * Executes the command, calculating the necessary velocities using PID controllers and applying them to the drive subsystem.
+   */
   @Override
   public void execute() {
     Pose2d currentPose = drive.getPose();
@@ -55,11 +72,21 @@ public class MoveXYHeading extends Command {
         || temp >= TimeK.TIME_OUT;
   }
 
+  /**
+   * Ends the command, stopping the drive subsystem.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
   @Override
   public void end(boolean interrupted) {
     drive.stop();
   }
 
+  /**
+   * Determines whether the command has finished.
+   *
+   * @return true if the command has finished, false otherwise.
+   */
   @Override
   public boolean isFinished() {
     return finish;
