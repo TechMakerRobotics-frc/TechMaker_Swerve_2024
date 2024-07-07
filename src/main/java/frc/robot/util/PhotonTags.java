@@ -3,6 +3,8 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.UtilConstants.VisionConstants;
+
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -14,16 +16,16 @@ public class PhotonTags {
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
-  static PhotonCamera camera = new PhotonCamera("AprilTags");
+  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
   static PhotonPipelineResult result = getLatestPipeline();
   static PhotonTrackedTarget t = getBestTarget(result);
   static int tagId;
 
   public static PhotonPipelineResult getLatestPipeline() {
-    return camera != null? camera.getLatestResult() : null;
+    return camera != null ? camera.getLatestResult() : null;
   }
 
-  public double getPipelineToPose(){
+  public double getPipelineToPose() {
     return getBestTarget(getLatestPipeline()).getYaw();
   }
 
@@ -35,7 +37,7 @@ public class PhotonTags {
     return result != null && result.hasTargets();
   }
 
-  public boolean hasTag(){
+  public boolean hasTag() {
     return hasTarget();
   }
 
@@ -59,11 +61,11 @@ public class PhotonTags {
     return target.getPitch();
   }
 
-  public static double getYaw(){
+  public static double getYaw() {
     return getYaw();
   }
 
-  public static double getPitch(){
+  public static double getPitch() {
     return getPitch();
   }
 
@@ -72,7 +74,7 @@ public class PhotonTags {
   }
 
   public static int getTargetId(PhotonTrackedTarget target) {
-    return target != null? target.getFiducialId() : null;
+    return target != null ? target.getFiducialId() : null;
   }
 
   public static double getPoseAbmiguity(PhotonTrackedTarget target) {
@@ -82,15 +84,15 @@ public class PhotonTags {
   public int getTargetCurrentId() {
     return getTargetId(t);
   }
-  
+
   public static Transform3d getBestCamera(PhotonTrackedTarget target) {
     return target.getBestCameraToTarget();
   }
-  
-  public Transform3d getCamera3d(){
+
+  public Transform3d getCamera3d() {
     return getBestCamera(t);
   }
-  
+
   public static void printToDashboard() {
     PhotonPipelineResult latestPipeline = getLatestPipeline();
     if (hasTarget()) {
