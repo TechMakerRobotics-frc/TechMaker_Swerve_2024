@@ -14,13 +14,13 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.MoveXYHeading;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.util.TunningPID;
@@ -138,6 +138,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("AutoTestNamed");
+    // return new PathPlannerAuto("AutoTestNamed");
+    return new MoveXYHeading(drive, 0, 0, 90);
   }
 }
