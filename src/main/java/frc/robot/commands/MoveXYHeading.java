@@ -13,7 +13,7 @@ import frc.robot.subsystems.drive.Drive;
 /** Command to move the robot to a specific position (X, Y) and heading using PID controllers. */
 public class MoveXYHeading extends Command {
   private final Drive drive;
-  private final double targetXMeters, targetYMeters, targetHeadingDegrees;
+  private double targetXMeters, targetYMeters, targetHeadingDegrees;
 
   private final PIDController xController = new PIDController(KMoveX.KP, KMoveX.KI, KMoveX.KD);
   private final PIDController yController = new PIDController(KMoveY.KP, KMoveY.KI, KMoveY.KD);
@@ -26,12 +26,10 @@ public class MoveXYHeading extends Command {
       angVelocity,
       errorX,
       errorY,
-      errorHeading,
-      currentHeading;
+      errorHeading;
   private boolean finish = false;
 
   private Pose2d currentPose;
-  private double currentPoseX, currentPoseY;
 
   /**
    * Constructs a new MoveXYHeading command.
@@ -67,10 +65,10 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
-    currentPose = drive.getPose();
-    currentHeading = drive.getRotation().getDegrees();
+    double currentHeading = drive.getRotation().getDegrees();
 
     while (finish == false) {
+      currentPose = drive.getPose();
       errorX = targetXMeters - currentPose.getX();
       errorY = targetYMeters - currentPose.getY();
       errorHeading = targetHeadingDegrees - currentHeading;
@@ -89,8 +87,8 @@ public class MoveXYHeading extends Command {
     drive.runVelocity(new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity)));
 
     finish =
-        (Math.abs(xVelocity) < 0.1 && Math.abs(yVelocity) < 0.1 && Math.abs(angVelocity) < 0.1)
-            || temp >= TimeK.TIME_OUT;
+        (Math.abs(errorX) < 0.1 && Math.abs(errorY) < 0.1 && Math.abs(errorHeading) < 0.1)
+        || temp >= TimeK.TIME_OUT;
   }
 
   /**
