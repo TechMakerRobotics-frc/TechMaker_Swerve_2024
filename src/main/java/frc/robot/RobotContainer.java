@@ -44,11 +44,9 @@ public class RobotContainer {
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
-  private final TunningPID tunningPID;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    tunningPID = new TunningPID();
+    new TunningPID();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
