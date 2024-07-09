@@ -68,7 +68,7 @@ public class MoveXYHeading extends Command {
     drive.runVelocity(new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity)));
 
     finish =
-        (Math.abs(errorX) < 0.1 && Math.abs(errorY) < 0.1 && Math.abs(errorHeading) < 0.1)
+        (Math.abs(xVelocity) < 0.1 && Math.abs(yVelocity) < 0.1 && Math.abs(angVelocity) < 0.1)
         || temp >= TimeK.TIME_OUT;
   }
 
