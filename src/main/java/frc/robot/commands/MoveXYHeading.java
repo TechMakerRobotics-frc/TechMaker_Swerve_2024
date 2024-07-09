@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.*;
 import frc.robot.subsystems.drive.Drive;
 
-/**
- * Command to move the robot to a specific position (X, Y) and heading using PID controllers.
- */
+/** 
+ * Command to move the robot to a specific position (X, Y) and heading using PID controllers. 
+*/
 public class MoveXYHeading extends Command {
   private final Drive drive;
   private final double targetXMeters, targetYMeters, targetHeadingDegrees;
@@ -39,16 +39,17 @@ public class MoveXYHeading extends Command {
     addRequirements(drive);
   }
 
-  /**
-   * Initializes the command by resetting the last timestamp.
-   */
+  /** 
+   * Initializes the command by resetting the last timestamp. 
+  */
   @Override
   public void initialize() {
     lastTimestamp = Timer.getFPGATimestamp();
   }
 
   /**
-   * Executes the command, calculating the necessary velocities using PID controllers and applying them to the drive subsystem.
+   * Executes the command, calculating the necessary velocities using PID controllers and applying
+   * them to the drive subsystem.
    */
   @Override
   public void execute() {
@@ -69,7 +70,7 @@ public class MoveXYHeading extends Command {
 
     finish =
         (Math.abs(xVelocity) < 0.1 && Math.abs(yVelocity) < 0.1 && Math.abs(angVelocity) < 0.1)
-        || temp >= TimeK.TIME_OUT;
+            || temp >= TimeK.TIME_OUT;
   }
 
   /**

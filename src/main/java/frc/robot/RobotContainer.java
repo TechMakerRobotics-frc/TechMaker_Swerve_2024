@@ -128,6 +128,8 @@ public class RobotContainer {
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
+    controller.b().onTrue(new MoveXYHeading(drive, 1, 0, 0));
+    controller.y().onTrue(new MoveXYHeading(drive, 0, 1, 0));
   }
 
   /**
@@ -137,6 +139,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return new PathPlannerAuto("AutoTestNamed");
-    return new MoveXYHeading(drive, 1, 0, 0);
+    return new MoveXYHeading(drive, 0, 0, 0);
   }
 }
