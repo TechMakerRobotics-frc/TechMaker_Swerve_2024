@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AlingCommand;
+import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
@@ -45,11 +45,9 @@ public class RobotContainer {
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
-  private final TunningPID tunningPID;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    tunningPID = new TunningPID();
+    new TunningPID();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -132,7 +130,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
 
-    controller.rightBumper().whileTrue(new AlingCommand(2.0, 7, drive));
+    controller.rightBumper().whileTrue(new AlignCommand(20, drive));
   }
 
   /**

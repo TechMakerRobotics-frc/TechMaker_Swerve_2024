@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.UtilConstants.VisionConstants;
-
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -17,91 +16,97 @@ public class PhotonTags {
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
-  static PhotonPipelineResult result = getLatestPipeline();
-  static PhotonTrackedTarget t = getBestTarget(result);
+  PhotonPipelineResult result = getLatestPipeline();
+  PhotonTrackedTarget t = getBestTarget(result);
   static int tagId;
 
   public static PhotonPipelineResult getLatestPipeline() {
-    return camera != null ? camera.getLatestResult() : null;
+    return camera.getLatestResult();
   }
 
-  public double getPipelineToPose() {
-    return getBestTarget(getLatestPipeline()).getYaw();
-  }
-
-  public PhotonCamera getCamera() {
+  public static PhotonCamera getCamera() {
     return camera;
   }
 
-  private static boolean hasTarget() {
-    return result != null && result.hasTargets();
-  }
-
-  public boolean hasTag() {
-    return hasTarget();
+  // Checks if there is a target in vision
+  public static boolean hasTarget(PhotonPipelineResult result) {
+    return result.hasTargets();
   }
 
   public static List<PhotonTrackedTarget> getTargets(PhotonPipelineResult result) {
-    return result != null ? result.getTargets() : List.of();
+    return result.getTargets();
   }
 
   public static PhotonTrackedTarget getBestTarget(PhotonPipelineResult result) {
-    return result != null ? result.getBestTarget() : null;
+    return result.getBestTarget();
   }
 
-  public PhotonTrackedTarget getBestTarget() {
-    return result != null ? result.getBestTarget() : null;
-  }
-
-  private static double getYaw(PhotonTrackedTarget target) {
+  // The yaw of the target in degrees (positive right)
+  public static double getYaw(PhotonTrackedTarget target) {
     return target.getYaw();
   }
 
-  private static double getPitch(PhotonTrackedTarget target) {
+  // The pitch of the target in degrees (positive up)
+  public static double getPitch(PhotonTrackedTarget target) {
     return target.getPitch();
   }
 
-  public static double getYaw() {
-    return getYaw();
+  // The area (how much of the camera feed the bounding box takes up) as a percent
+  // (0-100)
+  public static double getArea(PhotonTrackedTarget target) {
+    return target.getArea();
   }
 
-  public static double getPitch() {
-    return getPitch();
+  // The skew of the target in degrees (counter-clockwise positive)
+  public static double getSkew(PhotonTrackedTarget target) {
+    return target.getSkew();
   }
 
+  // The 4 corners of the minimum bounding box rectangle
   public static List<TargetCorner> getBoundingCorners(PhotonTrackedTarget target) {
     return target.getDetectedCorners();
   }
 
+  // The camera to target transform (Pose)
+  // For some reason cannot get pose for reflectiveTape
+  // public Transform2d getPose(PhotonTrackedTarget target){
+  // return target.getCameraToTarget();
+  // }
+
+  // Get id of tag
   public static int getTargetId(PhotonTrackedTarget target) {
-    return target != null ? target.getFiducialId() : null;
+    return target.getFiducialId();
   }
 
+  // How ambiguous the pose is????
   public static double getPoseAbmiguity(PhotonTrackedTarget target) {
     return target.getPoseAmbiguity();
   }
 
-  public int getTargetCurrentId() {
-    return getTargetId(t);
-  }
-
+  /*
+   * Get the transform that maps camera space (X = forward, Y = left, Z = up)
+   * to object/fiducial tag space (X forward, Y left, Z up) with the lowest
+   * reprojection error
+   */
   public static Transform3d getBestCamera(PhotonTrackedTarget target) {
     return target.getBestCameraToTarget();
   }
 
-  public Transform3d getCamera3d() {
-    return getBestCamera(t);
+  /*
+   * Get the transform that maps camera space (X = forward, Y = left, Z = up)
+   * to object/fiducial tag space (X forward, Y left, Z up) with the lowest
+   * highest error
+   */
+  public static Transform3d getAlternateCamera(PhotonTrackedTarget target) {
+    return target.getAlternateCameraToTarget();
   }
 
-  public static void printToDashboard() {
-    PhotonPipelineResult latestPipeline = getLatestPipeline();
-    if (hasTarget()) {
-      PhotonTrackedTarget bestTarget = getBestTarget(latestPipeline);
-      if (t != null) {
-        SmartDashboard.putNumber("TAG YAW", getYaw(bestTarget));
-        SmartDashboard.putNumber("TAG PITCH", getPitch(bestTarget));
-        SmartDashboard.putNumber("TAG ID", getTargetId(bestTarget));
-      }
+  public void printToDashboard() {
+    PhotonPipelineResult p = getLatestPipeline();
+    if (hasTarget(p)) {
+      PhotonTrackedTarget t = getBestTarget(p);
+      SmartDashboard.putNumber("NOTE YAW", getYaw(t));
+      SmartDashboard.putNumber("NOTE PITCH", getPitch(t));
     }
   }
 }
