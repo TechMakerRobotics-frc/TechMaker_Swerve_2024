@@ -9,11 +9,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.commands.CommandConstants.AlignConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.PhotonTags;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+import frc.robot.util.PhotonVision.PhotonTags;
+
+import org.photonvision.targeting.*;
 
 public class AlignCommand extends Command {
   private static PIDController vyAmpController =
