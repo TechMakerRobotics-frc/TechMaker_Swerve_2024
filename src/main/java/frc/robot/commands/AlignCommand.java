@@ -50,7 +50,7 @@ public class AlignCommand extends Command {
       SmartDashboard.putNumber("Angular", vo);
       SmartDashboard.putNumber("X", vy);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
-      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vy, 0, vo, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vo, vy, 0, drive.getRotation()));
 
       if (vyAmpController.atSetpoint()) {}
     }
