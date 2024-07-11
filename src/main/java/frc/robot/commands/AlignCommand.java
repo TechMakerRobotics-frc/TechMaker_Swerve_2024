@@ -23,6 +23,7 @@ public class AlignCommand extends Command {
   private double _timeout;
   private Command defaultCommand;
 
+  private boolean isFinished = false;
   public AlignCommand(double timeout, Drive drive) {
     this.drive = drive;
     vyAmpController.setSetpoint(AlignConstants.kTargetArea);
@@ -54,11 +55,13 @@ public class AlignCommand extends Command {
 
       if (vyAmpController.atSetpoint()) {}
     }
+
+    isFinished = timer.get() >= _timeout;
   }
 
   @Override
   public boolean isFinished() {
-    return timer.get() >= _timeout;
+    return isFinished;
   }
 
   @Override
