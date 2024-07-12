@@ -7,15 +7,17 @@ public final class CommandConstants {
     public static final double kvyStageI = 0.0;
     public static final double kvyStageD = 0.0;
     public static final double kDistanceFromSpeakerToShoot = 2.60;
+    public static final double CAMERA_HEIGHT_METERS = 0.50;
+    public static final double CAMERA_PITCH_RADIANS = Math.toRadians(30);
 
-    public static final double kvyAmpP = 0.08;
-    public static final double kvyAmpI = 0.0;
-    public static final double kvyAmpD = 0.0;
+    public static final double LINEAR_P = 0.1;
+    public static final double LINEAR_D = 0.0;
+
+    public static final double ANGULAR_P = 0.1;
+    public static final double ANGULAR_D = 0.0;
+
     public static final double kTargetArea = 1.20;
 
-    public static final double kvyNoteP = 0.03;
-    public static final double kvyNoteI = 0.002;
-    public static final double kvyNoteD = 0.0;
     public static final double kMaxPitch = -21;
   }
 }
