@@ -25,7 +25,7 @@ public class IdTargetHeight {
     }
   }
 
-  public double getTagMeters(){
-     return targetHeight;
+  public double getTagMeters() {
+    return targetHeight;
   }
 }
