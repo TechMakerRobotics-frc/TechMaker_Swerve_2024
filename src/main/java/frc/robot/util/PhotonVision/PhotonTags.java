@@ -1,6 +1,5 @@
 package frc.robot.util.PhotonVision;
 
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,8 +46,16 @@ public class PhotonTags {
     return target.getYaw();
   }
 
+  public double getYawNStatic(PhotonTrackedTarget target) {
+    return target.getYaw();
+  }
+
   // The pitch of the target in degrees (positive up)
   public static double getPitch(PhotonTrackedTarget target) {
+    return target.getPitch();
+  }
+
+  public double getPitchNStatic(PhotonTrackedTarget target) {
     return target.getPitch();
   }
 

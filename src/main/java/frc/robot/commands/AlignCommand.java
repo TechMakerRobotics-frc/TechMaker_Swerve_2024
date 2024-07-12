@@ -15,7 +15,7 @@ public class AlignCommand extends Command {
   private static PIDController vYSpeakerController =
       new PIDController(
           AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
-  //private static PIDController omegaControler = new PIDController(0.5, 0, 0);
+  // private static PIDController omegaControler = new PIDController(0.5, 0, 0);
   private final Timer timer = new Timer();
   private double _timeout;
   private Command defaultCommand;
@@ -44,10 +44,10 @@ public class AlignCommand extends Command {
 
     if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-      
+
       double vx = PhotonTags.getYaw(t) / 20;
       double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-      //double omega = PhotonTags.getPitch(t);
+      // double omega = PhotonTags.getPitch(t);
 
       SmartDashboard.putNumber("X", vx);
       SmartDashboard.putNumber("Y", vy);
