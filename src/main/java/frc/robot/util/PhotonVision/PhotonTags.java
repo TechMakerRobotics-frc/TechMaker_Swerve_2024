@@ -1,5 +1,6 @@
 package frc.robot.util.PhotonVision;
 
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -66,12 +67,6 @@ public class PhotonTags {
   public static List<TargetCorner> getBoundingCorners(PhotonTrackedTarget target) {
     return target.getDetectedCorners();
   }
-
-  // The camera to target transform (Pose)
-  // For some reason cannot get pose for reflectiveTape
-  // public Transform2d getPose(PhotonTrackedTarget target){
-  // return target.getCameraToTarget();
-  // }
 
   // Get id of tag
   public static int getTargetId(PhotonTrackedTarget target) {
