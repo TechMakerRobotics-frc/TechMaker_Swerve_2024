@@ -146,7 +146,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
         .onFalse(new InstantCommand(intake::stop, intake));
 
-    controller.rightBumper().whileTrue(new AlignCommand(20000, drive));
+    controller.rightBumper().whileTrue(new AlignCommand(20000, 7, 2, drive));
   }
 
   /**

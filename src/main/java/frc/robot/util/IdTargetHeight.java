@@ -13,7 +13,7 @@ public class IdTargetHeight {
    * @param tagId o ID da AprilTag
    * @return a altura do alvo em metros
    */
-  public static double idToHeight(int tagId) {
+  public IdTargetHeight(int tagId) {
     switch (tagId) {
       case 1, 2, 5, 6, 9, 10 -> targetHeight = Units.inchesToMeters(53.38);
       case 3, 4, 7, 8 -> targetHeight = Units.inchesToMeters(57.13);
@@ -23,6 +23,9 @@ public class IdTargetHeight {
         targetHeight = 0.0;
       }
     }
-    return targetHeight;
+  }
+
+  public double getTagMeters(){
+     return targetHeight;
   }
 }
