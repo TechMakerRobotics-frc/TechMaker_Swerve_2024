@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,26 +12,26 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AlignCommand extends Command {
-  private static PIDController vyAmpController =
+  private static PIDController vYSpeakerController =
       new PIDController(
-          AlignConstants.kvyStageP, AlignConstants.kvyStageI, AlignConstants.kvyStageD);
-  private static PIDController omegaControler = new PIDController(0.5, 0, 0);
-  private Drive drive;
+          AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
+  //private static PIDController omegaControler = new PIDController(0.5, 0, 0);
   private final Timer timer = new Timer();
   private double _timeout;
   private Command defaultCommand;
+  private Drive drive;
 
   private boolean isFinished = false;
 
   public AlignCommand(double timeout, Drive drive) {
     this.drive = drive;
-    vyAmpController.setSetpoint(AlignConstants.kTargetArea);
+    vYSpeakerController.setSetpoint(AlignConstants.kTargetArea);
     _timeout = timeout;
   }
 
   @Override
   public void initialize() {
-    vyAmpController.reset();
+    vYSpeakerController.reset();
     timer.reset();
     timer.start();
     defaultCommand = drive.getDefaultCommand();
@@ -48,16 +44,17 @@ public class AlignCommand extends Command {
 
     if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-      SmartDashboard.putData("PID AMP", vyAmpController);
+      
       double vx = PhotonTags.getYaw(t) / 20;
-      double omega = PhotonTags.getPitch(t);
-      double vy = vyAmpController.calculate(PhotonTags.getArea(t));
-      SmartDashboard.putNumber("Angular", vx);
-      SmartDashboard.putNumber("X", vy);
-      SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, 0, drive.getRotation()));
+      double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
+      //double omega = PhotonTags.getPitch(t);
 
-      if (vyAmpController.atSetpoint()) {}
+      SmartDashboard.putNumber("X", vx);
+      SmartDashboard.putNumber("Y", vy);
+      SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
+      SmartDashboard.putData("PID ", vYSpeakerController);
+
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, 0, drive.getRotation()));
     }
 
     isFinished = timer.get() >= _timeout;
@@ -70,7 +67,6 @@ public class AlignCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-
     drive.runVelocity(new ChassisSpeeds());
     drive.setDefaultCommand(defaultCommand);
   }
