@@ -130,7 +130,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
 
-    controller.rightBumper().whileTrue(new AlignCommand(20000, 7, 2, drive));
+    controller.rightBumper().whileTrue(new AlignCommand(20000, drive));
   }
 
   /**
