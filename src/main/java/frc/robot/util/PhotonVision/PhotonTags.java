@@ -118,19 +118,27 @@ public class PhotonTags {
     return target.getPoseAmbiguity();
   }
 
-  /*
-   * Get the transform that maps camera space (X = forward, Y = left, Z = up)
+  /**
+   * The transform that maps camera space (X = forward, Y = left, Z = up)
    * to object/fiducial tag space (X forward, Y left, Z up) with the lowest
-   * reprojection error
+   * reprojection error.
+   * 
+   * @param target the used target
+   * 
+   * @return Best camera to target
    */
   public static Transform3d getBestCamera(PhotonTrackedTarget target) {
     return target.getBestCameraToTarget();
   }
 
-  /*
+  /**
    * Get the transform that maps camera space (X = forward, Y = left, Z = up)
    * to object/fiducial tag space (X forward, Y left, Z up) with the lowest
    * highest error
+   * 
+   * @param target the used target
+   * 
+   * @rerturn Alternate camera to target
    */
   public static Transform3d getAlternateCamera(PhotonTrackedTarget target) {
     return target.getAlternateCameraToTarget();
