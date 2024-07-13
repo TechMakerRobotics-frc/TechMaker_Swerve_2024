@@ -3,14 +3,14 @@ package frc.robot.commands;
 public final class CommandConstants {
 
   public static final class KMoveX {
-    public static final double KP = 0.9;
-    public static final double KI = 0.1;
+    public static final double KP = 0.6;
+    public static final double KI = 0.0;
     public static final double KD = 0;
   }
 
   public static final class KMoveY {
-    public static final double KP = 0.9;
-    public static final double KI = 0.1;
+    public static final double KP = 0.6;
+    public static final double KI = 0.0;
     public static final double KD = 0;
   }
 

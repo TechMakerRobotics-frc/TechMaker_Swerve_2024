@@ -255,7 +255,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Resets the current odometry pose to zero position in the field. */
-  public void resetPose2d(){
+  public void resetPose2d() {
     setPose(new Pose2d(getPose().getTranslation(), new Rotation2d()));
   }
 

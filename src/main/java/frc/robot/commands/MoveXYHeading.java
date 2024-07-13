@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,16 +17,9 @@ public class MoveXYHeading extends Command {
   private final PIDController headingController =
       new PIDController(KMoveH.KP, KMoveH.KI, KMoveH.KD);
 
-  private double lastTimestamp,
-      xVelocity,
-      yVelocity,
-      angVelocity,
-      errorX,
-      errorY,
-      errorHeading;
+  private double lastTimestamp, xVelocity, yVelocity, angVelocity;
   private boolean finish = false;
-
-  private Pose2d currentPose;
+  private Command defaultCommand;
 
   /**
    * Constructs a new MoveXYHeading command.
@@ -37,7 +29,7 @@ public class MoveXYHeading extends Command {
    * @param yMeters The target position in meters on the Y axis.
    * @param headingDegrees The target heading in degrees.
    */
-  public MoveXYHeading(Drive drive, double xMeters, double yMeters, double headingDegrees) {
+  public MoveXYHeading(double xMeters, double yMeters, double headingDegrees, Drive drive) {
     this.drive = drive;
     this.targetXMeters = xMeters;
     this.targetYMeters = yMeters;
@@ -49,7 +41,7 @@ public class MoveXYHeading extends Command {
   @Override
   public void initialize() {
     lastTimestamp = Timer.getFPGATimestamp();
-    drive.resetPose2d();
+    defaultCommand = drive.getDefaultCommand();
   }
 
   /**
@@ -58,30 +50,17 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
-    double currentHeading = drive.getRotation().getDegrees();
+    xVelocity = xController.calculate(targetXMeters);
+    yVelocity = yController.calculate(targetYMeters);
+    angVelocity = headingController.calculate(targetHeadingDegrees);
 
-    while (finish == false) {
-      currentPose = drive.getPose();
-      errorX = targetXMeters - currentPose.getX();
-      errorY = targetYMeters - currentPose.getY();
-      errorHeading = targetHeadingDegrees - currentHeading;
-    }
-
-    if (errorX >= 0.08 && errorY >= 0.08) {
-      xVelocity = xController.calculate(currentPose.getX(), errorX);
-      yVelocity = yController.calculate(currentPose.getY(), errorY);
-      angVelocity = headingController.calculate(currentHeading, errorHeading);
-    } else {
-      drive.stop();
-      finish = true;
-    }
     double temp = Timer.getFPGATimestamp() - lastTimestamp;
 
-    drive.runVelocity(new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity)));
+    ChassisSpeeds speed = new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity));
 
-    finish =
-        (Math.abs(errorX) < 0.1 && Math.abs(errorY) < 0.1 && Math.abs(errorHeading) < 0.1)
-        || temp >= TimeK.TIME_OUT;
+    drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speed, drive.getRotation()));
+
+    finish = temp >= TimeK.TIME_OUT;
   }
 
   /**
@@ -91,7 +70,8 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    drive.stop();
+    drive.runVelocity(new ChassisSpeeds());
+    drive.setDefaultCommand(defaultCommand);
   }
 
   /**
