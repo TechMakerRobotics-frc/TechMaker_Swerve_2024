@@ -47,14 +47,14 @@ public class AlignCommand extends Command {
 
       double vx = PhotonTags.getYaw(t) / 20;
       double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-      // double omega = PhotonTags.getPitch(t);
+      double omega = PhotonTags.getSkew(t) / 20;
 
       SmartDashboard.putNumber("X", vx);
       SmartDashboard.putNumber("Y", vy);
       SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
       SmartDashboard.putData("PID ", vYSpeakerController);
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, 0, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }
 
     isFinished = timer.get() >= _timeout;
