@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
+import frc.robot.subsystems.intake.*;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -36,6 +37,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Flywheel flywheel;
+  private final Intake intake;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -43,6 +45,8 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+  private final LoggedDashboardNumber intakeSpeedInput =
+      new LoggedDashboardNumber("Intake Speed", 1500.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -64,6 +68,7 @@ public class RobotContainer {
         // new ModuleIOTalonFX(2),
         // new ModuleIOTalonFX(3));
         flywheel = new Flywheel(new FlywheelIOSparkMax());
+        intake = new Intake(new IntakeIOSparkMax());
         break;
 
       case SIM:
@@ -76,6 +81,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -88,6 +94,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
+        intake = new Intake(new IntakeIO() {});
         break;
     }
 
@@ -96,6 +103,11 @@ public class RobotContainer {
         "Run Flywheel",
         Commands.startEnd(
                 () -> flywheel.runVolts(flywheelSpeedInput.get()), flywheel::stop, flywheel)
+            .withTimeout(5.0));
+    NamedCommands.registerCommand(
+        "Run Intake",
+        Commands.startEnd(
+                () -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
@@ -128,6 +140,10 @@ public class RobotContainer {
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
+    controller
+        .y()
+        .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
+        .onFalse(new InstantCommand(intake::stop, intake));
   }
 
   /**
