@@ -20,6 +20,11 @@ public class PhotonTags {
   PhotonTrackedTarget t = getBestTarget(result);
   static int tagId;
 
+  /**
+   * get the latest rusult of the camera.
+   * 
+   * @return camera latest result
+   */
   public static PhotonPipelineResult getLatestPipeline() {
     return camera.getLatestResult();
   }
@@ -41,32 +46,60 @@ public class PhotonTags {
     return result.getBestTarget();
   }
 
-  // The yaw of the target in degrees (positive right)
+  /**
+   * @param target the used target
+   *  
+   * @return The yaw of the target in degrees (positive right)
+  */
   public static double getYaw(PhotonTrackedTarget target) {
     return target.getYaw();
   }
 
+  /** 
+   * Method not static.
+   * @param target the used target
+   * 
+   * @return The yaw of the target in degrees (positive right)
+  */
   public double getYawNStatic(PhotonTrackedTarget target) {
     return target.getYaw();
   }
 
-  // The pitch of the target in degrees (positive up)
+  /** 
+   * @param target the used target
+   * 
+   * @return The pitch of the target in degrees (positive up)
+   */
   public static double getPitch(PhotonTrackedTarget target) {
     return target.getPitch();
   }
 
+  /**
+   * Method not static.
+   * 
+   * @param target the used target
+   *  
+   * @return The pitch of the target in degrees (positive up)
+   */
   public double getPitchNStatic(PhotonTrackedTarget target) {
     return target.getPitch();
   }
 
-  // The area (how much of the camera feed the bounding box takes up) as a percent
-  // (0-100)
-  public static double getArea(PhotonTrackedTarget target) {
+  /**
+   * @param target the used target
+   *  
+   * @return The area (how much of the camera feed the bounding box takes up) as a percent (0-100)
+  */
+   public static double getArea(PhotonTrackedTarget target) {
     return target.getArea();
   }
 
-  // The skew of the target in degrees (counter-clockwise positive)
-  public static double getSkew(PhotonTrackedTarget target) {
+  /**
+   * @param target the used target
+   * 
+   * @return The skew of the target in degrees (counter-clockwise positive)
+  */
+   public static double getSkew(PhotonTrackedTarget target) {
     return target.getSkew();
   }
 
