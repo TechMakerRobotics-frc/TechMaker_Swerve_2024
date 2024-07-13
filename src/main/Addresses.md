@@ -1,7 +1,8 @@
 # Robot Addresses
 
 ## Flywheel
-- **ID**: `flywheel_id`
+- **Leader ID - 13**: `leader_flywheel_id`
+- **Follower ID - 15**: `follower_flywheel_id`
 
 ## Swerve Modules
 - **Front Left Module**
