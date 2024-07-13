@@ -13,8 +13,8 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Mode;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,6 +25,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -111,6 +112,9 @@ public class RobotContainer {
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
+    if(Constants.currentMode == Mode.SIM){
+      new PhotonSim(drive);
+    }
   }
 
   /**
@@ -155,6 +159,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("AutoTestNamed");
+    // return new PathPlannerAuto("AutoTestNamed");
+    return new AlignCommand(2000, drive);
   }
 }
