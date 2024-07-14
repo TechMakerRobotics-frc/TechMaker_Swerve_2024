@@ -23,11 +23,10 @@ public class MoveXYHeading extends Command {
 
   /**
    * Constructs a new MoveXYHeading command.
-   *
-   * @param drive The drive subsystem used by this command.
    * @param xMeters The target position in meters on the X axis.
    * @param yMeters The target position in meters on the Y axis.
    * @param headingDegrees The target heading in degrees.
+   * @param drive The drive subsystem used by this command.
    */
   public MoveXYHeading(double xMeters, double yMeters, double headingDegrees, Drive drive) {
     this.drive = drive;
