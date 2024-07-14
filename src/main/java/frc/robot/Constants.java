@@ -23,6 +23,7 @@ package frc.robot;
  */
 public final class Constants {
   public static final boolean tuningMode = true;
+  public static final boolean brakeMode = false;
 
   public static enum Mode {
     /** Running on a real robot. */

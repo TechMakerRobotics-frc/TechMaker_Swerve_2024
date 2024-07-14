@@ -18,7 +18,7 @@ public class MoveXYHeading extends Command {
       new PIDController(KMoveH.KP, KMoveH.KI, KMoveH.KD);
 
   private double lastTimestamp, xVelocity, yVelocity, angVelocity;
-  private boolean finish = false;
+  private boolean finish;
   private Command defaultCommand;
 
   /**
@@ -41,6 +41,7 @@ public class MoveXYHeading extends Command {
   public void initialize() {
     lastTimestamp = Timer.getFPGATimestamp();
     defaultCommand = drive.getDefaultCommand();
+    finish = false;
   }
 
   /**
@@ -69,8 +70,8 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    drive.runVelocity(new ChassisSpeeds());
     drive.setDefaultCommand(defaultCommand);
+    drive.stopWithX();
   }
 
   /**
