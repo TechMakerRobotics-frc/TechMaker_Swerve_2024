@@ -59,8 +59,8 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
    *
    * @param gearbox The type of and number of motors in the intake gearbox.
    * @param gearing The gearing of the intake (numbers greater than 1 represent reductions).
-   * @param jKgMetersSquared The moment of inertia of the intake. If this is unknown, use the
-   *     {@link #IntakeSim(LinearSystem, DCMotor, double, Matrix)} constructor.
+   * @param jKgMetersSquared The moment of inertia of the intake. If this is unknown, use the {@link
+   *     #IntakeSim(LinearSystem, DCMotor, double, Matrix)} constructor.
    */
   public IntakeSim(DCMotor gearbox, double gearing, double jKgMetersSquared) {
     super(LinearSystemId.createFlywheelSystem(gearbox, jKgMetersSquared, gearing));
@@ -73,8 +73,8 @@ public class IntakeSim extends LinearSystemSim<N1, N1, N1> {
    *
    * @param gearbox The type of and number of motors in the intake gearbox.
    * @param gearing The gearing of the intake (numbers greater than 1 represent reductions).
-   * @param jKgMetersSquared The moment of inertia of the intake. If this is unknown, use the
-   *     {@link #IntakeSim(LinearSystem, DCMotor, double, Matrix)} constructor.
+   * @param jKgMetersSquared The moment of inertia of the intake. If this is unknown, use the {@link
+   *     #IntakeSim(LinearSystem, DCMotor, double, Matrix)} constructor.
    * @param measurementStdDevs The standard deviations of the measurements.
    */
   public IntakeSim(
