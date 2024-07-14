@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.*;
 import frc.robot.subsystems.drive.Drive;
@@ -23,6 +24,7 @@ public class MoveXYHeading extends Command {
 
   /**
    * Constructs a new MoveXYHeading command.
+   *
    * @param xMeters The target position in meters on the X axis.
    * @param yMeters The target position in meters on the Y axis.
    * @param headingDegrees The target heading in degrees.
@@ -50,6 +52,7 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
+    SmartDashboard.putBoolean("MoveXYHeading", finish);
     xVelocity = xController.calculate(targetXMeters);
     yVelocity = yController.calculate(targetYMeters);
     angVelocity = headingController.calculate(targetHeadingDegrees);
