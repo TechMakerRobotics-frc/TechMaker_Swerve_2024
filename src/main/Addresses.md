@@ -1,9 +1,5 @@
 # Robot Addresses
 
-## Flywheel
-- **Leader ID - 13**: `leader_flywheel_id`
-- **Follower ID - 15**: `follower_flywheel_id`
-
 ## Swerve Modules
 - **Front Left Module**
   - **Drive Motor ID - 8**: `front_left_drive_motor_id`
@@ -24,3 +20,7 @@
   - **Drive Motor ID - 9**: `back_right_drive_motor_id`
   - **Steer Motor ID - 7**: `back_right_steer_motor_id`
   - **Steer Encoder ID - 3**: `back_right_steer_encoder_id`
+
+## Flywheel
+- **Leader ID - 13**: `leader_flywheel_id`
+- **Follower ID - 15**: `follower_flywheel_id`
