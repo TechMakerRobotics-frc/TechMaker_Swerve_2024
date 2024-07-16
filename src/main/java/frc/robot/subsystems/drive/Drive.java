@@ -30,6 +30,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -38,6 +41,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.util.LocalADStarAK;
+
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+import org.lasarobotics.drive.RotatePIDController;
+import org.lasarobotics.drive.ThrottleMap;
+import org.lasarobotics.utils.PIDConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -53,6 +61,7 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
+  //public final Measure<Velocity<Distance>> DRIVE_MAX_LINEAR_SPEED;
   private static Field2d field = new Field2d();
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -65,18 +74,31 @@ public class Drive extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private ThrottleMap m_throttleMap;
+  private RotatePIDController m_rotatePIDController;
 
   public Drive(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
-      ModuleIO brModuleIO) {
+      ModuleIO brModuleIO
+      /*PolynomialSplineFunction throttleInputCurve,
+      PolynomialSplineFunction turnInputCurve,
+      PIDConstants pidf,
+      double turnScalar, 
+      double deadband, 
+      double lookAhead*/
+  ) {
     this.gyroIO = gyroIO;
+    //DRIVE_MAX_LINEAR_SPEED = getMaxLinearSpeedMetersPerSec();// aterar isso para o 'measure'
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
     modules[2] = new Module(blModuleIO, 2);
     modules[3] = new Module(brModuleIO, 3);
+
+    //this.m_throttleMap = new ThrottleMap(throttleInputCurve, getMaxLinearSpeedMetersPerSec(), deadband);
+    //this.m_rotatePIDController = new RotatePIDController(turnInputCurve, pidf, turnScalar, deadband, lookAhead);
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
@@ -273,7 +295,6 @@ public class Drive extends SubsystemBase {
   public double getMaxAngularSpeedRadPerSec() {
     return MAX_ANGULAR_SPEED;
   }
-
   /** Returns an array of module translations. */
   public static Translation2d[] getModuleTranslations() {
     return new Translation2d[] {

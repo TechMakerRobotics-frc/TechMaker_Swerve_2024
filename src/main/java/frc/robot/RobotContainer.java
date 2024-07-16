@@ -106,8 +106,7 @@ public class RobotContainer {
             .withTimeout(5.0));
     NamedCommands.registerCommand(
         "Run Intake",
-        Commands.startEnd(
-                () -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
+        Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
