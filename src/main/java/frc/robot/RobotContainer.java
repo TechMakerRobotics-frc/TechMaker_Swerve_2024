@@ -99,6 +99,7 @@ public class RobotContainer {
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
+    new MoveXYHeading();
   }
 
   /**

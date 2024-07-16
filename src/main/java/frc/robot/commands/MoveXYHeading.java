@@ -10,7 +10,7 @@ import frc.robot.subsystems.drive.Drive;
 
 /** Command to move the robot to a specific position (X, Y) and heading using PID controllers. */
 public class MoveXYHeading extends Command {
-  private final Drive drive;
+  private Drive drive;
   private double targetXMeters, targetYMeters, targetHeadingDegrees;
 
   private final PIDController xController = new PIDController(KMoveX.KP, KMoveX.KI, KMoveX.KD);
@@ -36,6 +36,10 @@ public class MoveXYHeading extends Command {
     this.targetYMeters = yMeters;
     this.targetHeadingDegrees = headingDegrees;
     addRequirements(drive);
+  }
+
+  public MoveXYHeading(){
+    SmartDashboard.putBoolean("MoveXYHeading", !finish);
   }
 
   /** Initializes the command by resetting the last timestamp. */
