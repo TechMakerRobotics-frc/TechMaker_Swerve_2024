@@ -11,6 +11,9 @@ import frc.robot.util.PhotonVision.PhotonTags;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+/**
+ * Command to align the robot using vision targets detected by PhotonVision.
+ */
 public class AlignCommand extends Command {
   private static PIDController vYSpeakerController =
       new PIDController(
@@ -23,6 +26,12 @@ public class AlignCommand extends Command {
 
   private boolean isFinished = false;
 
+  /**
+   * Constructs a new AlignCommand.
+   *
+   * @param timeout the time in seconds before the command times out
+   * @param drive the Drive subsystem used by this command
+   */
   public AlignCommand(double timeout, Drive drive) {
     this.drive = drive;
     vYSpeakerController.setSetpoint(AlignConstants.kTargetArea);
@@ -72,6 +81,9 @@ public class AlignCommand extends Command {
     drive.setDefaultCommand(defaultCommand);
   }
 
+  /**
+   * Prints vision targeting information to the SmartDashboard.
+   */
   public void printToDashboard() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
