@@ -13,17 +13,18 @@
 
 package frc.robot;
 
-import frc.robot.Constants.Mode;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
+import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -101,9 +102,10 @@ public class RobotContainer {
             .withTimeout(5.0));
     // Configure the button bindings
     configureButtonBindings();
-    if(Constants.currentMode == Mode.SIM){
+    if (Constants.currentMode == Mode.SIM) {
       new PhotonSim(drive);
     }
+    new PhotonPose();
   }
 
   /**
