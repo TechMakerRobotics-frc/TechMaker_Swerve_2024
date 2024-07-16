@@ -129,7 +129,7 @@ public class RobotContainer {
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
-    controller.b().onTrue(new MoveXYHeading(1, 0, 0, drive));
+    controller.b().onTrue(new MoveXYHeading(0, 0, 1, drive));
     controller.y().onTrue(new MoveXYHeading(0, 1, 0, drive));
   }
 

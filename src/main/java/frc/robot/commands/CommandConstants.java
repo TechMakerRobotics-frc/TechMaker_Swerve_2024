@@ -15,7 +15,7 @@ public final class CommandConstants {
   }
 
   public static final class KMoveH {
-    public static final double KP = 0.05;
+    public static final double KP = 0.09;
     public static final double KI = 0;
     public static final double KD = 0;
   }

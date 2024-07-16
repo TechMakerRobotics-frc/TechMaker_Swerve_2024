@@ -37,7 +37,8 @@ public class MoveXYHeading extends Command {
     this.targetHeadingDegrees = headingDegrees;
     addRequirements(drive);
   }
-  /** Contructs a new MoveXYHeading to put finish boolean in the SmartDashboard.*/
+
+  /** Contructs a new MoveXYHeading to put finish boolean in the SmartDashboard. */
   public MoveXYHeading() {
     SmartDashboard.putBoolean("MoveXYHeading", finish);
   }
@@ -57,8 +58,8 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
-    xVelocity = xController.calculate(targetXMeters);
-    yVelocity = yController.calculate(targetYMeters);
+    xVelocity = xController.calculate((targetXMeters / 3));
+    yVelocity = yController.calculate((targetYMeters / 3));
     angVelocity = headingController.calculate(targetHeadingDegrees);
 
     double temp = Timer.getFPGATimestamp() - lastTimestamp;
