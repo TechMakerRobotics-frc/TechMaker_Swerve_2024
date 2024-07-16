@@ -43,6 +43,7 @@ public class AlignCommand extends Command {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
 
     if (PhotonTags.hasTarget(p)) {
+      printToDashboard();
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
 
       double vx = PhotonTags.getYaw(t) / 20;
@@ -69,5 +70,14 @@ public class AlignCommand extends Command {
   public void end(boolean interrupted) {
     drive.runVelocity(new ChassisSpeeds());
     drive.setDefaultCommand(defaultCommand);
+  }
+
+  public void printToDashboard() {
+    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+    PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
+    SmartDashboard.putNumber("Tag Yaw", PhotonTags.getYaw(t));
+    SmartDashboard.putNumber("Tag Pitch", PhotonTags.getPitch(t));
+    SmartDashboard.putNumber("Tag Skew", PhotonTags.getSkew(t));
+    SmartDashboard.putNumber("Current Tag", PhotonTags.getTargetId(t));
   }
 }

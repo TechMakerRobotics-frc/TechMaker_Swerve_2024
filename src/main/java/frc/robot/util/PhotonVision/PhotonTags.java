@@ -2,7 +2,6 @@ package frc.robot.util.PhotonVision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.UtilConstants.VisionConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -133,14 +132,5 @@ public class PhotonTags {
    */
   public static Transform3d getAlternateCamera(PhotonTrackedTarget target) {
     return target.getAlternateCameraToTarget();
-  }
-
-  public void printToDashboard() {
-    PhotonPipelineResult p = getLatestPipeline();
-    if (hasTarget(p)) {
-      PhotonTrackedTarget t = getBestTarget(p);
-      SmartDashboard.putNumber("NOTE YAW", getYaw(t));
-      SmartDashboard.putNumber("NOTE PITCH", getPitch(t));
-    }
   }
 }
