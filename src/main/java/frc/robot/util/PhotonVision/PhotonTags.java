@@ -15,7 +15,7 @@ public class PhotonTags {
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_NAME);
+  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
   PhotonPipelineResult result = getLatestPipeline();
   PhotonTrackedTarget t = getBestTarget(result);
 
