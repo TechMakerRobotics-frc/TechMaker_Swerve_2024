@@ -18,34 +18,54 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.simulation.VisionTargetSim;
 
 public class PhotonSim extends SubsystemBase {
+  /**
+   * The drive subsystem used by this class.
+   */
   Drive drive;
-  // A vision system sim labelled as "main" in NetworkTables
+
+  /**
+   *A vision system sim labelled as "main" in NetworkTables.
+   */
   private static VisionSystemSim visionSim = new VisionSystemSim("main");
 
-  // A 0.5 x 0.25 meter rectangular target
+  /**
+   * A 0.5 x 0.25 meter rectangular target.
+   */
   private TargetModel targetModel = new TargetModel(0.5, 0.25);
 
-  // The pose of where the target is on the field.
-  // Its rotation determines where "forward" or the target x-axis points.
-  // Let's say this target is flat against the far wall center, facing the blue driver stations.
+  /** 
+   * The pose of where the target is on the field.
+   * Its rotation determines where "forward" or the target x-axis points.
+   * Let's say this target is flat against the far wall center, facing the blue driver stations.
+   */
   private Pose3d targetPose = new Pose3d(16, 4, 2, new Rotation3d(0, 0, Math.PI));
 
-  // The given target model at the given pose
+  /** 
+   * The given target model at the given pose.
+   */
   private VisionTargetSim visionTarget = new VisionTargetSim(targetPose, targetModel);
 
-  // The layout of AprilTags which we want to add to the vision system
+  /*
+   *The layout of AprilTags which we want to add to the vision system.
+   */
   private AprilTagFieldLayout tagLayout;
 
-  // The simulated camera properties
+  /**
+   * The simulated camera properties.
+   */
   SimCameraProperties cameraProp = new SimCameraProperties();
 
   PhotonCameraSim cameraSim = new PhotonCameraSim(PhotonTags.getCamera(), cameraProp);
 
-  // Our camera is mounted 0.1 meters forward and 0.5 meters up from the robot pose,
-  // (Robot pose is considered the center of rotation at the floor level, or Z = 0)
+  /**
+   * Our camera is mounted 0.1 meters forward and 0.5 meters up from the robot pose,
+   * (Robot pose is considered the center of rotation at the floor level, or Z = 0)
+   */
   Translation3d robotToCameraTrl = new Translation3d(0.1, 0, 0.5);
 
-  // and pitched 15 degrees up.
+  /**
+   * and pitched 15 degrees up.
+   */
   Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-15), 0);
   Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
 
@@ -91,7 +111,9 @@ public class PhotonSim extends SubsystemBase {
     visionSim.getDebugField();
   }
 
-  // Get the built-in Field2d used by this VisionSystemSim
+  /**
+   * Get the built-in Field2d used by this VisionSystemSim.
+   */
   public static Field2d getField2dVisionSim() {
     return visionSim.getDebugField();
   }
