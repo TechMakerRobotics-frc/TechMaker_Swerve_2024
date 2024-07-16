@@ -38,8 +38,8 @@ public class MoveXYHeading extends Command {
     addRequirements(drive);
   }
 
-  public MoveXYHeading(){
-    SmartDashboard.putBoolean("MoveXYHeading", !finish);
+  public MoveXYHeading() {
+    SmartDashboard.putBoolean("MoveXYHeading", finish);
   }
 
   /** Initializes the command by resetting the last timestamp. */
