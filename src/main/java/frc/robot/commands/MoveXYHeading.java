@@ -37,7 +37,7 @@ public class MoveXYHeading extends Command {
     this.targetHeadingDegrees = headingDegrees;
     addRequirements(drive);
   }
-
+  /** Contructs a new MoveXYHeading to put finish boolean in the SmartDashboard.*/
   public MoveXYHeading() {
     SmartDashboard.putBoolean("MoveXYHeading", finish);
   }
