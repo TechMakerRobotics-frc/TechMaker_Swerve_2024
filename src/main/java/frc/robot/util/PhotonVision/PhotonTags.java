@@ -133,4 +133,24 @@ public class PhotonTags {
   public static Transform3d getAlternateCamera(PhotonTrackedTarget target) {
     return target.getAlternateCameraToTarget();
   }
+
+  public static double getDistance() {
+    if (!hasTarget(getLatestPipeline())) {
+        return 0;
+    } else {
+        // a1 = LL panning angle
+        // a2 = additional angle to target
+        // tan(a1 + a2) = h/d
+        // d = h/tan(a1+a2)
+        double a2 = getYaw(getBestTarget(getLatestPipeline()));
+        double a1 = VisionConstants.CAMERA_PANNING_ANGLE;
+        double h1 = VisionConstants.CAMERA_HEIGHT;
+        double h2 = 1.4511; // Place holder Height of target
+
+        double angleToGoal = (a1 + a2);
+        double angleToGoalRadian = Math.toRadians(angleToGoal);
+      
+        return (h2 - h1) / Math.tan(angleToGoalRadian);
+    }
+}
 }

@@ -16,7 +16,7 @@ public class AlignCommand extends Command {
   private static PIDController vYSpeakerController =
       new PIDController(
           AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
-  // private static PIDController omegaControler = new PIDController(0.5, 0, 0);
+  private static PIDController omegaControler = new PIDController(0.75, 0, 0);
   private final Timer timer = new Timer();
   private double _timeout;
   private Command defaultCommand;
@@ -53,16 +53,16 @@ public class AlignCommand extends Command {
       printToDashboard();
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
 
-      double vx = PhotonTags.getYaw(t) / 20;
-      double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-      double omega = PhotonTags.getSkew(t) / 20;
+      double omega = PhotonTags.getYaw(t) / 20;
+      //double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
+      double vx = omegaControler.calculate(PhotonTags.getDistance());
 
       SmartDashboard.putNumber("X", vx);
-      SmartDashboard.putNumber("Y", vy);
+      //SmartDashboard.putNumber("Y", vy);
       SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
       SmartDashboard.putData("PID ", vYSpeakerController);
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, 0, omega, drive.getRotation()));
     }
 
     isFinished = timer.get() >= _timeout;

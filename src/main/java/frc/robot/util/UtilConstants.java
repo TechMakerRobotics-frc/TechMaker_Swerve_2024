@@ -15,5 +15,8 @@ public final class UtilConstants {
 
     public static final double CAMERA_POSITION_FROM_ROBOT_CENTER_X_METERS = 0.30;
     public static final double CAMERA_POSITION_FROM_ROBOT_CENTER_Y_METERS = 0.30;
+
+    public static final double CAMERA_HEIGHT = 0.2;
+    public static final double CAMERA_PANNING_ANGLE = 30;
   }
 }
