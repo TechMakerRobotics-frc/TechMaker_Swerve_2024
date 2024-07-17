@@ -62,7 +62,7 @@ public class AlignCommand extends Command {
       SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
       SmartDashboard.putData("PID ", vYSpeakerController);
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, 0, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vx, 0, omega, drive.getRotation()));
     }
 
     isFinished = timer.get() >= _timeout;
