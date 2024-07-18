@@ -55,7 +55,7 @@ public class AlignCommand extends Command {
 
       double omega = PhotonTags.getYaw(t) / 20;
       //double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-      double vx = omegaControler.calculate(PhotonTags.getDistance());
+      double vx = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
 
       SmartDashboard.putNumber("X", vx);
       //SmartDashboard.putNumber("Y", vy);

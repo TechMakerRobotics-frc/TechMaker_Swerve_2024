@@ -141,7 +141,7 @@ public class PhotonTags {
     return false;
   }
 
-  public static double getDistance() {
+  public static double getDistanceToSpeaker() {
     if (!hasTarget(getLatestPipeline())) {
         return 0;
     } else {
