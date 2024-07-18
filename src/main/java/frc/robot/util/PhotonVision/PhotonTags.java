@@ -136,33 +136,55 @@ public class PhotonTags {
 
   /**
    * Sets the used tag.
+   *
    * @param tagNumber Number to compare
    * @return true if number is equal to current Tag
    */
-  public static boolean setUsedPipeline(int tagNumber){
-    if(tagNumber == getTargetId(getBestTarget(getLatestPipeline()))){
+  public static boolean setUsedPipeline(int tagNumber) {
+    if (tagNumber == getTargetId(getBestTarget(getLatestPipeline()))) {
       return true;
-    } 
+    }
     return false;
   }
 
   public static double getDistanceToSpeaker() {
     if (!hasTarget(getLatestPipeline())) {
-        return 0;
+      return 0;
     } else {
-        // a1 = LL panning angle
-        // a2 = additional angle to target
-        // tan(a1 + a2) = h/d
-        // d = h/tan(a1+a2)
-        double a2 = getYaw(getBestTarget(getLatestPipeline()));
-        double a1 = VisionConstants.CAMERA_PANNING_ANGLE;
-        double h1 = VisionConstants.CAMERA_HEIGHT;
-        double h2 = 1.4511; // Place holder Height of target
+      // a1 = LL panning angle
+      // a2 = additional angle to target
+      // tan(a1 + a2) = h/d
+      // d = h/tan(a1+a2)
+      double a2 = getPitch(getBestTarget(getLatestPipeline()));
+      double a1 = VisionConstants.CAMERA_A_ANGLE;
+      double h1 = VisionConstants.CAMERA_A_HEIGHT;
+      double h2 = 1.4511; // Place holder Height of target
 
-        double angleToGoal = (a1 + a2);
-        double angleToGoalRadian = Math.toRadians(angleToGoal);
-      
-        return (h2 - h1) / Math.tan(angleToGoalRadian);
+      double angleToGoal = (a1 + a2);
+      double angleToGoalRadian = Math.toRadians(angleToGoal);
+
+      return (h2 - h1) / Math.tan(angleToGoalRadian);
     }
-}
+  }
+
+  public static double getDistance(String cameraName, int tag) {
+    if (!hasTarget(getLatestPipeline())) {
+      return 0;
+    } else if (cameraName.equals(VisionConstants.CAMERA_A_NAME)) {
+      // a1 = LL panning angle
+      // a2 = additional angle to target
+      // tan(a1 + a2) = h/d
+      // d = h/tan(a1+a2)
+      double a2 = getYaw(getBestTarget(getLatestPipeline()));
+      double a1 = VisionConstants.CAMERA_A_ANGLE;
+      double h1 = VisionConstants.CAMERA_A_HEIGHT;
+      double h2 = 1.4511; // Place holder Height of target
+
+      double angleToGoal = (a1 + a2);
+      double angleToGoalRadian = Math.toRadians(angleToGoal);
+
+      return (h2 - h1) / Math.tan(angleToGoalRadian);
+    }
+    return 0;
+  }
 }

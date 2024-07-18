@@ -49,22 +49,30 @@ public class AlignCommand extends Command {
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
 
-    if (PhotonTags.setUsedPipeline(7) || PhotonTags.setUsedPipeline(3)) {
-      printToDashboard();
+    /*if (PhotonTags.hasTarget(p)
+      && (PhotonTags.setUsedPipeline(7) || PhotonTags.setUsedPipeline(3))) {
+    printToDashboard();
+    PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
+
+    double omega = -PhotonTags.getYaw(t) / 20;
+    // double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
+    double vx = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
+
+    SmartDashboard.putNumber("X", vx);
+    // SmartDashboard.putNumber("Y", vy);
+    SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
+    SmartDashboard.putData("PID ", vYSpeakerController); */
+    if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-
-      double omega = PhotonTags.getYaw(t) / 20;
-      //double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-      double vx = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
-
-      SmartDashboard.putNumber("X", vx);
-      //SmartDashboard.putNumber("Y", vy);
-      SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
-      SmartDashboard.putData("PID ", vYSpeakerController);
-
-      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vx, 0, omega, drive.getRotation()));
+      SmartDashboard.putData("PID AMP", vYSpeakerController);
+      double vx = PhotonTags.getYaw(t) / 20;
+      // double omega = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
+      double vy = PhotonTags.getPitch(t) / 20;
+      SmartDashboard.putNumber("Angular", vx);
+      SmartDashboard.putNumber("X", 00);
+      SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, 0, drive.getRotation()));
     }
-
     isFinished = timer.get() >= _timeout;
   }
 
