@@ -134,6 +134,11 @@ public class PhotonTags {
     return target.getAlternateCameraToTarget();
   }
 
+  /**
+   * Sets the used tag.
+   * @param tagNumber Number to compare
+   * @return true if number is equal to current Tag
+   */
   public static boolean setUsedPipeline(int tagNumber){
     if(tagNumber == getTargetId(getBestTarget(getLatestPipeline()))){
       return true;
