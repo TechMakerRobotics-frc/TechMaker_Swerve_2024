@@ -134,6 +134,13 @@ public class PhotonTags {
     return target.getAlternateCameraToTarget();
   }
 
+  public static boolean setUsedPipeline(int tagNumber){
+    if(tagNumber == getTargetId(getBestTarget(getLatestPipeline()))){
+      return true;
+    } 
+    return false;
+  }
+
   public static double getDistance() {
     if (!hasTarget(getLatestPipeline())) {
         return 0;

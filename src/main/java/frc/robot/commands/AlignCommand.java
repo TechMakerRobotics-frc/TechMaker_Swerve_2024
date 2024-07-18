@@ -49,7 +49,7 @@ public class AlignCommand extends Command {
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
 
-    if (PhotonTags.hasTarget(p)) {
+    if (PhotonTags.setUsedPipeline(7) || PhotonTags.setUsedPipeline(3)) {
       printToDashboard();
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
 
