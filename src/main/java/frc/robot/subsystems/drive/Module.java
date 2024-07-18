@@ -62,7 +62,7 @@ public class Module {
     }
 
     turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
-    setBrakeMode(false);
+    setBrakeMode(true);
   }
 
   public void periodic() {
