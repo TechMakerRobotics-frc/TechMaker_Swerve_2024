@@ -14,8 +14,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 /** Command to align the robot using vision targets detected by PhotonVision. */
 public class AlignCommand extends Command {
   private static PIDController vYSpeakerController =
-      new PIDController(
+    new PIDController(
           AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
+  private static PIDController vXSpeakerController =
+    new PIDController(
+      AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
+
   private static PIDController omegaControler = new PIDController(0.75, 0, 0);
   private final Timer timer = new Timer();
   private double _timeout;
@@ -65,13 +69,13 @@ public class AlignCommand extends Command {
     if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       SmartDashboard.putData("PID AMP", vYSpeakerController);
-      double vx = PhotonTags.getYaw(t) / 20;
+      double vx = vXSpeakerController.calculate((PhotonTags.getYaw(t) / 20) * (drive.getMaxLinearSpeedMetersPerSec()/4));
       // double omega = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
       double vy = PhotonTags.getPitch(t) / 20;
       SmartDashboard.putNumber("Angular", vx);
       SmartDashboard.putNumber("X", 00);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
-      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, 0, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vx, 0, 0, drive.getRotation()));
     }
     isFinished = timer.get() >= _timeout;
   }
