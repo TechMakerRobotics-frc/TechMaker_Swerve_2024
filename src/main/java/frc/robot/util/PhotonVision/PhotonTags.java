@@ -2,6 +2,7 @@ package frc.robot.util.PhotonVision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.Height;
 import frc.robot.util.UtilConstants.VisionConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -170,21 +171,21 @@ public class PhotonTags {
   public static double getDistance(String cameraName, int tag) {
     if (!hasTarget(getLatestPipeline())) {
       return 0;
-    } else if (cameraName.equals(VisionConstants.CAMERA_A_NAME)) {
+    } else if(setUsedPipeline(tag)){
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d
       // d = h/tan(a1+a2)
       double a2 = getYaw(getBestTarget(getLatestPipeline()));
-      double a1 = VisionConstants.CAMERA_A_ANGLE;
-      double h1 = VisionConstants.CAMERA_A_HEIGHT;
-      double h2 = 1.4511; // Place holder Height of target
+      double a1 = Height.getCameraAngle(cameraName);
+      double h1 = Height.getCameraHeight(cameraName);
+      double h2 = Height.getTagHeight(tag); // Place holder Height of target
 
       double angleToGoal = (a1 + a2);
       double angleToGoalRadian = Math.toRadians(angleToGoal);
 
       return (h2 - h1) / Math.tan(angleToGoalRadian);
-    }
+    } 
     return 0;
   }
 }
