@@ -1,13 +1,22 @@
 package frc.robot.util.PhotonVision;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.UtilConstants.VisionConstants;
+import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -15,6 +24,22 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class PhotonPose {
 
   Field2d field;
+
+  // The field from AprilTagFields will be different depending on the game.
+  static AprilTagFieldLayout aprilTagFieldLayout =
+      AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
+  // Forward Camera
+  static PhotonCamera cam = PhotonTags.getCamera();
+
+  // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+  static Transform3d robotToCam =
+      new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+
+  // Construct PhotonPoseEstimator
+  static PhotonPoseEstimator photonPoseEstimator =
+      new PhotonPoseEstimator(
+          aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, cam, robotToCam);
 
   public PhotonPose() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
@@ -49,5 +74,10 @@ public class PhotonPose {
       field.setRobotPose(robotPose2d);
       SmartDashboard.putData("Field robot pose PhotonVision", field);
     }
+  }
+
+  public static Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator.update();
   }
 }
