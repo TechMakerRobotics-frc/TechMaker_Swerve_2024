@@ -141,7 +141,7 @@ public class PhotonTags {
    * @param tagNumber Number to compare
    * @return true if number is equal to current Tag
    */
-  public static boolean setUsedPipeline(int tagNumber) {
+  public static boolean hasUsedPipeline(int tagNumber) {
     if (tagNumber == getTargetId(getBestTarget(getLatestPipeline()))) {
       return true;
     }
@@ -171,7 +171,7 @@ public class PhotonTags {
   public static double getDistance(String cameraName, int tag) {
     if (!hasTarget(getLatestPipeline())) {
       return 0;
-    } else if(setUsedPipeline(tag)){
+    } else if(hasUsedPipeline(tag)){
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d
