@@ -8,7 +8,6 @@ public class Height {
 
   private static double targetHeight;
 
-
   /**
    * Retorna a altura do alvo em metros com base no ID do AprilTag.
    *
@@ -30,12 +29,14 @@ public class Height {
 
   /**
    * Retorna a altura da câmera em metros pelo nome.
+   *
    * @param camera nome da câmera usada
    * @return altura câmera em metros
    */
-  public double getCameraHeight(String camera){
-    if(camera.equals(VisionConstants.CAMERA_A_NAME)){
+  public double getCameraHeight(String camera) {
+    if (camera.equals(VisionConstants.CAMERA_A_NAME)) {
       return VisionConstants.CAMERA_A_HEIGHT;
-    } return 0.0;
+    }
+    return 0.0;
   }
 }
