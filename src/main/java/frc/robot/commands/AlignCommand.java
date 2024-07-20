@@ -70,8 +70,9 @@ public class AlignCommand extends Command {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       SmartDashboard.putData("PID AMP", vYSpeakerController);
       double vx = vXSpeakerController.calculate((PhotonTags.getYaw(t) / 20) * (drive.getMaxLinearSpeedMetersPerSec()/4));
-      // double omega = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
-      double vy = PhotonTags.getPitch(t) / 20;
+      double vy = vYSpeakerController.calculate(PhotonTags.getDistanceToSpeaker());//adicionar lógica para ir para trás e 
+      //frente pela distância adicionando condição para ficar na distância do objetivo.
+      //double vy = PhotonTags.getPitch(t) / 20;
       SmartDashboard.putNumber("Angular", vx);
       SmartDashboard.putNumber("X", 00);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
