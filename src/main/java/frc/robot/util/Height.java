@@ -3,7 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.UtilConstants.VisionConstants;
 
-/** Classe para obter a altura do alvo com base no ID do AprilTag. */
+/** Classe para obter as alturas do sistema de visão */
 public class Height {
 
   private static double targetHeight;
