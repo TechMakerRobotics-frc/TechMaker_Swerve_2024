@@ -168,6 +168,28 @@ public class PhotonTags {
     }
   }
 
+  public static double getDistanceToBase(){
+    if (!hasTarget(getLatestPipeline())) {
+      return 0;
+    } else {
+      // a1 = LL panning angle
+      // a2 = additional angle to target
+      // tan(a1 + a2) = h/d
+      // d = h/tan(a1+a2)
+      double a2 = getPitch(getBestTarget(getLatestPipeline()));
+      double a1 = VisionConstants.CAMERA_A_ANGLE;
+      double h1 = VisionConstants.CAMERA_A_HEIGHT;
+      double h2 = 1.4511; // Place holder Height of target
+
+      double angleToGoal = (a1 + a2);
+      double angleToGoalRadian = Math.toRadians(angleToGoal);
+      double targetHeight = h2 - h1;
+      double distance = targetHeight / Math.tan(angleToGoalRadian);
+      double cateto = Math.sqrt((Math.pow(distance, 2) - Math.pow(targetHeight, 2)));
+      return cateto;
+    }
+  }
+
   public static double getDistance(String cameraName, int tag) {
     if (!hasTarget(getLatestPipeline())) {
       return 0;
