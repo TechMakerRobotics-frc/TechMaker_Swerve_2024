@@ -52,20 +52,6 @@ public class AlignCommand extends Command {
   @Override
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
-
-    /*if (PhotonTags.hasTarget(p)
-      && (PhotonTags.setUsedPipeline(7) || PhotonTags.setUsedPipeline(3))) {
-    printToDashboard();
-    PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-
-    double omega = -PhotonTags.getYaw(t) / 20;
-    // double vy = vYSpeakerController.calculate(PhotonTags.getArea(t));
-    double vx = omegaControler.calculate(PhotonTags.getDistanceToSpeaker());
-
-    SmartDashboard.putNumber("X", vx);
-    // SmartDashboard.putNumber("Y", vy);
-    SmartDashboard.putNumber("Área", PhotonTags.getArea(t));
-    SmartDashboard.putData("PID ", vYSpeakerController); */
     if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       SmartDashboard.putData("PID AMP", vYSpeakerController);
