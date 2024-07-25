@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.commands.AlignCommand;
+import frc.robot.commands.AlignToSpeaker;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
@@ -152,7 +152,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
         .onFalse(new InstantCommand(intake::stop, intake));
 
-    controller.rightBumper().whileTrue(new AlignCommand(20000, drive));
+    controller.rightBumper().whileTrue(new AlignToSpeaker(20000, drive));
   }
 
   /**
@@ -162,6 +162,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return new PathPlannerAuto("AutoTestNamed");
-    return new AlignCommand(2000, drive);
+    // return new AlignCommand(2000, drive);
+    return null;
   }
 }

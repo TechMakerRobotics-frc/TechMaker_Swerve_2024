@@ -46,7 +46,8 @@ public class AlignToSpeaker extends Command {
     if (limelight.atSpeaker()) {
       double vo = -limelight.getTx() / 50;
       double vy = vyStageController.calculate(limelight.getDistance());
-      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(-vy, 0, vo, drive.getRotation()));
+      ChassisSpeeds speed = ChassisSpeeds.fromFieldRelativeSpeeds(-vy, 0, vo, drive.getRotation());
+      drive.runVelocity(speed);
     }
   }
 
