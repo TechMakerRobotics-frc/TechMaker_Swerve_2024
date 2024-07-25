@@ -41,19 +41,23 @@ public final class CommandConstants {
   public static class LimelightConstants {
     public static final int kIDSpeakerBlue = 7;
     public static final int kIDSpeakerRed = 3;
-    public static final int kBlueSpeakerPipeline = 0;
-    public static final int kRedSpeakerPipeline = 1;
+
+    public static final int kBlueSpeakerPipeline = 7;
+    public static final int kRedSpeakerPipeline = 7;
+
     public static final int kPosePipeline = 2;
+
     public static final double kLimelightHeight = 0.2;
     public static final double kLimelightPanningAngle = 30;
   }
 
   public static class VisionConstants {
-
     public static final int kIDAmpBlue = 6;
     public static final int kIDAmpRed = 5;
+
     public static final int kIDSpeakerBlue = 7;
-    public static final int kIDSpeakerRed = 3;
+    public static final int kIDSpeakerRed = 7;
+
     public static final double kPhotonvisionHeight = 0.2;
     public static final double kPhotonvisionPanningAngle = 30;
   }
