@@ -168,7 +168,7 @@ public class PhotonTags {
     }
   }
 
-  public static double getDistanceToBase(){
+  public static double getDistanceToBase() {
     if (!hasTarget(getLatestPipeline())) {
       return 0;
     } else {
@@ -193,7 +193,7 @@ public class PhotonTags {
   public static double getDistance(String cameraName, int tag) {
     if (!hasTarget(getLatestPipeline())) {
       return 0;
-    } else if(hasUsedPipeline(tag)){
+    } else if (hasUsedPipeline(tag)) {
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d
@@ -207,7 +207,7 @@ public class PhotonTags {
       double angleToGoalRadian = Math.toRadians(angleToGoal);
 
       return (h2 - h1) / Math.tan(angleToGoalRadian);
-    } 
+    }
     return 0;
   }
 }
