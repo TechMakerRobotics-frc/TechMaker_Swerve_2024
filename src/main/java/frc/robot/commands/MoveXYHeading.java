@@ -49,6 +49,8 @@ public class MoveXYHeading extends Command {
     lastTimestamp = Timer.getFPGATimestamp();
     defaultCommand = drive.getDefaultCommand();
     finish = false;
+    xController.setSetpoint(targetXMeters + drive.getPose().getX());
+    yController.setSetpoint(targetYMeters + drive.getPose().getY());
     SmartDashboard.putBoolean("MoveXYHeading", !finish);
   }
 
@@ -58,8 +60,8 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
-    xVelocity = xController.calculate((targetXMeters / 3));
-    yVelocity = yController.calculate((targetYMeters / 3));
+    xVelocity = xController.calculate(drive.getPose().getX());
+    yVelocity = yController.calculate(drive.getPose().getY());
     angVelocity = headingController.calculate(targetHeadingDegrees);
 
     double temp = Timer.getFPGATimestamp() - lastTimestamp;

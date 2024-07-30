@@ -36,5 +36,5 @@ public final class Constants {
     REPLAY
   }
 
-  public static final Mode currentMode = Mode.REAL;
+  public static final Mode currentMode = Mode.SIM;
 }
