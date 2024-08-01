@@ -19,12 +19,10 @@ public class AlignCommand extends Command {
   private static PIDController vXSpeakerController =
       new PIDController(
           AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
-  private static PIDController vOmegaSpeakerController =
-      new PIDController(
-          AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
+
   // private static PIDController omegaControler = new PIDController(0.75, 0, 0);
   private final Timer timer = new Timer();
-  private double _timeout, vx, vy, omega;
+  private double _timeout, vx, vy;
   private Command defaultCommand;
   private Drive drive;
 
@@ -53,19 +51,20 @@ public class AlignCommand extends Command {
 
   @Override
   public void execute() {
-    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+        PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     if (PhotonTags.hasTarget(p)) {
+      printToDashboard();
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       SmartDashboard.putData("PID AMP", vYSpeakerController);
+
       vx = vXSpeakerController.calculate((PhotonTags.getYaw(t) / 20));
       vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX() / 2);
-      omega = vOmegaSpeakerController.calculate((PhotonTags.getBestCamera(t).getZ() / 180));
 
       SmartDashboard.putNumber("Angular", vx);
       SmartDashboard.putNumber("X", 00);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
-      drive.runVelocity(
-          ChassisSpeeds.fromRobotRelativeSpeeds(-vx, -vy, omega, drive.getRotation()));
+
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(-vx, -vy, 0, drive.getRotation()));
     }
     isFinished = timer.get() >= _timeout;
   }
