@@ -51,7 +51,7 @@ public class PhotonTags {
    * @return The yaw of the target in degrees (positive right)
    */
   public static double getYaw(PhotonTrackedTarget target) {
-    return hasTarget(getLatestPipeline()) ? target.getYaw() : null;
+    return target.getYaw();
   }
 
   /**
@@ -142,7 +142,9 @@ public class PhotonTags {
    * @return true if number is equal to current Tag
    */
   public static boolean hasUsedPipeline(int tagNumber) {
-    if (tagNumber == getTargetId(getBestTarget(getLatestPipeline()))) {
+    PhotonPipelineResult p = getLatestPipeline();
+    PhotonTrackedTarget t = getBestTarget(p);
+    if (PhotonTags.hasTarget(p) && PhotonTags.getTargetId(t) == tagNumber) {
       return true;
     }
     return false;
