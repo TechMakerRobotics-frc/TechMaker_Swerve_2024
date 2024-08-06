@@ -25,7 +25,6 @@ public class AlignCommand extends Command {
           AlignConstants.VOMEGA_SPEAKER_I,
           AlignConstants.VOMEGA_SPEAKER_D);
 
-  // private static PIDController omegaControler = new PIDController(0.75, 0, 0);
   private final Timer timer = new Timer();
   private double _timeout, vx, vy, omega;
   private Command defaultCommand;
@@ -41,14 +40,14 @@ public class AlignCommand extends Command {
    */
   public AlignCommand(double timeout, Drive drive) {
     this.drive = drive;
-    vYSpeakerController.setSetpoint(AlignConstants.kTargetArea);
     _timeout = timeout;
   }
 
   @Override
   public void initialize() {
     vOmegaSpeakerController.setSetpoint(180);
-    vYSpeakerController.reset();
+    vXSpeakerController.setSetpoint(0);
+    vYSpeakerController.setSetpoint(2);
     timer.reset();
     timer.start();
     defaultCommand = drive.getDefaultCommand();
@@ -63,8 +62,9 @@ public class AlignCommand extends Command {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       SmartDashboard.putData("PID AMP", vYSpeakerController);
 
-      vx = vXSpeakerController.calculate((PhotonTags.getYaw(t) / 20));
-      vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX() / 2);
+      vx = vXSpeakerController.calculate((PhotonTags.getYaw(t)));
+      vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX());
+      SmartDashboard.putNumber("Velocidade da Distância?", vy);
       omega =
           vOmegaSpeakerController.calculate(
               Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
@@ -76,7 +76,8 @@ public class AlignCommand extends Command {
       SmartDashboard.putNumber("X", 00);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
+      drive.runVelocity(
+          ChassisSpeeds.fromRobotRelativeSpeeds(-vx, -vy, omega, drive.getRotation()));
     }
     isFinished = timer.get() >= _timeout;
   }
