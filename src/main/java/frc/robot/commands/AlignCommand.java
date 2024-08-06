@@ -19,10 +19,15 @@ public class AlignCommand extends Command {
   private static PIDController vXSpeakerController =
       new PIDController(
           AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
+  private static PIDController vOmegaSpeakerController =
+      new PIDController(
+          AlignConstants.VOMEGA_SPEAKER_P,
+          AlignConstants.VOMEGA_SPEAKER_I,
+          AlignConstants.VOMEGA_SPEAKER_D);
 
   // private static PIDController omegaControler = new PIDController(0.75, 0, 0);
   private final Timer timer = new Timer();
-  private double _timeout, vx, vy;
+  private double _timeout, vx, vy, omega;
   private Command defaultCommand;
   private Drive drive;
 
@@ -42,6 +47,7 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
+    vOmegaSpeakerController.setSetpoint(180);
     vYSpeakerController.reset();
     timer.reset();
     timer.start();
@@ -51,7 +57,7 @@ public class AlignCommand extends Command {
 
   @Override
   public void execute() {
-        PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     if (PhotonTags.hasTarget(p)) {
       printToDashboard();
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
@@ -59,12 +65,18 @@ public class AlignCommand extends Command {
 
       vx = vXSpeakerController.calculate((PhotonTags.getYaw(t) / 20));
       vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX() / 2);
-
+      omega =
+          vOmegaSpeakerController.calculate(
+              Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
+      omega =
+          Math.copySign(
+                  omega, PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees())
+              * -1;
       SmartDashboard.putNumber("Angular", vx);
       SmartDashboard.putNumber("X", 00);
       SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(-vx, -vy, 0, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
     }
     isFinished = timer.get() >= _timeout;
   }
@@ -88,5 +100,8 @@ public class AlignCommand extends Command {
     SmartDashboard.putNumber("Tag Pitch", PhotonTags.getPitch(t));
     SmartDashboard.putNumber("Tag Skew", PhotonTags.getSkew(t));
     SmartDashboard.putNumber("Current Tag", PhotonTags.getTargetId(t));
+    SmartDashboard.putNumber(
+        "Tag Angle", PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees());
+    SmartDashboard.putNumber("omega", omega);
   }
 }
