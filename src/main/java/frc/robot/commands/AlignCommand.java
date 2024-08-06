@@ -13,20 +13,28 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** Command to align the robot using vision targets detected by PhotonVision. */
 public class AlignCommand extends Command {
-  private static PIDController vYSpeakerController =
+  private static PIDController vYController =
       new PIDController(
-          AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
-  private static PIDController vXSpeakerController =
+          AlignConstants.VY_SPEAKER_P, 
+          AlignConstants.VY_SPEAKER_I, 
+          AlignConstants.VY_SPEAKER_D
+      );
+  private static PIDController vXController =
       new PIDController(
-          AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
-  private static PIDController vOmegaSpeakerController =
+          AlignConstants.VX_SPEAKER_P, 
+          AlignConstants.VX_SPEAKER_I, 
+          AlignConstants.VX_SPEAKER_D
+      );
+  private static PIDController vOmegaController =
       new PIDController(
           AlignConstants.VOMEGA_SPEAKER_P,
           AlignConstants.VOMEGA_SPEAKER_I,
-          AlignConstants.VOMEGA_SPEAKER_D);
+          AlignConstants.VOMEGA_SPEAKER_D
+      );
 
   private final Timer timer = new Timer();
-  private double _timeout, vx, vy, omega;
+  private double timeout, vx, vy, omega;
+  private int usedTag;
   private Command defaultCommand;
   private Drive drive;
 
@@ -37,17 +45,19 @@ public class AlignCommand extends Command {
    *
    * @param timeout the time in seconds before the command times out
    * @param drive the Drive subsystem used by this command
+   * @param usedTag the used apriltag to align
    */
-  public AlignCommand(double timeout, Drive drive) {
+  public AlignCommand(int usedTag, double timeout, Drive drive) {
     this.drive = drive;
-    _timeout = timeout;
+    this.timeout = timeout;
+    this.usedTag = usedTag;
   }
 
   @Override
   public void initialize() {
-    vOmegaSpeakerController.setSetpoint(180);
-    vXSpeakerController.setSetpoint(0);
-    vYSpeakerController.setSetpoint(2);
+    vOmegaController.setSetpoint(180);
+    vXController.setSetpoint(0);
+    vYController.setSetpoint(2);
     timer.reset();
     timer.start();
     defaultCommand = drive.getDefaultCommand();
@@ -58,23 +68,19 @@ public class AlignCommand extends Command {
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-    if (PhotonTags.hasUsedPipeline(3)) {
+    if (PhotonTags.hasUsedTarget(usedTag)) {
       printToDashboard();
 
-      vx = vXSpeakerController.calculate((PhotonTags.getYaw(t))) * -1;
-      vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX()) * -1;
-
+      vx = vXController.calculate((PhotonTags.getYaw(t))) * -1;
+      vy = vYController.calculate(PhotonTags.getDistance()) * -1;
       omega =
-          vOmegaSpeakerController.calculate(
-              Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
+          vOmegaController.calculate(Math.abs(PhotonTags.getAngle()));
       omega =
-          Math.copySign(
-                  omega, PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees())
-              * -1;
+          Math.copySign(omega, PhotonTags.getAngle()) * -1;
 
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }
-    isFinished = timer.get() >= _timeout;
+    isFinished = timer.get() >= timeout;
   }
 
   @Override
