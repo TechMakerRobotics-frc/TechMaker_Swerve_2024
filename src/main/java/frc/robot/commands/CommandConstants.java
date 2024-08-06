@@ -7,9 +7,13 @@ public final class CommandConstants {
     public static final double VY_SPEAKER_I = 0.0;
     public static final double VY_SPEAKER_D = 0.0;
 
-    public static final double VX_SPEAKER_P = 0.15;
+    public static final double VX_SPEAKER_P = 0.05;
     public static final double VX_SPEAKER_I = 0.0;
     public static final double VX_SPEAKER_D = 0.0;
+
+    public static final double VOMEGA_SPEAKER_P = 0.02;
+    public static final double VOMEGA_SPEAKER_I = 0.0;
+    public static final double VOMEGA_SPEAKER_D = 0.0;
 
     public static final double kDistanceFromSpeakerToShoot = 2.60;
     public static final double CAMERA_HEIGHT_METERS = 0.50;
