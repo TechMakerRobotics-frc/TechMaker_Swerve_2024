@@ -57,14 +57,13 @@ public class AlignCommand extends Command {
   @Override
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
-    if (PhotonTags.hasTarget(p)) {
+    PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
+    if (PhotonTags.hasUsedPipeline(3)) {
       printToDashboard();
-      PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-      SmartDashboard.putData("PID AMP", vYSpeakerController);
 
-      vx = vXSpeakerController.calculate((PhotonTags.getYaw(t)));
-      vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX());
-      SmartDashboard.putNumber("Velocidade da Distância?", vy);
+      vx = vXSpeakerController.calculate((PhotonTags.getYaw(t))) * -1;
+      vy = vYSpeakerController.calculate(PhotonTags.getBestCamera(t).getX()) * -1;
+
       omega =
           vOmegaSpeakerController.calculate(
               Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
@@ -72,12 +71,8 @@ public class AlignCommand extends Command {
           Math.copySign(
                   omega, PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees())
               * -1;
-      SmartDashboard.putNumber("Angular", vx);
-      SmartDashboard.putNumber("X", 00);
-      SmartDashboard.putNumber("Distance", PhotonTags.getArea(t));
 
-      drive.runVelocity(
-          ChassisSpeeds.fromRobotRelativeSpeeds(-vx, -vy, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }
     isFinished = timer.get() >= _timeout;
   }
@@ -98,11 +93,9 @@ public class AlignCommand extends Command {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
     SmartDashboard.putNumber("Tag Yaw", PhotonTags.getYaw(t));
-    SmartDashboard.putNumber("Tag Pitch", PhotonTags.getPitch(t));
-    SmartDashboard.putNumber("Tag Skew", PhotonTags.getSkew(t));
     SmartDashboard.putNumber("Current Tag", PhotonTags.getTargetId(t));
-    SmartDashboard.putNumber(
-        "Tag Angle", PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees());
     SmartDashboard.putNumber("omega", omega);
+    SmartDashboard.putNumber("vx", vx);
+    SmartDashboard.putNumber("vy", vy);
   }
 }
