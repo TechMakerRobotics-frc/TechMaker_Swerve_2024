@@ -2,7 +2,6 @@ package frc.robot.util.PhotonVision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.Height;
 import frc.robot.util.UtilConstants.VisionConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -17,8 +16,8 @@ public class PhotonTags {
 
   static int tagId;
   static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
-  PhotonPipelineResult result = getLatestPipeline();
-  PhotonTrackedTarget t = getBestTarget(result);
+  static PhotonPipelineResult result = getLatestPipeline();
+  static PhotonTrackedTarget t = getBestTarget(result);
 
   /**
    * get the latest result of the camera.
@@ -141,7 +140,7 @@ public class PhotonTags {
    * @param tagNumber Number to compare
    * @return true if number is equal to current Tag
    */
-  public static boolean hasUsedPipeline(int tagNumber) {
+  public static boolean hasUsedTarget(int tagNumber) {
     PhotonPipelineResult p = getLatestPipeline();
     PhotonTrackedTarget t = getBestTarget(p);
     if (PhotonTags.hasTarget(p) && PhotonTags.getTargetId(t) == tagNumber) {
@@ -150,66 +149,21 @@ public class PhotonTags {
     return false;
   }
 
-  public static double getDistanceToSpeaker() {
-    if (!hasTarget(getLatestPipeline())) {
-      return 0;
-    } else {
-      // a1 = LL panning angle
-      // a2 = additional angle to target
-      // tan(a1 + a2) = h/d
-      // d = h/tan(a1+a2)
-      double a2 = getPitch(getBestTarget(getLatestPipeline()));
-      double a1 = VisionConstants.CAMERA_A_ANGLE;
-      double h1 = VisionConstants.CAMERA_A_HEIGHT;
-      double h2 = 1.4511; // Place holder Height of target
-
-      double angleToGoal = (a1 + a2);
-      double angleToGoalRadian = Math.toRadians(angleToGoal);
-
-      return (h2 - h1) / Math.tan(angleToGoalRadian);
-    }
+  /**
+   * Get the angle from the robot.
+   * 
+   * @return robot angle in degrees
+   */
+  public static double getAngle() {
+    return getBestCamera(t).getRotation().toRotation2d().getDegrees();
   }
 
-  public static double getDistanceToBase() {
-    if (!hasTarget(getLatestPipeline())) {
-      return 0;
-    } else {
-      // a1 = LL panning angle
-      // a2 = additional angle to target
-      // tan(a1 + a2) = h/d
-      // d = h/tan(a1+a2)
-      double a2 = getPitch(getBestTarget(getLatestPipeline()));
-      double a1 = VisionConstants.CAMERA_A_ANGLE;
-      double h1 = VisionConstants.CAMERA_A_HEIGHT;
-      double h2 = 1.4511; // Place holder Height of target
-
-      double angleToGoal = (a1 + a2);
-      double angleToGoalRadian = Math.toRadians(angleToGoal);
-      double targetHeight = h2 - h1;
-      double distance = targetHeight / Math.tan(angleToGoalRadian);
-      double cateto = Math.sqrt((Math.pow(distance, 2) - Math.pow(targetHeight, 2)));
-      return cateto;
-    }
-  }
-
-  public static double getDistance(String cameraName, int tag) {
-    if (!hasTarget(getLatestPipeline())) {
-      return 0;
-    } else if (hasUsedPipeline(tag)) {
-      // a1 = LL panning angle
-      // a2 = additional angle to target
-      // tan(a1 + a2) = h/d
-      // d = h/tan(a1+a2)
-      double a2 = getYaw(getBestTarget(getLatestPipeline()));
-      double a1 = Height.getCameraAngle(cameraName);
-      double h1 = Height.getCameraHeight(cameraName);
-      double h2 = Height.getTagHeight(tag); // Place holder Height of target
-
-      double angleToGoal = (a1 + a2);
-      double angleToGoalRadian = Math.toRadians(angleToGoal);
-
-      return (h2 - h1) / Math.tan(angleToGoalRadian);
-    }
-    return 0;
+  /**
+   * Get the distance from the camera to the target.
+   * 
+   * @return distance in meters
+   */
+  public static double getDistance() {
+    return getBestCamera(t).getX();
   }
 }
