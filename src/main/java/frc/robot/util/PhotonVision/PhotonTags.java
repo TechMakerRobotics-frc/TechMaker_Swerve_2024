@@ -51,7 +51,7 @@ public class PhotonTags {
    * @return The yaw of the target in degrees (positive right)
    */
   public static double getYaw(PhotonTrackedTarget target) {
-    return target.getYaw();
+    return hasTarget(getLatestPipeline()) ? target.getYaw() : null;
   }
 
   /**
