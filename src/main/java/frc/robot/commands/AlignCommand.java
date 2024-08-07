@@ -27,9 +27,9 @@ public class AlignCommand extends Command {
       );
   private static PIDController vOmegaController =
       new PIDController(
-          AlignConstants.VOMEGA_SPEAKER_P,
-          AlignConstants.VOMEGA_SPEAKER_I,
-          AlignConstants.VOMEGA_SPEAKER_D
+          AlignConstants.V_OMEGA_SPEAKER_P,
+          AlignConstants.V_OMEGA_SPEAKER_I,
+          AlignConstants.V_OMEGA_SPEAKER_D
       );
 
   private final Timer timer = new Timer();
@@ -55,6 +55,9 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
+    vOmegaController.reset();
+    vXController.reset();
+    vYController.reset();
     vOmegaController.setSetpoint(180);
     vXController.setSetpoint(0);
     vYController.setSetpoint(2);
