@@ -15,22 +15,15 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class AlignCommand extends Command {
   private static PIDController vYController =
       new PIDController(
-          AlignConstants.VY_SPEAKER_P, 
-          AlignConstants.VY_SPEAKER_I, 
-          AlignConstants.VY_SPEAKER_D
-      );
+          AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
   private static PIDController vXController =
       new PIDController(
-          AlignConstants.VX_SPEAKER_P, 
-          AlignConstants.VX_SPEAKER_I, 
-          AlignConstants.VX_SPEAKER_D
-      );
+          AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
   private static PIDController vOmegaController =
       new PIDController(
           AlignConstants.V_OMEGA_SPEAKER_P,
           AlignConstants.V_OMEGA_SPEAKER_I,
-          AlignConstants.V_OMEGA_SPEAKER_D
-      );
+          AlignConstants.V_OMEGA_SPEAKER_D);
 
   private final Timer timer = new Timer();
   private double timeout, vx, vy, omega;
@@ -76,10 +69,8 @@ public class AlignCommand extends Command {
 
       vx = vXController.calculate((PhotonTags.getYaw(t))) * -1;
       vy = vYController.calculate(PhotonTags.getDistance()) * -1;
-      omega =
-          vOmegaController.calculate(Math.abs(PhotonTags.getAngle()));
-      omega =
-          Math.copySign(omega, PhotonTags.getAngle()) * -1;
+      omega = vOmegaController.calculate(Math.abs(PhotonTags.getAngle()));
+      omega = Math.copySign(omega, PhotonTags.getAngle()) * -1;
 
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }

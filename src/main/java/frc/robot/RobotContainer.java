@@ -25,8 +25,8 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
-import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.PhotonVision.PhotonPose;
+import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -49,7 +49,7 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
-      private final LoggedDashboardNumber intakeSpeedInput =
+  private final LoggedDashboardNumber intakeSpeedInput =
       new LoggedDashboardNumber("Intake Speed", 1500.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -113,7 +113,7 @@ public class RobotContainer {
         Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
             .withTimeout(5.0));
     new RegisterAlign(30, drive);
-    
+
     // Configure the button bindings
     configureButtonBindings();
     if (Constants.currentMode == Mode.SIM) {
@@ -149,7 +149,7 @@ public class RobotContainer {
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
-        
+
     controller
         .y()
         .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))

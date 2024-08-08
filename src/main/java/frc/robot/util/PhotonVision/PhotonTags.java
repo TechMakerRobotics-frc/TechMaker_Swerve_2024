@@ -151,7 +151,7 @@ public class PhotonTags {
 
   /**
    * Get the angle from the robot.
-   * 
+   *
    * @return robot angle in degrees
    */
   public static double getAngle() {
@@ -160,7 +160,7 @@ public class PhotonTags {
 
   /**
    * Get the distance from the camera to the target.
-   * 
+   *
    * @return distance in meters
    */
   public static double getDistance() {
