@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -164,8 +165,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return new PathPlannerAuto("AutoTestNamed");
+    return new PathPlannerAuto("AutoTest1");
     // return new AlignCommand(2000, drive);
-    return null;
   }
 }
