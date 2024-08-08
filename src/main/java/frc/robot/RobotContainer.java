@@ -27,6 +27,7 @@ import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.PhotonVision.PhotonPose;
+import frc.robot.util.RegisterAlign;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -111,6 +112,8 @@ public class RobotContainer {
         "Run Intake",
         Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
             .withTimeout(5.0));
+    new RegisterAlign(30, drive);
+    
     // Configure the button bindings
     configureButtonBindings();
     if (Constants.currentMode == Mode.SIM) {
