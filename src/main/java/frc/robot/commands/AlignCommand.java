@@ -99,5 +99,7 @@ public class AlignCommand extends Command {
     SmartDashboard.putNumber("omega", omega);
     SmartDashboard.putNumber("vx", vx);
     SmartDashboard.putNumber("vy", vy);
+    SmartDashboard.putNumber("Target Angle", PhotonTags.getAngle());
+    SmartDashboard.putNumber("Target Distance", PhotonTags.getDistance());
   }
 }

@@ -159,7 +159,7 @@ public class PhotonTags {
    * @return robot angle in degrees
    */
   public static double getAngle() {
-    if (hasTarget(result)) {
+    if (hasTarget(getLatestPipeline())) {
       return getBestCamera(t).getRotation().toRotation2d().getDegrees();
     } else {
       return 0.0;
@@ -172,7 +172,7 @@ public class PhotonTags {
    * @return distance in meters
    */
   public static double getDistance() {
-    if (hasTarget(result)) {
+    if (hasTarget(getLatestPipeline())) {
       return getBestCamera(t).getX();
     } else {
       return 0.0;
