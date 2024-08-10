@@ -48,9 +48,6 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
-    vOmegaController.reset();
-    vXController.reset();
-    vYController.reset();
     vOmegaController.setSetpoint(180);
     vXController.setSetpoint(0);
     vYController.setSetpoint(2);
@@ -64,13 +61,18 @@ public class AlignCommand extends Command {
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
     PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
-    if (PhotonTags.hasUsedTarget(usedTag)) {
+    if (PhotonTags.hasTarget(p)) {
       printToDashboard();
 
       vx = vXController.calculate((PhotonTags.getYaw(t))) * -1;
-      vy = vYController.calculate(PhotonTags.getDistance()) * -1;
-      omega = vOmegaController.calculate(Math.abs(PhotonTags.getAngle()));
-      omega = Math.copySign(omega, PhotonTags.getAngle()) * -1;
+      vy = vYController.calculate(PhotonTags.getBestCamera(t).getX()) * -1;
+      omega =
+          vOmegaController.calculate(
+              Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
+      omega =
+          Math.copySign(
+                  omega, PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees())
+              * -1;
 
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }

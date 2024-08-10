@@ -120,7 +120,11 @@ public class PhotonTags {
    * @return Best camera to target
    */
   public static Transform3d getBestCamera(PhotonTrackedTarget target) {
-    return target.getBestCameraToTarget();
+    if (hasTarget(getLatestPipeline())) {
+      return target.getBestCameraToTarget();
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -155,7 +159,11 @@ public class PhotonTags {
    * @return robot angle in degrees
    */
   public static double getAngle() {
-    return getBestCamera(t).getRotation().toRotation2d().getDegrees();
+    if (hasTarget(result)) {
+      return getBestCamera(t).getRotation().toRotation2d().getDegrees();
+    } else {
+      return 0.0;
+    }
   }
 
   /**
@@ -164,6 +172,10 @@ public class PhotonTags {
    * @return distance in meters
    */
   public static double getDistance() {
-    return getBestCamera(t).getX();
+    if (hasTarget(result)) {
+      return getBestCamera(t).getX();
+    } else {
+      return 0.0;
+    }
   }
 }

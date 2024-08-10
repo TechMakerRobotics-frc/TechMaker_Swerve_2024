@@ -44,7 +44,7 @@ public class PhotonPose {
   public PhotonPose() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
 
-    if (PhotonTags.hasTarget(p)) {
+    while (PhotonTags.hasTarget(p)) {
       PhotonCamera camera = PhotonTags.getCamera();
       PhotonTrackedTarget bestTarget = camera.getLatestResult().getBestTarget();
 
