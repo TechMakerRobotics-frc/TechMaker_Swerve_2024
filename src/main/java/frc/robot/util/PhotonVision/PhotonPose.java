@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.UtilConstants.VisionConstants;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -21,7 +22,7 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class PhotonPose {
+public class PhotonPose extends SubsystemBase {
 
   Field2d field;
 
@@ -41,10 +42,13 @@ public class PhotonPose {
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, cam, robotToCam);
 
-  public PhotonPose() {
-    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+  public PhotonPose() {}
 
-    while (PhotonTags.hasTarget(p)) {
+  @Override
+  public void periodic(){
+    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+    
+    if (PhotonTags.hasTarget(p)) {
       PhotonCamera camera = PhotonTags.getCamera();
       PhotonTrackedTarget bestTarget = camera.getLatestResult().getBestTarget();
 
@@ -75,7 +79,6 @@ public class PhotonPose {
       SmartDashboard.putData("Field robot pose PhotonVision", field);
     }
   }
-
   public static Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimator.update();
