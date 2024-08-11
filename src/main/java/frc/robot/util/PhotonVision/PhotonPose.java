@@ -45,9 +45,9 @@ public class PhotonPose extends SubsystemBase {
   public PhotonPose() {}
 
   @Override
-  public void periodic(){
+  public void periodic() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
-    
+
     if (PhotonTags.hasTarget(p)) {
       PhotonCamera camera = PhotonTags.getCamera();
       PhotonTrackedTarget bestTarget = camera.getLatestResult().getBestTarget();
@@ -77,8 +77,10 @@ public class PhotonPose extends SubsystemBase {
           PhotonUtils.estimateFieldToRobot(cameraToTarget, fieldToTarget, cameraToRobot);
       field.setRobotPose(robotPose2d);
       SmartDashboard.putData("Field robot pose PhotonVision", field);
+      SmartDashboard.putBoolean("Has Target", PhotonTags.hasTarget(p));
     }
   }
+
   public static Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimator.update();

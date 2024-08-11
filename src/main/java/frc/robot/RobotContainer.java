@@ -170,7 +170,7 @@ public class RobotContainer {
     // return new AlignCommand(2000, drive);
   }
 
-  private void PhotonPose(){
+  private void PhotonPose() {
     while (PhotonTags.hasTarget(PhotonTags.getLatestPipeline())) {
       new PhotonPose();
     }
