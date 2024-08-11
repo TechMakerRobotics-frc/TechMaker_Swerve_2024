@@ -101,5 +101,6 @@ public class AlignCommand extends Command {
     SmartDashboard.putNumber("vy", vy);
     SmartDashboard.putNumber("Target Angle", PhotonTags.getAngle());
     SmartDashboard.putNumber("Target Distance", PhotonTags.getDistance());
+    SmartDashboard.putNumber("Target Distance with hypotenuse calc", PhotonTags.getDistanceHypotenuse());
   }
 }

@@ -154,9 +154,9 @@ public class PhotonTags {
   }
 
   /**
-   * Get the angle from the robot.
+   * Get the angle from the target.
    *
-   * @return robot angle in degrees
+   * @return target angle in degrees
    */
   public static double getAngle() {
     if (hasTarget(getLatestPipeline())) {
@@ -177,5 +177,42 @@ public class PhotonTags {
     } else {
       return 0.0;
     }
+  }
+
+  public static double getDistanceHypotenuse(){
+    if (hasTarget(getLatestPipeline())){
+      // a1 = LL panning angle
+      // a2 = additional angle to target
+      // tan(a1 + a2) = h/d
+      // d = h/tan(a1+a2)
+      double a1 = 30;
+      double a2 = 0;
+      double h1 = 0.40;
+      double h2 = 1.4511; // Place holder Height of target
+
+      double angleToGoal = (a1 + a2);
+      double angleToGoalRadian = Math.toRadians(angleToGoal);
+    
+      return (h2 - h1) / Math.tan(angleToGoalRadian);
+    } else {
+      return 0.0;
+    }
+    /*
+        C (h2)
+        |\   |\ additional angle = (a2)
+        | \
+        |  \
+        |   \ hyponenuse = (d)
+(h2-h1) |    \
+        |     \
+        |      \
+  {     |_______\ __\ câmera angle = (a1)
+  |     |        *---------|
+  |     |(h1)    * Robot   |
+  |     |        |         |
+  |     |________|_________|
+  |     A        B
+  {    (h1)     (d)
+    */
   }
 }
