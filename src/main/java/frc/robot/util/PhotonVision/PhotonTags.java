@@ -179,8 +179,8 @@ public class PhotonTags {
     }
   }
 
-  public static double getDistanceHypotenuse(){
-    if (hasTarget(getLatestPipeline())){
+  public static double getDistanceHypotenuse() {
+    if (hasTarget(getLatestPipeline())) {
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d
@@ -192,27 +192,27 @@ public class PhotonTags {
 
       double angleToGoal = (a1 + a2);
       double angleToGoalRadian = Math.toRadians(angleToGoal);
-    
+
       return (h2 - h1) / Math.tan(angleToGoalRadian);
     } else {
       return 0.0;
     }
     /*
-        C (h2)
-        |\   |\ additional angle = (a2)
-        | \
-        |  \
-        |   \ hyponenuse = (d)
-(h2-h1) |    \
-        |     \
-        |      \
-  {     |_______\ __\ câmera angle = (a1)
-  |     |        *---------|
-  |     |(h1)    * Robot   |
-  |     |        |         |
-  |     |________|_________|
-  |     A        B
-  {    (h1)     (d)
-    */
+            C (h2)
+            |\   |\ additional angle = (a2)
+            | \
+            |  \
+            |   \ hyponenuse = (d)
+    (h2-h1) |    \
+            |     \
+            |      \
+      {     |_______\ __\ câmera angle = (a1)
+      |     |        *---------|
+      |     |(h1)    * Robot   |
+      |     |        |         |
+      |     |________|_________|
+      |     A        B
+      {    (h1)     (d)
+        */
   }
 }
