@@ -13,12 +13,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** Command to align the robot using vision targets detected by PhotonVision. */
 public class AlignCommand extends Command {
-  private static PIDController vYController =
-      new PIDController(
-          AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
   private static PIDController vXController =
       new PIDController(
           AlignConstants.VX_SPEAKER_P, AlignConstants.VX_SPEAKER_I, AlignConstants.VX_SPEAKER_D);
+  private static PIDController vYController =
+      new PIDController(
+          AlignConstants.VY_SPEAKER_P, AlignConstants.VY_SPEAKER_I, AlignConstants.VY_SPEAKER_D);
   private static PIDController vOmegaController =
       new PIDController(
           AlignConstants.V_OMEGA_SPEAKER_P,
@@ -48,9 +48,10 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
-    vOmegaController.setSetpoint(180);
     vXController.setSetpoint(0);
     vYController.setSetpoint(2);
+    vOmegaController.setSetpoint(180);
+    vOmegaController.setTolerance(10);
     timer.reset();
     timer.start();
     defaultCommand = drive.getDefaultCommand();
@@ -69,7 +70,10 @@ public class AlignCommand extends Command {
       omega = vOmegaController.calculate(Math.abs(PhotonTags.getAngle(t)));
       omega = Math.copySign(omega, PhotonTags.getAngle(t)) * -1;
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
+      if (vXController.atSetpoint() && vYController.atSetpoint() && vOmegaController.atSetpoint()) {
+        drive.runVelocity(new ChassisSpeeds());
+      }
     }
     isFinished = timer.get() >= timeout;
   }

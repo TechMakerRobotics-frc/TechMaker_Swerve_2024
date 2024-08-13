@@ -121,7 +121,6 @@ public class RobotContainer {
     if (Constants.currentMode == Mode.SIM) {
       new PhotonSim(drive);
     }
-    PhotonPose();
   }
 
   /**

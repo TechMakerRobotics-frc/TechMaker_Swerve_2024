@@ -5,12 +5,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class TunningPID extends SubsystemBase {
 
-  private double p, i, d;
-  private LoggedDashboardNumber kP = new LoggedDashboardNumber("PID/P", 1500.0);
+  private static double p, i, d;
+  private LoggedDashboardNumber kP = new LoggedDashboardNumber("PID/P", 0.01);
 
-  private LoggedDashboardNumber kI = new LoggedDashboardNumber("PID/I", 1500.0);
+  private LoggedDashboardNumber kI = new LoggedDashboardNumber("PID/I", 0.01);
 
-  private LoggedDashboardNumber kD = new LoggedDashboardNumber("PID/D", 1500.0);
+  private LoggedDashboardNumber kD = new LoggedDashboardNumber("PID/D", 0.01);
 
   public TunningPID() {}
 
@@ -28,5 +28,17 @@ public class TunningPID extends SubsystemBase {
       System.out.println("D: " + kD.get());
       d = kD.get();
     }
+  }
+
+  public static double getP() {
+    return p;
+  }
+
+  public static double getI() {
+    return i;
+  }
+
+  public static double getD() {
+    return d;
   }
 }

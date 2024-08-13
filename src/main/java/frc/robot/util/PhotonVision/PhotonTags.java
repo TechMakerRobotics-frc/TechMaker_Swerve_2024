@@ -32,7 +32,7 @@ public class PhotonTags {
 
   // Checks if there is a target in vision
   public static boolean hasTarget(PhotonPipelineResult result) {
-    return result.hasTargets();
+    return result != null ? result.hasTargets() : false;
   }
 
   public static List<PhotonTrackedTarget> getTargets(PhotonPipelineResult result) {
