@@ -60,19 +60,14 @@ public class AlignCommand extends Command {
   @Override
   public void execute() {
     PhotonPipelineResult p = PhotonTags.getLatestPipeline();
-    PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
     if (PhotonTags.hasTarget(p)) {
+      PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       printToDashboard();
 
       vx = vXController.calculate((PhotonTags.getYaw(t))) * -1;
       vy = vYController.calculate(PhotonTags.getBestCamera(t).getX()) * -1;
-      omega =
-          vOmegaController.calculate(
-              Math.abs(PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees()));
-      omega =
-          Math.copySign(
-                  omega, PhotonTags.getBestCamera(t).getRotation().toRotation2d().getDegrees())
-              * -1;
+      omega = vOmegaController.calculate(Math.abs(PhotonTags.getAngle(t)));
+      omega = Math.copySign(omega, PhotonTags.getAngle(t)) * -1;
 
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, vy, omega, drive.getRotation()));
     }
@@ -99,8 +94,8 @@ public class AlignCommand extends Command {
     SmartDashboard.putNumber("omega", omega);
     SmartDashboard.putNumber("vx", vx);
     SmartDashboard.putNumber("vy", vy);
-    SmartDashboard.putNumber("Target Angle", PhotonTags.getAngle());
-    SmartDashboard.putNumber("Target Distance", PhotonTags.getDistance());
+    SmartDashboard.putNumber("Target Angle", PhotonTags.getAngle(t));
+    SmartDashboard.putNumber("Target Distance", PhotonTags.getDistance(t));
     SmartDashboard.putNumber(
         "Target Distance with hypotenuse calc", PhotonTags.getDistanceHypotenuse());
   }

@@ -16,8 +16,6 @@ public class PhotonTags {
 
   static int tagId;
   static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
-  static PhotonPipelineResult result = getLatestPipeline();
-  static PhotonTrackedTarget t = getBestTarget(result);
 
   /**
    * get the latest result of the camera.
@@ -120,11 +118,7 @@ public class PhotonTags {
    * @return Best camera to target
    */
   public static Transform3d getBestCamera(PhotonTrackedTarget target) {
-    if (hasTarget(getLatestPipeline())) {
-      return target.getBestCameraToTarget();
-    } else {
-      return null;
-    }
+    return target.getBestCameraToTarget();
   }
 
   /**
@@ -158,12 +152,8 @@ public class PhotonTags {
    *
    * @return target angle in degrees
    */
-  public static double getAngle() {
-    if (hasTarget(getLatestPipeline())) {
-      return getBestCamera(t).getRotation().toRotation2d().getDegrees();
-    } else {
-      return 0.0;
-    }
+  public static double getAngle(PhotonTrackedTarget target) {
+    return getBestCamera(target).getRotation().toRotation2d().getDegrees();
   }
 
   /**
@@ -171,9 +161,9 @@ public class PhotonTags {
    *
    * @return distance in meters
    */
-  public static double getDistance() {
-    if (hasTarget(getLatestPipeline())) {
-      return getBestCamera(t).getX();
+  public static double getDistance(PhotonTrackedTarget target) {
+    if (getBestCamera(target) != null) {
+      return getBestCamera(target).getX();
     } else {
       return 0.0;
     }
