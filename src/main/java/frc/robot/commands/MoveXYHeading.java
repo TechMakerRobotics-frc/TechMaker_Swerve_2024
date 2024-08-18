@@ -60,15 +60,19 @@ public class MoveXYHeading extends Command {
    */
   @Override
   public void execute() {
-    xVelocity = xController.calculate(drive.getPose().getX());
-    yVelocity = yController.calculate(drive.getPose().getY());
-    angVelocity = headingController.calculate(targetHeadingDegrees);
-
     double temp = Timer.getFPGATimestamp() - lastTimestamp;
+    if (!xController.atSetpoint() && !yController.atSetpoint()) {
+      xVelocity = xController.calculate(drive.getPose().getX());
+      yVelocity = yController.calculate(drive.getPose().getY());
+      angVelocity = headingController.calculate(targetHeadingDegrees);
 
-    ChassisSpeeds speed = new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity));
+      ChassisSpeeds speed = new ChassisSpeeds(xVelocity, yVelocity, Math.toRadians(angVelocity));
 
-    drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speed, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speed, drive.getRotation()));
+    } else {
+      drive.runVelocity(new ChassisSpeeds());
+      finish = true;
+    }
 
     finish = temp >= TimeK.TIME_OUT;
     SmartDashboard.putBoolean("MoveXYHeading", !finish);

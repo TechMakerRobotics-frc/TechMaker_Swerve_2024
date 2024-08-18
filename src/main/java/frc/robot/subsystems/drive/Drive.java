@@ -42,7 +42,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
-  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(2.5); // estava em 14.5
+  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5); // estava em 14.5
   private static final double TRACK_WIDTH_X = Units.inchesToMeters(28.0);
   private static final double TRACK_WIDTH_Y = Units.inchesToMeters(28.0);
   private static final double DRIVE_BASE_RADIUS =
@@ -88,7 +88,7 @@ public class Drive extends SubsystemBase {
             MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
         () ->
             DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
+                && DriverStation.getAlliance().get() == Alliance.Blue,
         this);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
