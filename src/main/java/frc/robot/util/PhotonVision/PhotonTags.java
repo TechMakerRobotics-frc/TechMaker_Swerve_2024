@@ -151,19 +151,19 @@ public class PhotonTags {
 
   /**
    * Get the angle from the robot.
-   * 
+   *
    * @return robot angle in degrees
    */
-  public static double getAngle() {
-    return getBestCamera(t).getRotation().toRotation2d().getDegrees();
+  public static double getAngle(PhotonTrackedTarget target) {
+    return getBestCamera(target).getRotation().toRotation2d().getDegrees();
   }
 
   /**
    * Get the distance from the camera to the target.
-   * 
+   *
    * @return distance in meters
    */
-  public static double getDistance() {
-    return getBestCamera(t).getX();
+  public static double getDistance(PhotonTrackedTarget target) {
+    return getBestCamera(target).getX();
   }
 }
