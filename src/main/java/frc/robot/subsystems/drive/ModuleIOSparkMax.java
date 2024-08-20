@@ -53,28 +53,28 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   public ModuleIOSparkMax(int index) {
     switch (index) {
-      case 0: // front left
+      case 0: // front left 8 - 11 - 2
         driveSparkMax = new CANSparkMax(8, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
         cancoder = new CANcoder(2);
         absoluteEncoderOffset =
             new Rotation2d(Units.degreesToRadians(312.891)); // MUST BE CALIBRATED
         break;
-      case 1: // front right
+      case 1: // front right 6 - 4 - 5
         driveSparkMax = new CANSparkMax(6, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(4, MotorType.kBrushless);
         cancoder = new CANcoder(5);
         absoluteEncoderOffset =
             new Rotation2d(Units.degreesToRadians(123.135)); // MUST BE CALIBRATED
         break;
-      case 2: // back left
+      case 2: // back left 12 - 10 - 1
         driveSparkMax = new CANSparkMax(12, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(10, MotorType.kBrushless);
         cancoder = new CANcoder(1);
         absoluteEncoderOffset =
             new Rotation2d(Units.degreesToRadians(-60.381)); // MUST BE CALIBRATED
         break;
-      case 3: // back right
+      case 3: // back right 9 - 7 - 3
         driveSparkMax = new CANSparkMax(9, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(7, MotorType.kBrushless);
         cancoder = new CANcoder(3);

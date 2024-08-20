@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -129,8 +130,8 @@ public class RobotContainer {
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
-    controller.b().onTrue(new MoveXYHeading(0, 0, 1, drive));
-    controller.y().onTrue(new MoveXYHeading(0, 1, 0, drive));
+    // controller.b().onTrue(new MoveXYHeading(0, 0, 1, drive));
+    // controller.y().onTrue(new MoveXYHeading(0, 1, 0, drive));
   }
 
   /**
@@ -139,8 +140,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return new PathPlannerAuto("AutoTestNamed");
-    return new MoveXYHeading(0, 1, 0, drive);
+    return new PathPlannerAuto("AutoTestNamed");
+    // return new MoveXYHeading(0, 1, 0, drive);
     // return null;
   }
 }
