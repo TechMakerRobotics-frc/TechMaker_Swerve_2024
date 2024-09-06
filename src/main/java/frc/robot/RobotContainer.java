@@ -26,9 +26,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
-import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
-import frc.robot.util.PhotonVision.PhotonTags;
 import frc.robot.util.RegisterAlign;
 import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -167,11 +165,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new PathPlannerAuto("AutoTest1");
     // return new AlignCommand(2000, drive);
-  }
-
-  private void PhotonPose() {
-    while (PhotonTags.hasTarget(PhotonTags.getLatestPipeline())) {
-      new PhotonPose();
-    }
   }
 }
