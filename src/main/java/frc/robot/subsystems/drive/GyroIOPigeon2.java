@@ -49,7 +49,7 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity.getValueAsDouble());
   }
 
-  public Rotation3d getRotation3d(){
+  public Rotation3d getRotation3d() {
     return new Rotation3d(rollValue, pitchValue, yawValue);
   }
 }
