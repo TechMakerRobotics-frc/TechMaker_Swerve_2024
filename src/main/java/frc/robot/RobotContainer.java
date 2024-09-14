@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -35,7 +34,6 @@ import frc.robot.subsystems.flywheel.*;
 import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -58,7 +56,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
-  // Dashboard inputs
+  /* Dashboard inputs
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
   /*private final LoggedDashboardNumber intakeSpeedInput =
@@ -73,18 +71,11 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOSparkMax(0),
-                new ModuleIOSparkMax(1),
-                new ModuleIOSparkMax(2),
-                new ModuleIOSparkMax(3));
-        // drive = new Drive(
-        // new GyroIOPigeon2(),
-        // new ModuleIOTalonFX(0),
-        // new ModuleIOTalonFX(1),
-        // new ModuleIOTalonFX(2),
-        // new ModuleIOTalonFX(3));
-        flywheel = new Flywheel(new FlywheelIOVictorSPX());
-        // intake = new Intake(new IntakeIOSparkMax());
+                new ModuleIOSparkAndTalon(0),
+                new ModuleIOSparkAndTalon(1),
+                new ModuleIOSparkAndTalon(2),
+                new ModuleIOSparkAndTalon(3));
+                flywheel = new Flywheel(new FlywheelIOVictorSPX());
         break;
 
       case SIM:
@@ -115,11 +106,6 @@ public class RobotContainer {
     }
 
     // Set up auto routines
-    NamedCommands.registerCommand(
-        "Run Flywheel",
-        Commands.startEnd(
-                () -> flywheel.runVolts(flywheelSpeedInput.get()), flywheel::stop, flywheel)
-            .withTimeout(5.0));
     /*NamedCommands.registerCommand(
     "Run Intake",
     Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
