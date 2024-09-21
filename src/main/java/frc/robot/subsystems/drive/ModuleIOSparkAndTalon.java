@@ -77,11 +77,13 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     driveAppliedVolts = driveTalon.getMotorVoltage();
     driveCurrent = driveTalon.getSupplyCurrent();
 
+    //Ver sobre essa frequência *******************************************************************************************************
     BaseStatusSignal.setUpdateFrequencyForAll(100.0, drivePosition); // Required for odometry
     BaseStatusSignal.setUpdateFrequencyForAll(50.0, driveVelocity, driveAppliedVolts, driveCurrent);
 
     // Initialize turn motor (CANSparkMax)
     turnSparkMax.restoreFactoryDefaults();
+    //Ver sobre esse Timeout *******************************************************************************************************
     turnSparkMax.setCANTimeout(250);
     turnRelativeEncoder = turnSparkMax.getEncoder();
     turnSparkMax.setInverted(isTurnMotorInverted);
@@ -91,6 +93,7 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
     turnSparkMax.setCANTimeout(0);
+    //Ver se isso diminui vida útil da memória ***************************************************************************************
     turnSparkMax.burnFlash();
 
     // Initialize CANcoder for turn position
