@@ -28,7 +28,6 @@ import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
-import frc.robot.util.TunningPID;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
@@ -43,6 +42,10 @@ public class RobotContainer {
   private final Flywheel flywheel;
   private final Intake intake;
 
+  //Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe que deverá 
+  //receber os valores pid atualizados e, no momento da sua instanciação aqui, deverá passar "pid" como argumento.
+  //private final TunningPID pid = TunningPID.getInstance();
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -54,7 +57,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    new TunningPID();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
