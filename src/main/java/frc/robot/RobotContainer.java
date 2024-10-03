@@ -53,6 +53,8 @@ public class RobotContainer {
   // como argumento.
   // private final TunningPID pid = TunningPID.getInstance();
 
+  // private final Intake intake;
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -61,6 +63,7 @@ public class RobotContainer {
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
   /*private final LoggedDashboardNumber intakeSpeedInput =
   new LoggedDashboardNumber("Intake Speed", 1500.0);*/
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -88,7 +91,6 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
-        // intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -101,7 +103,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
-        // intake = new Intake(new IntakeIO() {});
         break;
     }
 
@@ -110,6 +111,7 @@ public class RobotContainer {
     "Run Intake",
     Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
         .withTimeout(5.0));*/
+
     new RegisterAlign(30, drive);
 
     // Configure the button bindings
