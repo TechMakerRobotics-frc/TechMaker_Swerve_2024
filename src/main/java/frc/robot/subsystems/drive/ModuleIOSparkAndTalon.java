@@ -27,7 +27,7 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   private final StatusSignal<Double> turnAbsolutePosition;
   private final TalonFX driveTalon;
 
-  private boolean isTurnMotorInverted = true;
+  private boolean isTurnMotorInverted = false;
   private final Rotation2d absoluteEncoderOffset;
 
   private final StatusSignal<Double> drivePosition;
@@ -38,32 +38,32 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   public ModuleIOSparkAndTalon(int index) {
     switch (index) {
       case 0: // front left
-        driveTalon = new TalonFX(1);
+        driveTalon = new TalonFX(1, "CANivore");
         turnSparkMax = new CANSparkMax(2, MotorType.kBrushless);
         cancoder = new CANcoder(3);
         absoluteEncoderOffset =
-            new Rotation2d(Units.degreesToRadians(312.891)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(-0.402588)); // MUST BE CALIBRATED
         break;
       case 1: // front right
-        driveTalon = new TalonFX(4);
+        driveTalon = new TalonFX(4, "CANivore");
         turnSparkMax = new CANSparkMax(5, MotorType.kBrushless);
-        cancoder = new CANcoder(6);
+        cancoder = new CANcoder(6, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.degreesToRadians(123.135)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.323975)); // MUST BE CALIBRATED
         break;
       case 2: // back left
-        driveTalon = new TalonFX(7);
+        driveTalon = new TalonFX(7, "CANivore");
         turnSparkMax = new CANSparkMax(8, MotorType.kBrushless);
-        cancoder = new CANcoder(9);
+        cancoder = new CANcoder(9, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.degreesToRadians(-60.381)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.388672)); // MUST BE CALIBRATED
         break;
       case 3: // back right
-        driveTalon = new TalonFX(10);
+        driveTalon = new TalonFX(10, "CANivore");
         turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
-        cancoder = new CANcoder(12);
+        cancoder = new CANcoder(12, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.degreesToRadians(228.779)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.378662)); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");

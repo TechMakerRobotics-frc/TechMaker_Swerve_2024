@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -29,7 +28,6 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
 import frc.robot.util.TunningPID;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,17 +38,17 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Flywheel flywheel;
-  private final Intake intake;
+  // private final Flywheel flywheel;
+  // private final Intake intake;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
-  private final LoggedDashboardNumber flywheelSpeedInput =
+  /*private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
   private final LoggedDashboardNumber intakeSpeedInput =
-      new LoggedDashboardNumber("Intake Speed", 1500.0);
+      new LoggedDashboardNumber("Intake Speed", 1500.0);*/
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -65,8 +63,8 @@ public class RobotContainer {
                 new ModuleIOSparkAndTalon(1),
                 new ModuleIOSparkAndTalon(2),
                 new ModuleIOSparkAndTalon(3));
-        flywheel = new Flywheel(new FlywheelIOSparkMax());
-        intake = new Intake(new IntakeIOSparkMax());
+        // flywheel = new Flywheel(new FlywheelIOSparkMax());
+        // intake = new Intake(new IntakeIOSparkMax());
         break;
 
       case SIM:
@@ -78,8 +76,8 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
-        flywheel = new Flywheel(new FlywheelIOSim());
-        intake = new Intake(new IntakeIOSim());
+        // flywheel = new Flywheel(new FlywheelIOSim());
+        // intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -91,13 +89,13 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        flywheel = new Flywheel(new FlywheelIO() {});
-        intake = new Intake(new IntakeIO() {});
+        // flywheel = new Flywheel(new FlywheelIO() {});
+        // intake = new Intake(new IntakeIO() {});
         break;
     }
 
     // Set up auto routines
-    NamedCommands.registerCommand(
+    /*  NamedCommands.registerCommand(
         "Run Flywheel",
         Commands.startEnd(
                 () -> flywheel.runVolts(flywheelSpeedInput.get()), flywheel::stop, flywheel)
@@ -105,7 +103,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Run Intake",
         Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
-            .withTimeout(5.0));
+            .withTimeout(5.0));*/
     new RegisterAlign(30, drive);
 
     // Configure the button bindings
@@ -138,7 +136,7 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
-    controller
+    /*  controller
         .a()
         .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
         .onFalse(new InstantCommand(flywheel::stop, flywheel));
@@ -146,7 +144,7 @@ public class RobotContainer {
     controller
         .y()
         .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
-        .onFalse(new InstantCommand(intake::stop, intake));
+        .onFalse(new InstantCommand(intake::stop, intake));*/
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
   }
