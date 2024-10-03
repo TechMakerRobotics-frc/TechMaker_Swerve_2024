@@ -38,28 +38,32 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   public ModuleIOSparkAndTalon(int index) {
     switch (index) {
       case 0: // front left
-        driveTalon = new TalonFX(8);
-        turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
-        cancoder = new CANcoder(2);
-        absoluteEncoderOffset = new Rotation2d(Units.degreesToRadians(312.891)); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(1);
+        turnSparkMax = new CANSparkMax(2, MotorType.kBrushless);
+        cancoder = new CANcoder(3);
+        absoluteEncoderOffset =
+            new Rotation2d(Units.degreesToRadians(312.891)); // MUST BE CALIBRATED
         break;
       case 1: // front right
-        driveTalon = new TalonFX(6);
-        turnSparkMax = new CANSparkMax(4, MotorType.kBrushless);
-        cancoder = new CANcoder(5);
-        absoluteEncoderOffset = new Rotation2d(Units.degreesToRadians(123.135)); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(4);
+        turnSparkMax = new CANSparkMax(5, MotorType.kBrushless);
+        cancoder = new CANcoder(6);
+        absoluteEncoderOffset =
+            new Rotation2d(Units.degreesToRadians(123.135)); // MUST BE CALIBRATED
         break;
       case 2: // back left
-        driveTalon = new TalonFX(12);
-        turnSparkMax = new CANSparkMax(10, MotorType.kBrushless);
-        cancoder = new CANcoder(1);
-        absoluteEncoderOffset = new Rotation2d(Units.degreesToRadians(-60.381)); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(7);
+        turnSparkMax = new CANSparkMax(8, MotorType.kBrushless);
+        cancoder = new CANcoder(9);
+        absoluteEncoderOffset =
+            new Rotation2d(Units.degreesToRadians(-60.381)); // MUST BE CALIBRATED
         break;
       case 3: // back right
-        driveTalon = new TalonFX(9);
-        turnSparkMax = new CANSparkMax(7, MotorType.kBrushless);
-        cancoder = new CANcoder(3);
-        absoluteEncoderOffset = new Rotation2d(Units.degreesToRadians(228.779)); // MUST BE CALIBRATED
+        driveTalon = new TalonFX(10);
+        turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
+        cancoder = new CANcoder(12);
+        absoluteEncoderOffset =
+            new Rotation2d(Units.degreesToRadians(228.779)); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -77,13 +81,15 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     driveAppliedVolts = driveTalon.getMotorVoltage();
     driveCurrent = driveTalon.getSupplyCurrent();
 
-    //Ver sobre essa frequência *******************************************************************************************************
+    // Ver sobre essa frequência
+    // *******************************************************************************************************
     BaseStatusSignal.setUpdateFrequencyForAll(100.0, drivePosition); // Required for odometry
     BaseStatusSignal.setUpdateFrequencyForAll(50.0, driveVelocity, driveAppliedVolts, driveCurrent);
 
     // Initialize turn motor (CANSparkMax)
     turnSparkMax.restoreFactoryDefaults();
-    //Ver sobre esse Timeout *******************************************************************************************************
+    // Ver sobre esse Timeout
+    // *******************************************************************************************************
     turnSparkMax.setCANTimeout(250);
     turnRelativeEncoder = turnSparkMax.getEncoder();
     turnSparkMax.setInverted(isTurnMotorInverted);
@@ -93,7 +99,8 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
     turnSparkMax.setCANTimeout(0);
-    //Ver se isso diminui vida útil da memória ***************************************************************************************
+    // Ver se isso diminui vida útil da memória
+    // ***************************************************************************************
     turnSparkMax.burnFlash();
 
     // Initialize CANcoder for turn position
@@ -106,16 +113,23 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   public void updateInputs(ModuleIOInputs inputs) {
     // Update drive (TalonFX)
     BaseStatusSignal.refreshAll(drivePosition, driveVelocity, driveAppliedVolts, driveCurrent);
-    inputs.drivePositionRad = Units.rotationsToRadians(drivePosition.getValueAsDouble()) / DRIVE_GEAR_RATIO;
-    inputs.driveVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(driveVelocity.getValueAsDouble()) / DRIVE_GEAR_RATIO;
+    inputs.drivePositionRad =
+        Units.rotationsToRadians(drivePosition.getValueAsDouble()) / DRIVE_GEAR_RATIO;
+    inputs.driveVelocityRadPerSec =
+        Units.rotationsPerMinuteToRadiansPerSecond(driveVelocity.getValueAsDouble())
+            / DRIVE_GEAR_RATIO;
     inputs.driveAppliedVolts = driveAppliedVolts.getValueAsDouble();
     inputs.driveCurrentAmps = new double[] {driveCurrent.getValueAsDouble()};
 
     // Update turn (CANSparkMax)
-    inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble())
-        .minus(absoluteEncoderOffset);
-    inputs.turnPosition = Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
-    inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity()) / TURN_GEAR_RATIO;
+    inputs.turnAbsolutePosition =
+        Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble())
+            .minus(absoluteEncoderOffset);
+    inputs.turnPosition =
+        Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
+    inputs.turnVelocityRadPerSec =
+        Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity())
+            / TURN_GEAR_RATIO;
     inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
     inputs.turnCurrentAmps = new double[] {turnSparkMax.getOutputCurrent()};
   }
