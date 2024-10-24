@@ -23,6 +23,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Flywheel.InsideFlywheel;
+import frc.robot.commands.Flywheel.InsideLockWheel;
+import frc.robot.commands.Flywheel.OutsideFlywheel;
+import frc.robot.commands.Flywheel.OutsideLockWheel;
+import frc.robot.commands.Flywheel.StopFlywheel;
+import frc.robot.commands.Flywheel.StopLockWheel;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
@@ -75,7 +81,7 @@ public class RobotContainer {
         // new ModuleIOTalonFX(1),
         // new ModuleIOTalonFX(2),
         // new ModuleIOTalonFX(3));
-        flywheel = new Flywheel(new FlywheelIOSparkMax());
+        flywheel = new Flywheel(new FlywheelIOTalonFX());
         intake = new Intake(new IntakeIOSparkMax());
         break;
 
@@ -148,15 +154,26 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
-    controller
-        .a()
-        .onTrue(new InstantCommand(() -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel))
-        .onFalse(new InstantCommand(flywheel::stop, flywheel));
 
     controller
         .y()
-        .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
-        .onFalse(new InstantCommand(intake::stop, intake));
+        .onTrue(new OutsideFlywheel())
+        .onFalse(new StopFlywheel());
+
+    controller
+        .a()
+        .onTrue(new InsideFlywheel())
+        .onFalse(new StopFlywheel());
+
+    controller
+        .x()
+        .onTrue(new OutsideLockWheel())
+        .onFalse(new StopLockWheel());
+
+    controller
+        .b()
+        .onTrue(new InsideLockWheel())
+        .onFalse(new StopLockWheel());
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
   }
