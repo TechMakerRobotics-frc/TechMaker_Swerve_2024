@@ -134,7 +134,7 @@ public class RobotContainer {
             () -> controller.getLeftY(),
             () -> controller.getLeftX(),
             () -> -controller.getRightX()));
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller
         .povRight()
         .onTrue(
@@ -152,6 +152,13 @@ public class RobotContainer {
     controller.x().onTrue(new OutsideLockWheel()).onFalse(new StopLockWheel());
 
     controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());
+
+    controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
+
+    /*controller
+    .y()
+    .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
+    .onFalse(new InstantCommand(intake::stop, intake));*/
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
   }

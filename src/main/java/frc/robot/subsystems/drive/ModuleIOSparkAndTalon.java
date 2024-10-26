@@ -40,30 +40,30 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
       case 0: // front left
         driveTalon = new TalonFX(1, "CANivore");
         turnSparkMax = new CANSparkMax(2, MotorType.kBrushless);
-        cancoder = new CANcoder(3);
+        cancoder = new CANcoder(3, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(-0.013184)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.091553)); // MUST BE CALIBRATED
         break;
       case 1: // front right
         driveTalon = new TalonFX(4, "CANivore");
         turnSparkMax = new CANSparkMax(5, MotorType.kBrushless);
         cancoder = new CANcoder(6, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(0.324463)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.324707)); // MUST BE CALIBRATED
         break;
       case 2: // back left
         driveTalon = new TalonFX(7, "CANivore");
         turnSparkMax = new CANSparkMax(8, MotorType.kBrushless);
         cancoder = new CANcoder(9, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(-0.109131)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(-0.112549)); // MUST BE CALIBRATED
         break;
       case 3: // back right
         driveTalon = new TalonFX(10, "CANivore");
         turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
         cancoder = new CANcoder(12, "CANivore");
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(0.385986)); // MUST BE CALIBRATED
+            new Rotation2d(Units.rotationsToRadians(0.373047)); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
