@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.flywheel.LockWheel;
 
-public class OutsideLockWheel extends InstantCommand{
-    
-    private Flywheel lockWheel;
+public class OutsideLockWheel extends InstantCommand {
 
-    @Override
-    public void initialize() {
-        lockWheel = new Flywheel(new LockWheel());
-    }
+  private Flywheel lockWheel;
 
-    @Override
-    public void execute() {
-        lockWheel.runVelocity(-1000);
-    }
+  @Override
+  public void initialize() {
+    lockWheel = new Flywheel(new LockWheel());
+  }
+
+  @Override
+  public void execute() {
+    lockWheel.runVelocity(-1000);
+  }
 }

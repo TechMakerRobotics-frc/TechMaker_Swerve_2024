@@ -32,7 +32,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
   public FlywheelIOVictorSPX() {
     leader.configFactoryDefault();
     follower.configFactoryDefault();
-    
+
     leader.setNeutralMode(NeutralMode.Coast);
     follower.setNeutralMode(NeutralMode.Coast);
 
@@ -41,8 +41,8 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
     follower.configVoltageCompSaturation(12.0);
     follower.enableVoltageCompensation(true);
 
-    leader.configOpenloopRamp(0.1);  // Slope for ramping up voltage
-    follower.follow(leader);         // Follower setup
+    leader.configOpenloopRamp(0.1); // Slope for ramping up voltage
+    follower.follow(leader); // Follower setup
   }
 
   /**
@@ -52,24 +52,25 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
   public void updateInputs(FlywheelIOInputs inputs) {
     // VictorSPX doesn't provide direct sensor input for position/velocity,
     // so this is an approximation.
-    inputs.positionRad = 0;  // Add encoder-based position reading if applicable
+    inputs.positionRad = 0; // Add encoder-based position reading if applicable
     inputs.velocityRadPerSec = Units.rotationsToRadians(currentVelocity) / GEAR_RATIO;
     inputs.appliedVolts = appliedVolts;
-    inputs.currentAmps = new double[] { leaderCurrent, followerCurrent };
+    inputs.currentAmps = new double[] {leaderCurrent, followerCurrent};
   }
 
   @Override
   public void setVoltage(double volts) {
-    leader.set(ControlMode.PercentOutput, volts / 12.0);  // Convert to percent output
+    leader.set(ControlMode.PercentOutput, volts / 12.0); // Convert to percent output
     appliedVolts = volts;
   }
 
   @Override
   public void setVelocity(double velocityRadPerSec, double ffVolts) {
-    // VictorSPX doesn't support velocity control directly without an external sensor, so we'll emulate with percent output.
+    // VictorSPX doesn't support velocity control directly without an external sensor, so we'll
+    // emulate with percent output.
     double targetRPM = Units.radiansToRotations(velocityRadPerSec) * 60.0;
     currentVelocity = targetRPM / GEAR_RATIO;
-    leader.set(ControlMode.PercentOutput, ffVolts / 12.0);  // Open loop control
+    leader.set(ControlMode.PercentOutput, ffVolts / 12.0); // Open loop control
     appliedVolts = ffVolts;
   }
 
@@ -80,6 +81,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
 
   @Override
   public void configurePID(double kP, double kI, double kD) {
-    // VictorSPX doesn't support onboard PID, this would need to be handled by external code (e.g., in the robot loop).
+    // VictorSPX doesn't support onboard PID, this would need to be handled by external code (e.g.,
+    // in the robot loop).
   }
 }

@@ -5,20 +5,20 @@ import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.flywheel.FlywheelIOVictorSPX;
 import frc.robot.subsystems.flywheel.LockWheel;
 
-public class StopFlywheel extends InstantCommand{
-    
-    private Flywheel flywheel;
-    private Flywheel lockWheel;
+public class StopFlywheel extends InstantCommand {
 
-    @Override
-    public void initialize() {
-        flywheel = new Flywheel(new FlywheelIOVictorSPX());
-        lockWheel = new Flywheel(new LockWheel());
-    }
+  private Flywheel flywheel;
+  private Flywheel lockWheel;
 
-    @Override
-    public void execute() {
-        flywheel.stop();
-        lockWheel.stop();
-    }
+  @Override
+  public void initialize() {
+    flywheel = new Flywheel(new FlywheelIOVictorSPX());
+    lockWheel = new Flywheel(new LockWheel());
+  }
+
+  @Override
+  public void execute() {
+    flywheel.stop();
+    lockWheel.stop();
+  }
 }

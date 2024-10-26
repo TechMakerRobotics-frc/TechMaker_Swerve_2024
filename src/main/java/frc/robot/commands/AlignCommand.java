@@ -27,7 +27,7 @@ public class AlignCommand extends Command {
 
   private final Timer timer = new Timer();
   private double timeout, vx, vy, omega;
-  //private int usedTag;
+  // private int usedTag;
   private Command defaultCommand;
   private Drive drive;
 
@@ -43,7 +43,7 @@ public class AlignCommand extends Command {
   public AlignCommand(int usedTag, double timeout, Drive drive) {
     this.drive = drive;
     this.timeout = timeout;
-    //this.usedTag = usedTag;
+    // this.usedTag = usedTag;
   }
 
   @Override

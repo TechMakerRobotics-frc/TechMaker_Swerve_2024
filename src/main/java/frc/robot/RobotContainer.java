@@ -31,7 +31,7 @@ import frc.robot.commands.Flywheel.StopFlywheel;
 import frc.robot.commands.Flywheel.StopLockWheel;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
-import frc.robot.subsystems.intake.*;
+// import frc.robot.subsystems.intake.*;
 import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
@@ -47,11 +47,13 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Flywheel flywheel;
-  private final Intake intake;
+  // private final Intake intake;
 
-  //Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe que deverá 
-  //receber os valores pid atualizados e, no momento da sua instanciação aqui, deverá passar "pid" como argumento.
-  //private final TunningPID pid = TunningPID.getInstance();
+  // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
+  // que deverá
+  // receber os valores pid atualizados e, no momento da sua instanciação aqui, deverá passar "pid"
+  // como argumento.
+  // private final TunningPID pid = TunningPID.getInstance();
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -59,8 +61,8 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardNumber flywheelSpeedInput =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
-  private final LoggedDashboardNumber intakeSpeedInput =
-      new LoggedDashboardNumber("Intake Speed", 1500.0);
+  /*private final LoggedDashboardNumber intakeSpeedInput =
+  new LoggedDashboardNumber("Intake Speed", 1500.0);*/
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -81,8 +83,8 @@ public class RobotContainer {
         // new ModuleIOTalonFX(1),
         // new ModuleIOTalonFX(2),
         // new ModuleIOTalonFX(3));
-        flywheel = new Flywheel(new FlywheelIOTalonFX());
-        intake = new Intake(new IntakeIOSparkMax());
+        flywheel = new Flywheel(new FlywheelIOVictorSPX());
+        // intake = new Intake(new IntakeIOSparkMax());
         break;
 
       case SIM:
@@ -95,7 +97,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
-        intake = new Intake(new IntakeIOSim());
+        // intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -108,7 +110,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
-        intake = new Intake(new IntakeIO() {});
+        // intake = new Intake(new IntakeIO() {});
         break;
     }
 
@@ -118,10 +120,10 @@ public class RobotContainer {
         Commands.startEnd(
                 () -> flywheel.runVolts(flywheelSpeedInput.get()), flywheel::stop, flywheel)
             .withTimeout(5.0));
-    NamedCommands.registerCommand(
-        "Run Intake",
-        Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
-            .withTimeout(5.0));
+    /*NamedCommands.registerCommand(
+    "Run Intake",
+    Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
+        .withTimeout(5.0));*/
     new RegisterAlign(30, drive);
 
     // Configure the button bindings
@@ -155,25 +157,13 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller
-        .y()
-        .onTrue(new OutsideFlywheel())
-        .onFalse(new StopFlywheel());
+    controller.y().onTrue(new OutsideFlywheel()).onFalse(new StopFlywheel());
 
-    controller
-        .a()
-        .onTrue(new InsideFlywheel())
-        .onFalse(new StopFlywheel());
+    controller.a().onTrue(new InsideFlywheel()).onFalse(new StopFlywheel());
 
-    controller
-        .x()
-        .onTrue(new OutsideLockWheel())
-        .onFalse(new StopLockWheel());
+    controller.x().onTrue(new OutsideLockWheel()).onFalse(new StopLockWheel());
 
-    controller
-        .b()
-        .onTrue(new InsideLockWheel())
-        .onFalse(new StopLockWheel());
+    controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
   }
