@@ -15,11 +15,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.drive.DriveConstants.ModuleConstants;
 
 public class ModuleIOSparkAndTalon implements ModuleIO {
-  // Gear ratios for SDS MK4i L3, adjust as necessary
-  private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0);
-  private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
+
+  private static final double DRIVE_GEAR_RATIO = ModuleConstants.DRIVE_GEAR_RATIO;
+  private static final double TURN_GEAR_RATIO = ModuleConstants.TURN_GEAR_RATIO;
 
   private final CANSparkMax turnSparkMax;
   private final RelativeEncoder turnRelativeEncoder;
@@ -27,7 +28,7 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   private final StatusSignal<Double> turnAbsolutePosition;
   private final TalonFX driveTalon;
 
-  private boolean isTurnMotorInverted = true;
+  private boolean isTurnMotorInverted = ModuleConstants.TURN_MOTOR_INVERTED;
   private final Rotation2d absoluteEncoderOffset;
 
   private final StatusSignal<Double> drivePosition;
@@ -38,32 +39,32 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
   public ModuleIOSparkAndTalon(int index) {
     switch (index) {
       case 0: // front left
-        driveTalon = new TalonFX(1, "CANivore");
-        turnSparkMax = new CANSparkMax(2, MotorType.kBrushless);
-        cancoder = new CANcoder(3, "CANivore");
+        driveTalon = new TalonFX(ModuleConstants.TALON_FL, ModuleConstants.CANBUS);
+        turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_FL, MotorType.kBrushless);
+        cancoder = new CANcoder(ModuleConstants.CANCODER_FL, ModuleConstants.CANBUS);
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(0.091553)); // MUST BE CALIBRATED
+            new Rotation2d(ModuleConstants.ENCODER_OFFSET_FL);
         break;
       case 1: // front right
-        driveTalon = new TalonFX(4, "CANivore");
-        turnSparkMax = new CANSparkMax(5, MotorType.kBrushless);
-        cancoder = new CANcoder(6, "CANivore");
+        driveTalon = new TalonFX(ModuleConstants.TALON_FR, ModuleConstants.CANBUS);
+        turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_FR, MotorType.kBrushless);
+        cancoder = new CANcoder(ModuleConstants.CANCODER_FR, ModuleConstants.CANBUS);
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(0.324707)); // MUST BE CALIBRATED
+            new Rotation2d(ModuleConstants.ENCODER_OFFSET_FR);
         break;
       case 2: // back left
-        driveTalon = new TalonFX(7, "CANivore");
-        turnSparkMax = new CANSparkMax(8, MotorType.kBrushless);
-        cancoder = new CANcoder(9, "CANivore");
+        driveTalon = new TalonFX(ModuleConstants.TALON_BL, ModuleConstants.CANBUS);
+        turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_BL, MotorType.kBrushless);
+        cancoder = new CANcoder(ModuleConstants.CANCODER_BL, ModuleConstants.CANBUS);
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(-0.112549)); // MUST BE CALIBRATED
+            new Rotation2d(ModuleConstants.ENCODER_OFFSET_BL);
         break;
       case 3: // back right
-        driveTalon = new TalonFX(10, "CANivore");
-        turnSparkMax = new CANSparkMax(11, MotorType.kBrushless);
-        cancoder = new CANcoder(12, "CANivore");
+        driveTalon = new TalonFX(ModuleConstants.TALON_BR, ModuleConstants.CANBUS);
+        turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_BR, MotorType.kBrushless);
+        cancoder = new CANcoder(ModuleConstants.CANCODER_BR, ModuleConstants.CANBUS);
         absoluteEncoderOffset =
-            new Rotation2d(Units.rotationsToRadians(0.373047)); // MUST BE CALIBRATED
+            new Rotation2d(ModuleConstants.ENCODER_OFFSET_BR);
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -71,8 +72,8 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
 
     // Initialize TalonFX configuration
     var driveConfig = new TalonFXConfiguration();
-    driveConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveConfig.CurrentLimits.SupplyCurrentLimit = ModuleConstants.SUPPLY_CURRENT_LIMIT;
+    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = ModuleConstants.SUPPLY_CURRENT_LIMIT_ENABLE;
     driveTalon.getConfigurator().apply(driveConfig);
     setDriveBrakeMode(false);
 
@@ -81,23 +82,18 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     driveAppliedVolts = driveTalon.getMotorVoltage();
     driveCurrent = driveTalon.getSupplyCurrent();
 
-    // Ver sobre essa frequência
-    // *******************************************************************************************************
-    BaseStatusSignal.setUpdateFrequencyForAll(100.0, drivePosition); // Required for odometry
-    BaseStatusSignal.setUpdateFrequencyForAll(50.0, driveVelocity, driveAppliedVolts, driveCurrent);
+    BaseStatusSignal.setUpdateFrequencyForAll(ModuleConstants.ODOMETRY_UPDATE_FREQUENCY, drivePosition); // Required for odometry
+    BaseStatusSignal.setUpdateFrequencyForAll(ModuleConstants.OTHER_SIGNALS_UPDATE_FREQUENCY, driveVelocity, driveAppliedVolts, driveCurrent);
 
-    // Initialize turn motor (CANSparkMax)
     turnSparkMax.restoreFactoryDefaults();
-    // Ver sobre esse Timeout
-    // *******************************************************************************************************
-    turnSparkMax.setCANTimeout(250);
+    turnSparkMax.setCANTimeout(ModuleConstants.CAN_TIMEOUT_MS);
     turnRelativeEncoder = turnSparkMax.getEncoder();
     turnSparkMax.setInverted(isTurnMotorInverted);
-    turnSparkMax.setSmartCurrentLimit(30);
-    turnSparkMax.enableVoltageCompensation(10.0);
-    turnRelativeEncoder.setPosition(0.0);
-    turnRelativeEncoder.setMeasurementPeriod(10);
-    turnRelativeEncoder.setAverageDepth(2);
+    turnSparkMax.setSmartCurrentLimit(ModuleConstants.SMART_CURRENT_LIMIT);
+    turnSparkMax.enableVoltageCompensation(ModuleConstants.VOLTAGE_COMPENSATION);
+    turnRelativeEncoder.setPosition(ModuleConstants.INITIAL_ENCODER_POSITION);
+    turnRelativeEncoder.setMeasurementPeriod(ModuleConstants.ENCODER_MEASUREMENT_PERIOD_MS);
+    turnRelativeEncoder.setAverageDepth(ModuleConstants.ENCODER_AVERAGE_DEPTH);
     turnSparkMax.burnFlash();
 
     cancoder.getConfigurator().apply(new CANcoderConfiguration());
