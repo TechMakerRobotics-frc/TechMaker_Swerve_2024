@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Flywheel.FlywheelCommand;
 import frc.robot.commands.Flywheel.InsideFlywheel;
 import frc.robot.commands.Flywheel.InsideLockWheel;
 import frc.robot.commands.Flywheel.OutsideFlywheel;
@@ -45,6 +46,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Flywheel flywheel;
+  private final FlywheelCommand flywheelCommand;
   // private final Intake intake;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
@@ -68,6 +70,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     new PhotonPose();
+    flywheelCommand = new FlywheelCommand();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -145,13 +148,18 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller.y().onTrue(new OutsideFlywheel()).onFalse(new StopFlywheel());
+    /*controller.y().onTrue(new OutsideFlywheel()).onFalse(new StopFlywheel());
 
     controller.a().onTrue(new InsideFlywheel()).onFalse(new StopFlywheel());
 
     controller.x().onTrue(new OutsideLockWheel()).onFalse(new StopLockWheel());
 
-    controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());
+    controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());*/
+    
+    controller.y().onTrue(flywheelCommand.runOutsideFlywheel()).onFalse(flywheelCommand.stopFlywheels());
+    controller.a().onTrue(flywheelCommand.runInsideFlywheel()).onFalse(flywheelCommand.stopFlywheels());
+    controller.x().onTrue(flywheelCommand.runOutsideLockWheel()).onFalse(flywheelCommand.stopLockWheel());
+    controller.b().onTrue(flywheelCommand.runInsideLockWheel()).onFalse(flywheelCommand.stopLockWheel());
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
 
