@@ -42,29 +42,25 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
         driveTalon = new TalonFX(ModuleConstants.TALON_FL, ModuleConstants.CANBUS);
         turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_FL, MotorType.kBrushless);
         cancoder = new CANcoder(ModuleConstants.CANCODER_FL, ModuleConstants.CANBUS);
-        absoluteEncoderOffset =
-            new Rotation2d(ModuleConstants.ENCODER_OFFSET_FL);
+        absoluteEncoderOffset = new Rotation2d(ModuleConstants.ENCODER_OFFSET_FL);
         break;
       case 1: // front right
         driveTalon = new TalonFX(ModuleConstants.TALON_FR, ModuleConstants.CANBUS);
         turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_FR, MotorType.kBrushless);
         cancoder = new CANcoder(ModuleConstants.CANCODER_FR, ModuleConstants.CANBUS);
-        absoluteEncoderOffset =
-            new Rotation2d(ModuleConstants.ENCODER_OFFSET_FR);
+        absoluteEncoderOffset = new Rotation2d(ModuleConstants.ENCODER_OFFSET_FR);
         break;
       case 2: // back left
         driveTalon = new TalonFX(ModuleConstants.TALON_BL, ModuleConstants.CANBUS);
         turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_BL, MotorType.kBrushless);
         cancoder = new CANcoder(ModuleConstants.CANCODER_BL, ModuleConstants.CANBUS);
-        absoluteEncoderOffset =
-            new Rotation2d(ModuleConstants.ENCODER_OFFSET_BL);
+        absoluteEncoderOffset = new Rotation2d(ModuleConstants.ENCODER_OFFSET_BL);
         break;
       case 3: // back right
         driveTalon = new TalonFX(ModuleConstants.TALON_BR, ModuleConstants.CANBUS);
         turnSparkMax = new CANSparkMax(ModuleConstants.SPARK_BR, MotorType.kBrushless);
         cancoder = new CANcoder(ModuleConstants.CANCODER_BR, ModuleConstants.CANBUS);
-        absoluteEncoderOffset =
-            new Rotation2d(ModuleConstants.ENCODER_OFFSET_BR);
+        absoluteEncoderOffset = new Rotation2d(ModuleConstants.ENCODER_OFFSET_BR);
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -73,7 +69,8 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     // Initialize TalonFX configuration
     var driveConfig = new TalonFXConfiguration();
     driveConfig.CurrentLimits.SupplyCurrentLimit = ModuleConstants.SUPPLY_CURRENT_LIMIT;
-    driveConfig.CurrentLimits.SupplyCurrentLimitEnable = ModuleConstants.SUPPLY_CURRENT_LIMIT_ENABLE;
+    driveConfig.CurrentLimits.SupplyCurrentLimitEnable =
+        ModuleConstants.SUPPLY_CURRENT_LIMIT_ENABLE;
     driveTalon.getConfigurator().apply(driveConfig);
     setDriveBrakeMode(false);
 
@@ -82,8 +79,13 @@ public class ModuleIOSparkAndTalon implements ModuleIO {
     driveAppliedVolts = driveTalon.getMotorVoltage();
     driveCurrent = driveTalon.getSupplyCurrent();
 
-    BaseStatusSignal.setUpdateFrequencyForAll(ModuleConstants.ODOMETRY_UPDATE_FREQUENCY, drivePosition); // Required for odometry
-    BaseStatusSignal.setUpdateFrequencyForAll(ModuleConstants.OTHER_SIGNALS_UPDATE_FREQUENCY, driveVelocity, driveAppliedVolts, driveCurrent);
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        ModuleConstants.ODOMETRY_UPDATE_FREQUENCY, drivePosition); // Required for odometry
+    BaseStatusSignal.setUpdateFrequencyForAll(
+        ModuleConstants.OTHER_SIGNALS_UPDATE_FREQUENCY,
+        driveVelocity,
+        driveAppliedVolts,
+        driveCurrent);
 
     turnSparkMax.restoreFactoryDefaults();
     turnSparkMax.setCANTimeout(ModuleConstants.CAN_TIMEOUT_MS);

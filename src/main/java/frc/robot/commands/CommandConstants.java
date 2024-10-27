@@ -16,7 +16,6 @@ public final class CommandConstants {
     public static final double V_OMEGA_SPEAKER_D = 0.0;
   }
 
-
   public static final class FlywheelConstants {
     public static final double TIME_TO_SHOOT = 3; // in seconds
   }

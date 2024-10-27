@@ -23,18 +23,12 @@ import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Flywheel.FlywheelCommand;
-import frc.robot.commands.Flywheel.InsideFlywheel;
-import frc.robot.commands.Flywheel.InsideLockWheel;
-import frc.robot.commands.Flywheel.OutsideFlywheel;
-import frc.robot.commands.Flywheel.OutsideLockWheel;
-import frc.robot.commands.Flywheel.StopFlywheel;
-import frc.robot.commands.Flywheel.StopLockWheel;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
-// import frc.robot.subsystems.intake.*;
 import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
 import frc.robot.util.RegisterAlign;
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,12 +54,18 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
-  /* Dashboard inputs
-  private final LoggedDashboardNumber flywheelSpeedInput =
+  // Dashboard inputs
+  private final LoggedDashboardNumber flywheelSpeedInside =
+      new LoggedDashboardNumber("Flywheel Speed", 300.0);
+  private final LoggedDashboardNumber flywheelSpeedOutside =
       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+  private final LoggedDashboardNumber lockwheelSpeedInside =
+      new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+  private final LoggedDashboardNumber lockwheelSpeedOutside =
+      new LoggedDashboardNumber("Flywheel Speed", 3000.0);
+
   /*private final LoggedDashboardNumber intakeSpeedInput =
   new LoggedDashboardNumber("Intake Speed", 1500.0);*/
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -81,7 +81,7 @@ public class RobotContainer {
                 new ModuleIOSparkAndTalon(1),
                 new ModuleIOSparkAndTalon(2),
                 new ModuleIOSparkAndTalon(3));
-                flywheel = new Flywheel(new FlywheelIOVictorSPX());
+        flywheel = new Flywheel(new FlywheelIOVictorSPX());
         break;
 
       case SIM:
@@ -155,11 +155,25 @@ public class RobotContainer {
     controller.x().onTrue(new OutsideLockWheel()).onFalse(new StopLockWheel());
 
     controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());*/
-    
-    controller.y().onTrue(flywheelCommand.runOutsideFlywheel()).onFalse(flywheelCommand.stopFlywheels());
-    controller.a().onTrue(flywheelCommand.runInsideFlywheel()).onFalse(flywheelCommand.stopFlywheels());
-    controller.x().onTrue(flywheelCommand.runOutsideLockWheel()).onFalse(flywheelCommand.stopLockWheel());
-    controller.b().onTrue(flywheelCommand.runInsideLockWheel()).onFalse(flywheelCommand.stopLockWheel());
+
+    controller
+        .y()
+        .onTrue(
+            flywheelCommand.runOutsideFlywheel(
+                flywheelSpeedOutside.get(), lockwheelSpeedOutside.get()))
+        .onFalse(flywheelCommand.stopFlywheels());
+    controller
+        .a()
+        .onTrue(flywheelCommand.runInsideFlywheel(flywheelSpeedInside.get()))
+        .onFalse(flywheelCommand.stopFlywheels());
+    controller
+        .x()
+        .onTrue(flywheelCommand.runOutsideLockWheel(lockwheelSpeedOutside.get()))
+        .onFalse(flywheelCommand.stopLockWheel());
+    controller
+        .b()
+        .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
+        .onFalse(flywheelCommand.stopLockWheel());
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
 

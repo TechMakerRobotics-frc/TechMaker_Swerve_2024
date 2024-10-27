@@ -28,7 +28,7 @@ public class OutsideFlywheel extends Command {
   @Override
   public void execute() {
     flywheel.runVelocity(5000);
-    if (timer.get() > FlywheelConstants.TIME_TO_SHOOT) { 
+    if (timer.get() > FlywheelConstants.TIME_TO_SHOOT) {
       lockWheel.runVelocity(1000);
     }
   }
@@ -39,5 +39,4 @@ public class OutsideFlywheel extends Command {
     lockWheel.stop();
     timer.stop();
   }
-  
 }
