@@ -10,7 +10,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 public class PhotonPose extends SubsystemBase {
 
-  private static final PhotonCamera cam = PhotonTags.getCamera();
+  private static final PhotonCamera cam = PhotonTags.getCameraA();
   private Transform3d fieldToCamera;
 
   @Override

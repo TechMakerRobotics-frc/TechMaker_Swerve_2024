@@ -15,19 +15,28 @@ public class PhotonTags {
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
+  static PhotonCamera cameraA = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
+  static PhotonCamera cameraB = new PhotonCamera(VisionConstants.CAMERA_B_NAME);
 
   /**
    * get the latest result of the camera.
    *
    * @return camera latest result
    */
-  public static PhotonPipelineResult getLatestPipeline() {
-    return camera.getLatestResult();
+  public static PhotonPipelineResult getLatestPipelineA() {
+    return cameraA.getLatestResult();
   }
 
-  public static PhotonCamera getCamera() {
-    return camera;
+  public static PhotonCamera getCameraA() {
+    return cameraA;
+  }
+
+  public static PhotonPipelineResult getLatestPipelineB() {
+    return cameraB.getLatestResult();
+  }
+
+  public static PhotonCamera getCameraB() {
+    return cameraB;
   }
 
   // Checks if there is a target in vision
@@ -139,7 +148,7 @@ public class PhotonTags {
    * @return true if number is equal to current Tag
    */
   public static boolean hasUsedTarget(int tagNumber) {
-    PhotonPipelineResult p = getLatestPipeline();
+    PhotonPipelineResult p = getLatestPipelineA();
     PhotonTrackedTarget t = getBestTarget(p);
     if (PhotonTags.hasTarget(p) && PhotonTags.getTargetId(t) == tagNumber) {
       return true;
@@ -170,7 +179,7 @@ public class PhotonTags {
   }
 
   public static double getDistanceHypotenuse() {
-    if (hasTarget(getLatestPipeline())) {
+    if (hasTarget(getLatestPipelineA())) {
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d

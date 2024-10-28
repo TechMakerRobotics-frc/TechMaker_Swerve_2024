@@ -60,7 +60,7 @@ public class AlignCommand extends Command {
 
   @Override
   public void execute() {
-    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+    PhotonPipelineResult p = PhotonTags.getLatestPipelineA();
     if (PhotonTags.hasTarget(p)) {
       PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
       printToDashboard();
@@ -91,7 +91,7 @@ public class AlignCommand extends Command {
 
   /** Prints vision targeting information to the SmartDashboard. */
   public void printToDashboard() {
-    PhotonPipelineResult p = PhotonTags.getLatestPipeline();
+    PhotonPipelineResult p = PhotonTags.getLatestPipelineA();
     PhotonTrackedTarget t = PhotonTags.getBestTarget(p);
     SmartDashboard.putNumber("Tag Yaw", PhotonTags.getYaw(t));
     SmartDashboard.putNumber("Current Tag", PhotonTags.getTargetId(t));
