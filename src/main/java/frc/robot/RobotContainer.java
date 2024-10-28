@@ -25,8 +25,10 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Flywheel.FlywheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
-import frc.robot.util.PhotonVision.PhotonPose;
 import frc.robot.util.PhotonVision.PhotonSim;
+import frc.robot.util.PhotonVision.RobotPose.PoseCamA;
+import frc.robot.util.PhotonVision.RobotPose.PoseCamB;
+import frc.robot.util.PhotonVision.RobotPose.RobotPose;
 import frc.robot.util.RegisterAlign;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -69,7 +71,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    new PhotonPose();
+    new PoseCamA();
+    new PoseCamB();
+    new RobotPose();
     flywheelCommand = new FlywheelCommand();
     switch (Constants.currentMode) {
       case REAL:
