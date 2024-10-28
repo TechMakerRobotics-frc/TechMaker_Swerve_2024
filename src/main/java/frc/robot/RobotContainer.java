@@ -60,9 +60,9 @@ public class RobotContainer {
   private final LoggedDashboardNumber flywheelSpeedOutside =
       new LoggedDashboardNumber("Flywheel Speed Outside", 1500.0);
   private final LoggedDashboardNumber lockwheelSpeedInside =
-      new LoggedDashboardNumber("Flywheel Speed Inside", 1500.0);
+      new LoggedDashboardNumber("Lockwheel Speed Inside", 1500.0);
   private final LoggedDashboardNumber lockwheelSpeedOutside =
-      new LoggedDashboardNumber("Flywheel Speed Outside", 3000.0);
+      new LoggedDashboardNumber("Lockwheel Speed Outside", 3000.0);
 
   /*private final LoggedDashboardNumber intakeSpeedInput =
   new LoggedDashboardNumber("Intake Speed", 1500.0);*/
