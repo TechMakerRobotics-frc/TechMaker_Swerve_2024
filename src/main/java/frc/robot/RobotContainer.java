@@ -60,9 +60,9 @@ public class RobotContainer {
   private final LoggedDashboardNumber flywheelSpeedInside =
       new LoggedDashboardNumber("Flywheel Speed Inside", 300.0);
   private final LoggedDashboardNumber flywheelSpeedOutside =
-      new LoggedDashboardNumber("Flywheel Speed Outside", 1500.0);
+      new LoggedDashboardNumber("Flywheel Speed Outside", 3000.0);
   private final LoggedDashboardNumber lockwheelSpeedInside =
-      new LoggedDashboardNumber("Lockwheel Speed Inside", 1500.0);
+      new LoggedDashboardNumber("Lockwheel Speed Inside", 3000.0);
   private final LoggedDashboardNumber lockwheelSpeedOutside =
       new LoggedDashboardNumber("Lockwheel Speed Outside", 3000.0);
 
@@ -71,9 +71,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    new PoseCamA();
-    new PoseCamB();
-    new RobotPose();
+    PoseCamA camA = new PoseCamA();
+    PoseCamB camB = new PoseCamB();
+    RobotPose pose = new RobotPose();
     flywheelCommand = new FlywheelCommand();
     switch (Constants.currentMode) {
       case REAL:
