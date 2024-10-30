@@ -9,34 +9,25 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class PhotonTags {
+public class PhotonTagsCamB {
 
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera cameraA = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
-  static PhotonCamera cameraB = new PhotonCamera(VisionConstants.CAMERA_B_NAME);
+  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_B_NAME);
 
   /**
    * get the latest result of the camera.
    *
    * @return camera latest result
    */
-  public static PhotonPipelineResult getLatestPipelineA() {
-    return cameraA.getLatestResult();
+  public static PhotonPipelineResult getLatestPipeline() {
+    return camera.getLatestResult();
   }
 
-  public static PhotonCamera getCameraA() {
-    return cameraA;
-  }
-
-  public static PhotonPipelineResult getLatestPipelineB() {
-    return cameraB.getLatestResult();
-  }
-
-  public static PhotonCamera getCameraB() {
-    return cameraB;
+  public static PhotonCamera getCamera() {
+    return camera;
   }
 
   // Checks if there is a target in vision
@@ -148,9 +139,9 @@ public class PhotonTags {
    * @return true if number is equal to current Tag
    */
   public static boolean hasUsedTarget(int tagNumber) {
-    PhotonPipelineResult p = getLatestPipelineA();
+    PhotonPipelineResult p = getLatestPipeline();
     PhotonTrackedTarget t = getBestTarget(p);
-    if (PhotonTags.hasTarget(p) && PhotonTags.getTargetId(t) == tagNumber) {
+    if (PhotonTagsCamA.hasTarget(p) && PhotonTagsCamA.getTargetId(t) == tagNumber) {
       return true;
     }
     return false;
@@ -179,7 +170,7 @@ public class PhotonTags {
   }
 
   public static double getDistanceHypotenuse() {
-    if (hasTarget(getLatestPipelineA())) {
+    if (hasTarget(getLatestPipeline())) {
       // a1 = LL panning angle
       // a2 = additional angle to target
       // tan(a1 + a2) = h/d
