@@ -1,16 +1,3 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -22,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.Flywheel.FlywheelCommand;
+import frc.robot.commands.FlywheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.util.PhotonVision.PhotonSim;
@@ -41,7 +28,6 @@ public class RobotContainer {
   private final Drive drive;
   private final Flywheel flywheel;
   private final FlywheelCommand flywheelCommand;
-  // private final Intake intake;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -63,9 +49,6 @@ public class RobotContainer {
       new LoggedDashboardNumber("Lockwheel Speed Inside", 3000.0);
   private final LoggedDashboardNumber lockwheelSpeedOutside =
       new LoggedDashboardNumber("Lockwheel Speed Outside", 3000.0);
-
-  /*private final LoggedDashboardNumber intakeSpeedInput =
-  new LoggedDashboardNumber("Intake Speed", 1500.0);*/
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -108,15 +91,9 @@ public class RobotContainer {
         break;
     }
 
-    // Set up auto routines
-    /*NamedCommands.registerCommand(
-    "Run Intake",
-    Commands.startEnd(() -> intake.runVolts(intakeSpeedInput.get()), intake::stop, intake)
-        .withTimeout(5.0));*/
-
     new RegisterAlign(30, drive);
     VisionPose pose = new VisionPose(drive);
-    
+
     // Configure the button bindings
     configureButtonBindings();
     if (Constants.currentMode == Mode.SIM) {
@@ -137,7 +114,7 @@ public class RobotContainer {
             () -> controller.getLeftY(),
             () -> controller.getLeftX(),
             () -> -controller.getRightX()));
-    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
     controller
         .povRight()
         .onTrue(
@@ -147,14 +124,6 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
-
-    /*controller.y().onTrue(new OutsideFlywheel()).onFalse(new StopFlywheel());
-
-    controller.a().onTrue(new InsideFlywheel()).onFalse(new StopFlywheel());
-
-    controller.x().onTrue(new OutsideLockWheel()).onFalse(new StopLockWheel());
-
-    controller.b().onTrue(new InsideLockWheel()).onFalse(new StopLockWheel());*/
 
     controller
         .y()
@@ -176,13 +145,7 @@ public class RobotContainer {
         .onFalse(flywheelCommand.stopLockWheel());
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
-
-    /*controller
-    .y()
-    .onTrue(new InstantCommand(() -> intake.runVelocity(intakeSpeedInput.get()), intake))
-    .onFalse(new InstantCommand(intake::stop, intake));*/
-
-    controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
+    controller.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
   }
 
   /**
