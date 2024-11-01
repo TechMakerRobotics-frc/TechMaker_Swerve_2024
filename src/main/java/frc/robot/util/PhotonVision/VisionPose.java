@@ -25,7 +25,9 @@ public class VisionPose extends SubsystemBase {
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, cam, robotToCam);
 
-  Drive drive;
+  private Drive drive;
+  private Pose2d pose2d;
+  private Field2d field = new Field2d();
 
   public VisionPose(Drive drive) {
     this.drive = drive;
@@ -36,11 +38,10 @@ public class VisionPose extends SubsystemBase {
     Optional<EstimatedRobotPose> estimatedPoseOpt = getEstimatedGlobalPose(drive.getPose());
 
     if (estimatedPoseOpt.isPresent()) {
-      Pose2d pose2d = estimatedPoseOpt.get().estimatedPose.toPose2d();
-      Field2d field = new Field2d();
+      pose2d = estimatedPoseOpt.get().estimatedPose.toPose2d();
       field.setRobotPose(pose2d);
 
-      SmartDashboard.putData(field);
+      SmartDashboard.putData("Field to cam A", field);
     }
   }
 
