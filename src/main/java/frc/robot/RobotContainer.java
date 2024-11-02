@@ -12,10 +12,10 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.PhotonVision.VisionPose;
 import frc.robot.util.PhotonVision.VisionSim;
 import frc.robot.util.RegisterAlign;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,14 +41,14 @@ public class RobotContainer {
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
-  private final LoggedDashboardNumber flywheelSpeedInside =
-      new LoggedDashboardNumber("Flywheel Speed Inside", 300.0);
-  private final LoggedDashboardNumber flywheelSpeedOutside =
-      new LoggedDashboardNumber("Flywheel Speed Outside", 3000.0);
-  private final LoggedDashboardNumber lockwheelSpeedInside =
-      new LoggedDashboardNumber("Lockwheel Speed Inside", 3000.0);
-  private final LoggedDashboardNumber lockwheelSpeedOutside =
-      new LoggedDashboardNumber("Lockwheel Speed Outside", 3000.0);
+  private final LoggedTunableNumber flywheelSpeedInside =
+      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
+  private final LoggedTunableNumber flywheelSpeedOutside =
+      new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
+  private final LoggedTunableNumber lockwheelSpeedInside =
+      new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
+  private final LoggedTunableNumber lockwheelSpeedOutside =
+      new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
