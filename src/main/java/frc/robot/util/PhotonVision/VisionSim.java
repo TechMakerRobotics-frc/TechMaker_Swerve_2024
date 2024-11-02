@@ -45,7 +45,7 @@ public class VisionSim extends SubsystemBase {
   /** The simulated camera properties. */
   SimCameraProperties cameraProp = new SimCameraProperties();
 
-  PhotonCameraSim cameraSim = new PhotonCameraSim(VisionTagsCamA.getCamera(), cameraProp);
+  PhotonCameraSim cameraSim = new PhotonCameraSim(VisionTagsFLCam.getCamera(), cameraProp);
 
   /**
    * Our camera is mounted 0.1 meters forward and 0.5 meters up from the robot pose, (Robot pose is

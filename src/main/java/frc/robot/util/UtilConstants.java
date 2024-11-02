@@ -3,14 +3,15 @@ package frc.robot.util;
 public final class UtilConstants {
 
   public static class VisionConstants {
-    public static final String CAMERA_A_NAME = "FLCam";
-    public static final String CAMERA_B_NAME = "FRCam";
-    public static final String LIMELIGHT_NAME = "Limelight";
+    public static final String CAMERA_FL_NAME = "FLCam";
+    public static final double CAMERA_FL_HEIGHT = 0.22;
+    public static final double CAMERA_FL_ANGLE = 25;
 
-    public static final double CAMERA_A_HEIGHT = 0.22;
-    public static final double CAMERA_A_ANGLE = 25;
-    public static final double CAMERA_B_HEIGHT = 0.22;
-    public static final double CAMERA_B_ANGLE = 25;
+    public static final String CAMERA_FR_NAME = "FRCam";
+    public static final double CAMERA_FR_HEIGHT = 0.22;
+    public static final double CAMERA_FR_ANGLE = 25;
+
+    public static final String LIMELIGHT_NAME = "Limelight";
     public static final double LIMELIGHT_HEIGHT = 0.45;
     public static final double LIMELIGHT_ANGLE = 20;
 

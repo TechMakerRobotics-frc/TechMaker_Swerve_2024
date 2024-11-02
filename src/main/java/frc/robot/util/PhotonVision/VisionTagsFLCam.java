@@ -9,13 +9,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class VisionTagsCamA {
+public class VisionTagsFLCam {
 
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera cameraA = new PhotonCamera(VisionConstants.CAMERA_A_NAME);
+  static PhotonCamera cameraA = new PhotonCamera(VisionConstants.CAMERA_FL_NAME);
 
   /**
    * get the latest result of the camera.
@@ -141,7 +141,7 @@ public class VisionTagsCamA {
   public static boolean hasUsedTarget(int tagNumber) {
     PhotonPipelineResult p = getLatestPipeline();
     PhotonTrackedTarget t = getBestTarget(p);
-    if (VisionTagsCamA.hasTarget(p) && VisionTagsCamA.getTargetId(t) == tagNumber) {
+    if (VisionTagsFLCam.hasTarget(p) && VisionTagsFLCam.getTargetId(t) == tagNumber) {
       return true;
     }
     return false;

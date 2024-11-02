@@ -141,7 +141,7 @@ public class VisionTagsLimelight {
   public static boolean hasUsedTarget(int tagNumber) {
     PhotonPipelineResult p = getLatestPipeline();
     PhotonTrackedTarget t = getBestTarget(p);
-    if (VisionTagsCamA.hasTarget(p) && VisionTagsCamA.getTargetId(t) == tagNumber) {
+    if (VisionTagsFLCam.hasTarget(p) && VisionTagsFLCam.getTargetId(t) == tagNumber) {
       return true;
     }
     return false;

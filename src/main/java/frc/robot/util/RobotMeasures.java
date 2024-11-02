@@ -34,19 +34,19 @@ public class RobotMeasures {
    * @return altura câmera em metros
    */
   public static double getCameraHeight(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_A_NAME)) {
-      return VisionConstants.CAMERA_A_HEIGHT;
-    } else if (camera.equals(VisionConstants.CAMERA_B_NAME)) {
-      return VisionConstants.CAMERA_B_HEIGHT;
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_HEIGHT;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_HEIGHT;
     }
     return 0.0;
   }
 
   public static double getCameraAngle(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_A_NAME)) {
-      return VisionConstants.CAMERA_A_ANGLE;
-    } else if (camera.equals(VisionConstants.CAMERA_B_NAME)) {
-      return VisionConstants.CAMERA_B_ANGLE;
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_ANGLE;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_ANGLE;
     }
     return 0.0;
   }
