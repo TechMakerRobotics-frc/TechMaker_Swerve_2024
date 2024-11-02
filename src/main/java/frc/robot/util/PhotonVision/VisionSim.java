@@ -17,7 +17,7 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.simulation.VisionTargetSim;
 
-public class PhotonSim extends SubsystemBase {
+public class VisionSim extends SubsystemBase {
   /** The drive subsystem used by this class. */
   Drive drive;
 
@@ -45,7 +45,7 @@ public class PhotonSim extends SubsystemBase {
   /** The simulated camera properties. */
   SimCameraProperties cameraProp = new SimCameraProperties();
 
-  PhotonCameraSim cameraSim = new PhotonCameraSim(PhotonTagsCamA.getCamera(), cameraProp);
+  PhotonCameraSim cameraSim = new PhotonCameraSim(VisionTagsCamA.getCamera(), cameraProp);
 
   /**
    * Our camera is mounted 0.1 meters forward and 0.5 meters up from the robot pose, (Robot pose is
@@ -58,7 +58,7 @@ public class PhotonSim extends SubsystemBase {
 
   Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
 
-  public PhotonSim(Drive drive) {
+  public VisionSim(Drive drive) {
     this.drive = drive;
     try {
       // Carrega o layout dos AprilTags a partir do recurso especificado

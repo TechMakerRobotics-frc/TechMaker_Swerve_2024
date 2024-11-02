@@ -12,6 +12,8 @@ public final class UtilConstants {
     public static final double CAMERA_HEIGHT_METERS = 0.20;
     public static final double CAMERA_A_HEIGHT = 0.445;
     public static final double CAMERA_A_ANGLE = 30;
+    public static final double CAMERA_B_HEIGHT = 0.445;
+    public static final double CAMERA_B_ANGLE = 30;
 
     public static final int TARGET_7_X_POSITION_METERS = 3;
     public static final int TARGET_7_Y_POSITION_METERS = 3;

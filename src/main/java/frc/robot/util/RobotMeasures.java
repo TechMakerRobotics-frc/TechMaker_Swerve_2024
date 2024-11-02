@@ -4,7 +4,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.util.UtilConstants.VisionConstants;
 
 /** Classe para obter as alturas do sistema de visão */
-public class Height {
+public class RobotMeasures {
 
   private static double targetHeight;
 
@@ -36,6 +36,8 @@ public class Height {
   public static double getCameraHeight(String camera) {
     if (camera.equals(VisionConstants.CAMERA_A_NAME)) {
       return VisionConstants.CAMERA_A_HEIGHT;
+    } else if (camera.equals(VisionConstants.CAMERA_B_NAME)) {
+      return VisionConstants.CAMERA_B_HEIGHT;
     }
     return 0.0;
   }
@@ -43,6 +45,8 @@ public class Height {
   public static double getCameraAngle(String camera) {
     if (camera.equals(VisionConstants.CAMERA_A_NAME)) {
       return VisionConstants.CAMERA_A_ANGLE;
+    } else if (camera.equals(VisionConstants.CAMERA_B_NAME)) {
+      return VisionConstants.CAMERA_B_ANGLE;
     }
     return 0.0;
   }

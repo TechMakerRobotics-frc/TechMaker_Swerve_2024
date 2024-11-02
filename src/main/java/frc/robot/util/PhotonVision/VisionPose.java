@@ -12,7 +12,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class VisionPose extends SubsystemBase {
 
-  private static final PhotonCamera cam = PhotonTagsCamA.getCamera();
+  private static final PhotonCamera cam = VisionTagsCamA.getCamera();
   private AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -25,9 +25,7 @@ public class VisionPose extends SubsystemBase {
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, cam, robotToCam);
 
-  private Drive drive;
-  private Pose2d pose2d;
-  private Field2d field = new Field2d();
+  Drive drive;
 
   public VisionPose(Drive drive) {
     this.drive = drive;
@@ -38,10 +36,11 @@ public class VisionPose extends SubsystemBase {
     Optional<EstimatedRobotPose> estimatedPoseOpt = getEstimatedGlobalPose(drive.getPose());
 
     if (estimatedPoseOpt.isPresent()) {
-      pose2d = estimatedPoseOpt.get().estimatedPose.toPose2d();
+      Pose2d pose2d = estimatedPoseOpt.get().estimatedPose.toPose2d();
+      Field2d field = new Field2d();
       field.setRobotPose(pose2d);
 
-      SmartDashboard.putData("Field to cam A", field);
+      SmartDashboard.putData(field);
     }
   }
 

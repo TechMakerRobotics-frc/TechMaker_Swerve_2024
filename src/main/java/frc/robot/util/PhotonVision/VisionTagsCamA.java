@@ -9,7 +9,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class PhotonTagsCamA {
+public class VisionTagsCamA {
 
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
@@ -141,7 +141,7 @@ public class PhotonTagsCamA {
   public static boolean hasUsedTarget(int tagNumber) {
     PhotonPipelineResult p = getLatestPipeline();
     PhotonTrackedTarget t = getBestTarget(p);
-    if (PhotonTagsCamA.hasTarget(p) && PhotonTagsCamA.getTargetId(t) == tagNumber) {
+    if (VisionTagsCamA.hasTarget(p) && VisionTagsCamA.getTargetId(t) == tagNumber) {
       return true;
     }
     return false;

@@ -12,7 +12,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
-import frc.robot.util.PhotonVision.PhotonSim;
+import frc.robot.util.PhotonVision.VisionSim;
 import frc.robot.util.PhotonVision.VisionPose;
 import frc.robot.util.RegisterAlign;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -97,7 +97,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     if (Constants.currentMode == Mode.SIM) {
-      new PhotonSim(drive);
+      new VisionSim(drive);
     }
   }
 
