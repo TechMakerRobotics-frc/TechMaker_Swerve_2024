@@ -1,7 +1,6 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * A classe TunningPID é responsável por gerenciar e ajustar em tempo real os valores de controle
@@ -20,12 +19,12 @@ public class TunningPID extends SubsystemBase {
   /** Valor derivativo do PID */
   private double d;
 
-  /** Dashboard para ajustar o valor proporcional P */
-  private LoggedDashboardNumber kP = new LoggedDashboardNumber("PID/P", 0.01);
-  /** Dashboard para ajustar o valor integral I */
-  private LoggedDashboardNumber kI = new LoggedDashboardNumber("PID/I", 0.01);
-  /** Dashboard para ajustar o valor derivativo D */
-  private LoggedDashboardNumber kD = new LoggedDashboardNumber("PID/D", 0.01);
+  /** Tunable para ajustar o valor proporcional P */
+  private LoggedTunableNumber kP = new LoggedTunableNumber("PID/P", 0.01);
+  /** Tunable para ajustar o valor integral I */
+  private LoggedTunableNumber kI = new LoggedTunableNumber("PID/I", 0.01);
+  /** Tunable para ajustar o valor derivativo D */
+  private LoggedTunableNumber kD = new LoggedTunableNumber("PID/D", 0.01);
 
   /**
    * Construtor da classe TunningPID. Inicializa os valores de P, I e D com os valores obtidos do
