@@ -29,8 +29,8 @@
 - **Leader ID - 17**: `leader_flywheel_id`
 
 
-## Photonvision - CamA and CamB
+## Photonvision static IP - CamA and CamB
 - **10.90.47.100:5800**
 
-## Photonvision - Limelight
+## Photonvision static IP - Limelight
 - **10.90.47.200:5800**
