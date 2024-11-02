@@ -20,7 +20,6 @@ public class VisionPose extends SubsystemBase {
   private Transform3d robotToCam =
       new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
 
-  // Construct PhotonPoseEstimator
   private PhotonPoseEstimator photonPoseEstimator =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, cam, robotToCam);

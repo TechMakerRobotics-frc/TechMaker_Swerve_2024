@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.AlignConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.PhotonVision.VisionTagsCamA;
+import frc.robot.util.PhotonVision.VisionTagsLimelight;
+
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -60,15 +61,15 @@ public class AlignCommand extends Command {
 
   @Override
   public void execute() {
-    PhotonPipelineResult p = VisionTagsCamA.getLatestPipeline();
-    if (VisionTagsCamA.hasTarget(p)) {
-      PhotonTrackedTarget t = VisionTagsCamA.getBestTarget(p);
+    PhotonPipelineResult p = VisionTagsLimelight.getLatestPipeline();
+    if (VisionTagsLimelight.hasTarget(p)) {
+      PhotonTrackedTarget t = VisionTagsLimelight.getBestTarget(p);
       printToDashboard();
 
-      vx = vXController.calculate((VisionTagsCamA.getYaw(t))) * -1;
-      vy = vYController.calculate(VisionTagsCamA.getBestCamera(t).getX()) * -1;
-      omega = vOmegaController.calculate(Math.abs(VisionTagsCamA.getAngle(t)));
-      omega = Math.copySign(omega, VisionTagsCamA.getAngle(t)) * -1;
+      vx = vXController.calculate((VisionTagsLimelight.getYaw(t))) * -1;
+      vy = vYController.calculate(VisionTagsLimelight.getBestCamera(t).getX()) * -1;
+      omega = vOmegaController.calculate(Math.abs(VisionTagsLimelight.getAngle(t)));
+      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t)) * -1;
 
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
       if (vXController.atSetpoint() && vYController.atSetpoint() && vOmegaController.atSetpoint()) {
@@ -91,16 +92,16 @@ public class AlignCommand extends Command {
 
   /** Prints vision targeting information to the SmartDashboard. */
   public void printToDashboard() {
-    PhotonPipelineResult p = VisionTagsCamA.getLatestPipeline();
-    PhotonTrackedTarget t = VisionTagsCamA.getBestTarget(p);
-    SmartDashboard.putNumber("Tag Yaw", VisionTagsCamA.getYaw(t));
-    SmartDashboard.putNumber("Current Tag", VisionTagsCamA.getTargetId(t));
+    PhotonPipelineResult p = VisionTagsLimelight.getLatestPipeline();
+    PhotonTrackedTarget t = VisionTagsLimelight.getBestTarget(p);
+    SmartDashboard.putNumber("Tag Yaw", VisionTagsLimelight.getYaw(t));
+    SmartDashboard.putNumber("Current Tag", VisionTagsLimelight.getTargetId(t));
     SmartDashboard.putNumber("omega", omega);
     SmartDashboard.putNumber("vx", vx);
     SmartDashboard.putNumber("vy", vy);
-    SmartDashboard.putNumber("Target Angle", VisionTagsCamA.getAngle(t));
-    SmartDashboard.putNumber("Target Distance", VisionTagsCamA.getDistance(t));
+    SmartDashboard.putNumber("Target Angle", VisionTagsLimelight.getAngle(t));
+    SmartDashboard.putNumber("Target Distance", VisionTagsLimelight.getDistance(t));
     SmartDashboard.putNumber(
-        "Target Distance with hypotenuse calc", VisionTagsCamA.getDistanceHypotenuse());
+        "Target Distance with hypotenuse calc", VisionTagsLimelight.getDistanceHypotenuse());
   }
 }
