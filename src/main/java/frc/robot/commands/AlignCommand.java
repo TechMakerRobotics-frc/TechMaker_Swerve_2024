@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.AlignConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.PhotonVision.VisionTagsLimelight;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -27,6 +30,7 @@ public class AlignCommand extends Command {
 
   private final Timer timer = new Timer();
   private double timeout, vx, vy, omega;
+  private PhotonCamera limelight = VisionTagsLimelight.getCamera();
   // private int usedTag;
   private Command defaultCommand;
   private Drive drive;
@@ -56,6 +60,9 @@ public class AlignCommand extends Command {
     timer.start();
     defaultCommand = drive.getDefaultCommand();
     drive.removeDefaultCommand();
+    if (limelight != null) {
+      limelight.setLED(VisionLEDMode.kOn);
+    }
   }
 
   @Override
@@ -73,6 +80,7 @@ public class AlignCommand extends Command {
       drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
       if (vXController.atSetpoint() && vYController.atSetpoint() && vOmegaController.atSetpoint()) {
         drive.runVelocity(new ChassisSpeeds());
+        limelight.setLED(VisionLEDMode.kBlink);
       }
     }
     isFinished = timer.get() >= timeout;
@@ -87,6 +95,7 @@ public class AlignCommand extends Command {
   public void end(boolean interrupted) {
     drive.runVelocity(new ChassisSpeeds());
     drive.setDefaultCommand(defaultCommand);
+    limelight.setLED(VisionLEDMode.kOff);
   }
 
   /** Prints vision targeting information to the SmartDashboard. */
