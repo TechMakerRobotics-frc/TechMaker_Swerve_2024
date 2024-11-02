@@ -17,6 +17,6 @@ public final class CommandConstants {
   }
 
   public static final class FlywheelConstants {
-    public static final double TIME_TO_SHOOT = 3; // in seconds
+    public static final double TIME_TO_SHOOT = 1.5; // in seconds
   }
 }
