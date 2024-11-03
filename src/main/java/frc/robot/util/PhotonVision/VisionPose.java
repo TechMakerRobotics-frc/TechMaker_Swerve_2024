@@ -10,6 +10,10 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+/**
+ * A classe VisionPose representa o subsistema de visão utilizado para estimar a posição e a
+ * orientação do robô usando câmeras PhotonVision e AprilTags.
+ */
 public class VisionPose extends SubsystemBase {
 
   private static final PhotonCamera FLcam = VisionTagsFLCam.getCamera();
@@ -21,21 +25,18 @@ public class VisionPose extends SubsystemBase {
 
   private Transform3d robotToFLCam =
       new Transform3d(new Translation3d(0.5, -0.25, 0.25), new Rotation3d(0, 0, 0));
-
   private PhotonPoseEstimator photonPoseEstimatorFLCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FLcam, robotToFLCam);
 
   private Transform3d robotToFRCam =
       new Transform3d(new Translation3d(0.5, 0.25, 0.25), new Rotation3d(0, 0, 0));
-
   private PhotonPoseEstimator photonPoseEstimatorFRCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FRcam, robotToFRCam);
 
   private Transform3d robotToLimelight =
       new Transform3d(new Translation3d(0.2, 0.0, 0.30), new Rotation3d(0, 0, 0));
-
   private PhotonPoseEstimator photonPoseEstimatorLimelight =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, limelight, robotToLimelight);
@@ -75,6 +76,11 @@ public class VisionPose extends SubsystemBase {
 
   private int count = 0;
 
+  /**
+   * Construtor da classe VisionPose.
+   *
+   * @param drive A referência do subsistema de direção.
+   */
   public VisionPose(Drive drive) {
     this.drive = drive;
   }
@@ -105,6 +111,7 @@ public class VisionPose extends SubsystemBase {
     count = 0;
 
     if (estimatedPoseOptFLCam.isPresent()) {
+      // Atualiza somas de posição e orientação para a câmera FL
       pose2dFLCam = estimatedPoseOptFLCam.get().estimatedPose.toPose2d();
       pose3dFLCam = estimatedPoseOptFLCam.get().estimatedPose;
       fieldFLCam.setRobotPose(pose2dFLCam);
@@ -128,6 +135,7 @@ public class VisionPose extends SubsystemBase {
     }
 
     if (estimatedPoseOptFRCam.isPresent()) {
+      // Atualiza somas de posição e orientação para a câmera FR
       pose2dFRCam = estimatedPoseOptFRCam.get().estimatedPose.toPose2d();
       pose3dFRCam = estimatedPoseOptFRCam.get().estimatedPose;
       fieldFRCam.setRobotPose(pose2dFRCam);
@@ -151,6 +159,7 @@ public class VisionPose extends SubsystemBase {
     }
 
     if (estimatedPoseOptLimelight.isPresent()) {
+      // Atualiza somas de posição e orientação para a câmera Limelight
       pose2dLimelight = estimatedPoseOptLimelight.get().estimatedPose.toPose2d();
       pose3dLimelight = estimatedPoseOptLimelight.get().estimatedPose;
 
@@ -175,6 +184,7 @@ public class VisionPose extends SubsystemBase {
     }
 
     if (count > 0) {
+      // Calcula a pose média combinada em 2D
       double avgTheta = Math.atan2(sinThetaSum / count, cosThetaSum / count);
       combinedPose2d = new Pose2d(xSum / count, ySum / count, new Rotation2d(avgTheta));
       fieldCombinedTags.setRobotPose(combinedPose2d);
@@ -182,6 +192,7 @@ public class VisionPose extends SubsystemBase {
     }
 
     if (count > 0) {
+      // Calcula a pose média combinada em 3D
       double avgThetaX = Math.atan2(sinThetaXSum / count, cosThetaXSum / count);
       double avgThetaY = Math.atan2(sinThetaYSum / count, cosThetaYSum / count);
       double avgThetaZ = Math.atan2(sinThetaZSum / count, cosThetaZSum / count);
@@ -195,16 +206,34 @@ public class VisionPose extends SubsystemBase {
     }
   }
 
+  /**
+   * Obtém a pose estimada global usando a câmera FL.
+   *
+   * @param prevEstimatedRobotPose A última pose estimada do robô.
+   * @return A pose estimada do robô, se presente.
+   */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimatorFLCam.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimatorFLCam.update();
   }
 
+  /**
+   * Obtém a pose estimada global usando a câmera FR.
+   *
+   * @param prevEstimatedRobotPose A última pose estimada do robô.
+   * @return A pose estimada do robô, se presente.
+   */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimatorFRCam.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimatorFRCam.update();
   }
 
+  /**
+   * Obtém a pose estimada global usando a câmera Limelight.
+   *
+   * @param prevEstimatedRobotPose A última pose estimada do robô.
+   * @return A pose estimada do robô, se presente.
+   */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight(
       Pose2d prevEstimatedRobotPose) {
     photonPoseEstimatorLimelight.setReferencePose(prevEstimatedRobotPose);
@@ -235,7 +264,7 @@ public class VisionPose extends SubsystemBase {
     }
   }
 
-  /** Retorna a pose3d pela câmera limelight */
+  /** Retorna a pose3d pela câmera Limelight */
   @AutoLogOutput(key = "Odometry/LimelightPose3d")
   public Pose3d getRobotPoseLimelight() {
     Optional<EstimatedRobotPose> estimatedPoseOptLimelight =
@@ -551,7 +580,7 @@ public class VisionPose extends SubsystemBase {
     return photonPoseEstimatorLimelight.update();
   }
 
-  /** Retorna a pose3d pela câmera FL 
+  /** Retorna a pose3d pela câmera FL
   @AutoLogOutput(key = "Odometry/FLCamPose3d")
   public Pose3d getRobotPoseFLCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFLCam =
@@ -563,7 +592,7 @@ public class VisionPose extends SubsystemBase {
     }
   }
 
-  /** Retorna a pose3d pela câmera FR 
+  /** Retorna a pose3d pela câmera FR
   @AutoLogOutput(key = "Odometry/FRCamPose3d")
   public Pose3d getRobotPoseFRCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFRCam =
@@ -587,7 +616,7 @@ public class VisionPose extends SubsystemBase {
     }
   }
 
-  /** Retorna a pose combinada das câmeras 
+  /** Retorna a pose combinada das câmeras
   @AutoLogOutput(key = "Odometry/CombinedPose3d")
   public Pose3d getRobotPose3d() {
     if (count > 0) {
