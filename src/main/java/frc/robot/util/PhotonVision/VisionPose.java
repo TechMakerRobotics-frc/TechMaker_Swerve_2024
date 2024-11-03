@@ -182,11 +182,13 @@ public class VisionPose extends SubsystemBase {
     }
 
     if (count > 0) {
-      double avgThetaZ = Math.atan2(sinThetaZSum, count); // Cálculo da média circular para thetaZ
+      double avgThetaX = Math.atan2(sinThetaXSum / count, cosThetaXSum / count);
+      double avgThetaY = Math.atan2(sinThetaYSum / count, cosThetaYSum / count);
+      double avgThetaZ = Math.atan2(sinThetaZSum / count, cosThetaZSum / count);
       combinedPose3d =
           new Pose3d(
               new Translation3d(xSum / count, ySum / count, zSum / count),
-              new Rotation3d(sinThetaXSum / count, sinThetaYSum / count, avgThetaZ));
+              new Rotation3d(avgThetaX, avgThetaY, avgThetaZ));
       fieldCombinedTagsPose3d.setRobotPose(combinedPose3d.toPose2d());
       SmartDashboard.putData(
           "Estimated Combined Pose3d to pose 2d to test", fieldCombinedTagsPose3d);
