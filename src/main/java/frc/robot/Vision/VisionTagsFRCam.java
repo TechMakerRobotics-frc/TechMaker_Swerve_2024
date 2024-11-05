@@ -1,4 +1,4 @@
-package frc.robot.util.PhotonVision;
+package frc.robot.Vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -9,13 +9,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class VisionTagsFLCam {
+public class VisionTagsFRCam {
 
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera cameraA = new PhotonCamera(VisionConstants.CAMERA_FL_NAME);
+  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_FR_NAME);
 
   /**
    * get the latest result of the camera.
@@ -23,11 +23,11 @@ public class VisionTagsFLCam {
    * @return camera latest result
    */
   public static PhotonPipelineResult getLatestPipeline() {
-    return cameraA.getLatestResult();
+    return camera.getLatestResult();
   }
 
   public static PhotonCamera getCamera() {
-    return cameraA;
+    return camera;
   }
 
   // Checks if there is a target in vision

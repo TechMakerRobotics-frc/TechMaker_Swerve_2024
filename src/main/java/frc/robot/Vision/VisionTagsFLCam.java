@@ -1,4 +1,4 @@
-package frc.robot.util.PhotonVision;
+package frc.robot.Vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -9,13 +9,13 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-public class VisionTagsLimelight {
+public class VisionTagsFLCam {
 
   double CAMERA_HEIGHT_METERS = 0.20;
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera camera = new PhotonCamera(VisionConstants.LIMELIGHT_NAME);
+  static PhotonCamera camera = new PhotonCamera(VisionConstants.CAMERA_FL_NAME);
 
   /**
    * get the latest result of the camera.

@@ -1,4 +1,4 @@
-package frc.robot.util.PhotonVision;
+package frc.robot.Vision;
 
 import edu.wpi.first.apriltag.*;
 import edu.wpi.first.math.geometry.*;

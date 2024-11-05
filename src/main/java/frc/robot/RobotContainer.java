@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.Vision.VisionPose;
+import frc.robot.Vision.VisionSim;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.util.LoggedTunableNumber;
-import frc.robot.util.PhotonVision.VisionPose;
-import frc.robot.util.PhotonVision.VisionSim;
 import frc.robot.util.RegisterAlign;
 
 /**
