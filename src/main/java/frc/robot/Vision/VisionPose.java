@@ -4,7 +4,6 @@ import edu.wpi.first.apriltag.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.drive.Drive;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;
@@ -41,8 +40,6 @@ public class VisionPose extends SubsystemBase {
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, limelight, robotToLimelight);
 
-  private Drive drive;
-
   private Pose2d pose2dFLCam;
   private Pose2d pose2dFRCam;
   private Pose2d pose2dLimelight;
@@ -77,22 +74,19 @@ public class VisionPose extends SubsystemBase {
   private int count = 0;
 
   /**
-   * Construtor da classe VisionPose.
-   *
-   * @param drive A referência do subsistema de direção.
+   * Construtor da classe VisionPose.   *
    */
-  public VisionPose(Drive drive) {
-    this.drive = drive;
+  public VisionPose() {
   }
 
   @Override
   public void periodic() {
     Optional<EstimatedRobotPose> estimatedPoseOptFLCam =
-        getEstimatedGlobalPoseFLCam(drive.getPose());
+        getEstimatedGlobalPoseFLCam();
     Optional<EstimatedRobotPose> estimatedPoseOptFRCam =
-        getEstimatedGlobalPoseFRCam(drive.getPose());
+        getEstimatedGlobalPoseFRCam();
     Optional<EstimatedRobotPose> estimatedPoseOptLimelight =
-        getEstimatedGlobalPoseLimelight(drive.getPose());
+        getEstimatedGlobalPoseLimelight();
 
     xSum = 0.0;
     ySum = 0.0;
@@ -212,8 +206,7 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimatorFLCam.setReferencePose(prevEstimatedRobotPose);
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam() {
     return photonPoseEstimatorFLCam.update();
   }
 
@@ -223,8 +216,7 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimatorFRCam.setReferencePose(prevEstimatedRobotPose);
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam() {
     return photonPoseEstimatorFRCam.update();
   }
 
@@ -234,9 +226,7 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight(
-      Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimatorLimelight.setReferencePose(prevEstimatedRobotPose);
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight() {
     return photonPoseEstimatorLimelight.update();
   }
 
@@ -244,7 +234,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/FLCamPose3d")
   public Pose3d getRobotPoseFLCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFLCam =
-        getEstimatedGlobalPoseFLCam(drive.getPose());
+        getEstimatedGlobalPoseFLCam();
     if (estimatedPoseOptFLCam.isPresent()) {
       return pose3dFLCam;
     } else {
@@ -256,7 +246,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/FRCamPose3d")
   public Pose3d getRobotPoseFRCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFRCam =
-        getEstimatedGlobalPoseFRCam(drive.getPose());
+        getEstimatedGlobalPoseFRCam();
     if (estimatedPoseOptFRCam.isPresent()) {
       return pose3dFRCam;
     } else {
@@ -268,7 +258,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/LimelightPose3d")
   public Pose3d getRobotPoseLimelight() {
     Optional<EstimatedRobotPose> estimatedPoseOptLimelight =
-        getEstimatedGlobalPoseLimelight(drive.getPose());
+        getEstimatedGlobalPoseLimelight();
     if (estimatedPoseOptLimelight.isPresent()) {
       return pose3dLimelight;
     } else {
