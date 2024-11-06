@@ -92,7 +92,7 @@ public class RobotContainer {
     }
 
     new RegisterAlign(30, drive);
-    VisionPose pose = new VisionPose(drive);
+    VisionPose pose = new VisionPose();
 
     // Configure the button bindings
     configureButtonBindings();
