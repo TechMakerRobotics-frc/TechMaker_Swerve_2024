@@ -27,27 +27,106 @@ public class Measures {
     return targetHeight;
   }
 
-  /**
-   * Retorna a altura da câmera em metros pelo nome.
+    /**
+   * Retorna a posição X da câmera em metros pelo nome.
    *
    * @param camera nome da câmera usada
-   * @return altura câmera em metros
+   * @return posição X da câmera em metros
    */
-  public static double getCameraHeight(String camera) {
+  public static double getCameraX(String camera) {
     if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_HEIGHT;
+      return VisionConstants.CAMERA_FL_X;
     } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_HEIGHT;
+      return VisionConstants.CAMERA_FR_X;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_X;
     }
     return 0.0;
   }
 
-  public static double getCameraAngle(String camera) {
+  /**
+   * Retorna a posição Y da câmera em metros pelo nome.
+   *
+   * @param camera nome da câmera usada
+   * @return posição Y da câmera em metros
+   */
+  public static double getCameraY(String camera) {
     if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_ANGLE;
+      return VisionConstants.CAMERA_FL_Y;
     } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_ANGLE;
+      return VisionConstants.CAMERA_FR_Y;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_Y;
     }
     return 0.0;
   }
+
+  /**
+   * Retorna a altura (Z) da câmera em metros pelo nome.
+   *
+   * @param camera nome da câmera usada
+   * @return altura da câmera em metros
+   */
+  public static double getCameraZ(String camera) {
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_Z;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_Z;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_Z;
+    }
+    return 0.0;
+  }
+
+  /**
+   * Retorna a rotação (Roll) da câmera em graus pelo nome.
+   *
+   * @param camera nome da câmera usada
+   * @return rotação (Roll) da câmera em graus
+   */
+  public static double getCameraRoll(String camera) {
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_ROLL;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_ROLL;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_ROLL;
+    }
+    return 0.0;
+  }
+
+  /**
+   * Retorna a inclinação (Pitch) da câmera em graus pelo nome.
+   *
+   * @param camera nome da câmera usada
+   * @return inclinação (Pitch) da câmera em graus
+   */
+  public static double getCameraPitch(String camera) {
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_PITCH;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_PITCH;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_PITCH;
+    }
+    return 0.0;
+  }
+
+  /**
+   * Retorna a rotação (Yaw) da câmera em graus pelo nome.
+   *
+   * @param camera nome da câmera usada
+   * @return rotação (Yaw) da câmera em graus
+   */
+  public static double getCameraYaw(String camera) {
+    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
+      return VisionConstants.CAMERA_FL_YAW;
+    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
+      return VisionConstants.CAMERA_FR_YAW;
+    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
+      return VisionConstants.LIMELIGHT_YAW;
+    }
+    return 0.0;
+  }
+
 }
