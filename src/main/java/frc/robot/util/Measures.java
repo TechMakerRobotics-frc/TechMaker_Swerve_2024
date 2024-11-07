@@ -4,7 +4,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.util.UtilConstants.VisionConstants;
 
 /** Classe para obter as alturas do sistema de visão */
-public class RobotMeasures {
+public class Measures {
 
   private static double targetHeight;
 
