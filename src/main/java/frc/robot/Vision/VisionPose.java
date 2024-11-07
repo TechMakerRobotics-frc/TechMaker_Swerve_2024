@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.drive.Drive;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;
@@ -23,19 +24,19 @@ public class VisionPose extends SubsystemBase {
       AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   private Transform3d robotToFLCam =
-      new Transform3d(new Translation3d(0.5, -0.25, 0.25), new Rotation3d(0, 0, 0));
+      new Transform3d(new Translation3d(0.265, -0.235, 0.20), new Rotation3d(0, 30, 25));
   private PhotonPoseEstimator photonPoseEstimatorFLCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FLcam, robotToFLCam);
 
   private Transform3d robotToFRCam =
-      new Transform3d(new Translation3d(0.5, 0.25, 0.25), new Rotation3d(0, 0, 0));
+      new Transform3d(new Translation3d(0.265, 0.235, 0.20), new Rotation3d(0, 30, -25));
   private PhotonPoseEstimator photonPoseEstimatorFRCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FRcam, robotToFRCam);
 
   private Transform3d robotToLimelight =
-      new Transform3d(new Translation3d(0.2, 0.0, 0.30), new Rotation3d(0, 0, 0));
+      new Transform3d(new Translation3d(0.155, 0.0, 0.545), new Rotation3d(180, 25, 180));
   private PhotonPoseEstimator photonPoseEstimatorLimelight =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, limelight, robotToLimelight);
@@ -73,20 +74,22 @@ public class VisionPose extends SubsystemBase {
 
   private int count = 0;
 
-  /**
-   * Construtor da classe VisionPose.   *
-   */
-  public VisionPose() {
+  private Drive drive;
+  Field2d fielddrive = new Field2d();
+
+  /** Construtor da classe VisionPose. * */
+  public VisionPose(Drive drive) {
+    this.drive = drive;
   }
 
   @Override
   public void periodic() {
     Optional<EstimatedRobotPose> estimatedPoseOptFLCam =
-        getEstimatedGlobalPoseFLCam();
+        getEstimatedGlobalPoseFLCam(drive.getPose());
     Optional<EstimatedRobotPose> estimatedPoseOptFRCam =
-        getEstimatedGlobalPoseFRCam();
+        getEstimatedGlobalPoseFRCam(drive.getPose());
     Optional<EstimatedRobotPose> estimatedPoseOptLimelight =
-        getEstimatedGlobalPoseLimelight();
+        getEstimatedGlobalPoseLimelight(drive.getPose());
 
     xSum = 0.0;
     ySum = 0.0;
@@ -126,6 +129,8 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dFLCam.getRotation().getZ());
 
       count++;
+
+      drive.addVisionMeasurement(pose2dFLCam, FLcam.getLatestResult().getTimestampSeconds());
     }
 
     if (estimatedPoseOptFRCam.isPresent()) {
@@ -150,6 +155,8 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dFRCam.getRotation().getZ());
 
       count++;
+
+      drive.addVisionMeasurement(pose2dFRCam, FRcam.getLatestResult().getTimestampSeconds());
     }
 
     if (estimatedPoseOptLimelight.isPresent()) {
@@ -175,6 +182,9 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dLimelight.getRotation().getZ());
 
       count++;
+
+      drive.addVisionMeasurement(
+          pose2dLimelight, limelight.getLatestResult().getTimestampSeconds());
     }
 
     if (count > 0) {
@@ -206,7 +216,8 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimatorFLCam.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimatorFLCam.update();
   }
 
@@ -216,7 +227,8 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimatorFRCam.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimatorFRCam.update();
   }
 
@@ -226,7 +238,9 @@ public class VisionPose extends SubsystemBase {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return A pose estimada do robô, se presente.
    */
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight(
+      Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimatorLimelight.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimatorLimelight.update();
   }
 
@@ -234,7 +248,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/FLCamPose3d")
   public Pose3d getRobotPoseFLCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFLCam =
-        getEstimatedGlobalPoseFLCam();
+        getEstimatedGlobalPoseFLCam(drive.getPose());
     if (estimatedPoseOptFLCam.isPresent()) {
       return pose3dFLCam;
     } else {
@@ -246,7 +260,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/FRCamPose3d")
   public Pose3d getRobotPoseFRCam() {
     Optional<EstimatedRobotPose> estimatedPoseOptFRCam =
-        getEstimatedGlobalPoseFRCam();
+        getEstimatedGlobalPoseFRCam(drive.getPose());
     if (estimatedPoseOptFRCam.isPresent()) {
       return pose3dFRCam;
     } else {
@@ -258,7 +272,7 @@ public class VisionPose extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/LimelightPose3d")
   public Pose3d getRobotPoseLimelight() {
     Optional<EstimatedRobotPose> estimatedPoseOptLimelight =
-        getEstimatedGlobalPoseLimelight();
+        getEstimatedGlobalPoseLimelight(drive.getPose());
     if (estimatedPoseOptLimelight.isPresent()) {
       return pose3dLimelight;
     } else {
