@@ -74,9 +74,9 @@ public class AlignCommand extends Command {
       vx = vXController.calculate((VisionTagsLimelight.getYaw(t))) * -1;
       vy = vYController.calculate(VisionTagsLimelight.getBestCamera(t).getX()) * -1;
       omega = vOmegaController.calculate(Math.abs(VisionTagsLimelight.getAngle(t)));
-      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t)) * -1;
+      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t));
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, -vy, omega, drive.getRotation()));
       if (vXController.atSetpoint() && vYController.atSetpoint() && vOmegaController.atSetpoint()) {
         drive.runVelocity(new ChassisSpeeds());
         limelight.setLED(VisionLEDMode.kBlink);
