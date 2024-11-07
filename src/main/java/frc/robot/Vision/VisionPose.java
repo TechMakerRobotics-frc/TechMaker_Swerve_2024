@@ -5,8 +5,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.UtilConstants.VisionConstants;
-
+import frc.robot.Vision.VisionConstants.CameraConstants;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;
@@ -25,17 +24,17 @@ public class VisionPose extends SubsystemBase {
   private AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
-  private Transform3d robotToFLCam = VisionConstants.ROBOT_TO_FL_CAM;
+  private Transform3d robotToFLCam = CameraConstants.ROBOT_TO_FL_CAM;
   private PhotonPoseEstimator photonPoseEstimatorFLCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FLcam, robotToFLCam);
 
-  private Transform3d robotToFRCam = VisionConstants.ROBOT_TO_FR_CAM;
+  private Transform3d robotToFRCam = CameraConstants.ROBOT_TO_FR_CAM;
   private PhotonPoseEstimator photonPoseEstimatorFRCam =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, FRcam, robotToFRCam);
 
-  private Transform3d robotToLimelight = VisionConstants.ROBOT_TO_LIMELIGHT;
+  private Transform3d robotToLimelight = CameraConstants.ROBOT_TO_LIMELIGHT;
   private PhotonPoseEstimator photonPoseEstimatorLimelight =
       new PhotonPoseEstimator(
           aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, limelight, robotToLimelight);

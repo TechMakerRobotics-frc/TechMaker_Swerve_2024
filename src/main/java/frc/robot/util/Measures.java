@@ -1,7 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.UtilConstants.VisionConstants;
+import frc.robot.Vision.VisionConstants.CameraConstants;
 
 /** Classe para obter as alturas do sistema de visão */
 public class Measures {
@@ -34,12 +34,12 @@ public class Measures {
    * @return posição X da câmera em metros
    */
   public static double getCameraX(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_X;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_X;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_X;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_X;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_X;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_X;
     }
     return 0.0;
   }
@@ -51,12 +51,12 @@ public class Measures {
    * @return posição Y da câmera em metros
    */
   public static double getCameraY(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_Y;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_Y;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_Y;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_Y;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_Y;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_Y;
     }
     return 0.0;
   }
@@ -68,12 +68,12 @@ public class Measures {
    * @return altura da câmera em metros
    */
   public static double getCameraZ(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_Z;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_Z;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_Z;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_Z;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_Z;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_Z;
     }
     return 0.0;
   }
@@ -85,12 +85,12 @@ public class Measures {
    * @return rotação (Roll) da câmera em graus
    */
   public static double getCameraRoll(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_ROLL;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_ROLL;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_ROLL;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_ROLL;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_ROLL;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_ROLL;
     }
     return 0.0;
   }
@@ -102,12 +102,12 @@ public class Measures {
    * @return inclinação (Pitch) da câmera em graus
    */
   public static double getCameraPitch(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_PITCH;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_PITCH;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_PITCH;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_PITCH;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_PITCH;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_PITCH;
     }
     return 0.0;
   }
@@ -119,12 +119,12 @@ public class Measures {
    * @return rotação (Yaw) da câmera em graus
    */
   public static double getCameraYaw(String camera) {
-    if (camera.equals(VisionConstants.CAMERA_FL_NAME)) {
-      return VisionConstants.CAMERA_FL_YAW;
-    } else if (camera.equals(VisionConstants.CAMERA_FR_NAME)) {
-      return VisionConstants.CAMERA_FR_YAW;
-    } else if (camera.equals(VisionConstants.LIMELIGHT_NAME)) {
-      return VisionConstants.LIMELIGHT_YAW;
+    if (camera.equals(CameraConstants.CAMERA_FL_NAME)) {
+      return CameraConstants.CAMERA_FL_YAW;
+    } else if (camera.equals(CameraConstants.CAMERA_FR_NAME)) {
+      return CameraConstants.CAMERA_FR_YAW;
+    } else if (camera.equals(CameraConstants.LIMELIGHT_NAME)) {
+      return CameraConstants.LIMELIGHT_YAW;
     }
     return 0.0;
   }

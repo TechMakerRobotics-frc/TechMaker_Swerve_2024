@@ -2,7 +2,7 @@ package frc.robot.Vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.util.UtilConstants.VisionConstants;
+import frc.robot.Vision.VisionConstants.CameraConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -15,7 +15,7 @@ public class VisionTagsLimelight {
   double CAMERA_PITCH_RADIANS = Units.degreesToRadians(30);
 
   static int tagId;
-  static PhotonCamera camera = new PhotonCamera(VisionConstants.LIMELIGHT_NAME);
+  static PhotonCamera camera = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
 
   /**
    * get the latest result of the camera.
