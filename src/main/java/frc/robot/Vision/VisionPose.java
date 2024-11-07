@@ -77,6 +77,8 @@ public class VisionPose extends SubsystemBase {
   private Drive drive;
   Field2d fielddrive = new Field2d();
 
+  private final boolean updateDrivePose = false;
+
   /** Construtor da classe VisionPose. * */
   public VisionPose(Drive drive) {
     this.drive = drive;
@@ -129,8 +131,9 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dFLCam.getRotation().getZ());
 
       count++;
-
-      drive.addVisionMeasurement(pose2dFLCam, FLcam.getLatestResult().getTimestampSeconds());
+      if (updateDrivePose) {
+        drive.addVisionMeasurement(pose2dFLCam, FLcam.getLatestResult().getTimestampSeconds());
+      }
     }
 
     if (estimatedPoseOptFRCam.isPresent()) {
@@ -155,8 +158,9 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dFRCam.getRotation().getZ());
 
       count++;
-
-      drive.addVisionMeasurement(pose2dFRCam, FRcam.getLatestResult().getTimestampSeconds());
+      if (updateDrivePose) {
+        drive.addVisionMeasurement(pose2dFRCam, FRcam.getLatestResult().getTimestampSeconds());
+      }
     }
 
     if (estimatedPoseOptLimelight.isPresent()) {
@@ -182,9 +186,10 @@ public class VisionPose extends SubsystemBase {
       cosThetaZSum += Math.cos(pose3dLimelight.getRotation().getZ());
 
       count++;
-
+      if (updateDrivePose) {
       drive.addVisionMeasurement(
           pose2dLimelight, limelight.getLatestResult().getTimestampSeconds());
+      }
     }
 
     if (count > 0) {
