@@ -75,7 +75,7 @@ public class VisionPose extends SubsystemBase {
   private Drive drive;
   Field2d fielddrive = new Field2d();
 
-  private final boolean updateDrivePose = false;
+  private static boolean updateDrivePose = false;
 
   /** Construtor da classe VisionPose. * */
   public VisionPose(Drive drive) {
@@ -291,6 +291,10 @@ public class VisionPose extends SubsystemBase {
     } else {
       return null;
     }
+  }
+
+  public static void updateOdometryPose(boolean update) {
+    updateDrivePose = update;
   }
 }
 

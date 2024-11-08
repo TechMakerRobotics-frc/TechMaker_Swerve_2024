@@ -146,6 +146,9 @@ public class RobotContainer {
 
     controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
     controller.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+    controller.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
+    controller.povDown().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
   }
 
   /**
