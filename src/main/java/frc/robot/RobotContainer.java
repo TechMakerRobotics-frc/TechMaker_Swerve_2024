@@ -28,6 +28,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Flywheel flywheel;
   private final FlywheelCommand flywheelCommand;
+  private Pose2d resetPose = new Pose2d();
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -123,7 +124,8 @@ public class RobotContainer {
                         drive.setPose(
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
-                .ignoringDisable(true));
+                .ignoringDisable(true)
+                );
 
     controller
         .y()
@@ -149,6 +151,12 @@ public class RobotContainer {
 
     controller.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     controller.povDown().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
+    
+    if (controller.povUp().getAsBoolean() == true && controller.povDown().getAsBoolean() == true) {
+        resetPose = drive.getPose();
+    }
+
+    controller.povLeft().onTrue(new InstantCommand(() -> drive.setPose(resetPose)));
   }
 
   /**
