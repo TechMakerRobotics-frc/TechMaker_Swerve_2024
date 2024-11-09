@@ -1,7 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.Vision.VisionConstants.CameraConstants;
+import frc.robot.vision.VisionConstants.CameraConstants;
 
 /** Classe para obter as alturas do sistema de visão */
 public class Measures {
@@ -27,7 +27,7 @@ public class Measures {
     return targetHeight;
   }
 
-    /**
+  /**
    * Retorna a posição X da câmera em metros pelo nome.
    *
    * @param camera nome da câmera usada
@@ -128,5 +128,4 @@ public class Measures {
     }
     return 0.0;
   }
-
 }

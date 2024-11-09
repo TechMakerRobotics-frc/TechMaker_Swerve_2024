@@ -1,11 +1,11 @@
-package frc.robot.Vision;
+package frc.robot.vision;
 
 import edu.wpi.first.apriltag.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.Vision.VisionConstants.CameraConstants;
+import frc.robot.vision.VisionConstants.CameraConstants;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;

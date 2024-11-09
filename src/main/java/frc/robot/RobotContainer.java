@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.Vision.VisionPose;
-import frc.robot.Vision.VisionSim;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FlywheelCommand;
@@ -16,6 +14,8 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RegisterAlign;
+import frc.robot.vision.VisionPose;
+import frc.robot.vision.VisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -124,8 +124,7 @@ public class RobotContainer {
                         drive.setPose(
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
-                .ignoringDisable(true)
-                );
+                .ignoringDisable(true));
 
     controller
         .y()
@@ -151,9 +150,9 @@ public class RobotContainer {
 
     controller.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     controller.povDown().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
-    
+
     if (controller.povUp().getAsBoolean() == true && controller.povDown().getAsBoolean() == true) {
-        resetPose = drive.getPose();
+      resetPose = drive.getPose();
     }
 
     controller.povLeft().onTrue(new InstantCommand(() -> drive.setPose(resetPose)));

@@ -1,8 +1,8 @@
-package frc.robot.Vision;
+package frc.robot.vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Vision.VisionConstants.CameraConstants;
+import frc.robot.vision.VisionConstants.CameraConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
