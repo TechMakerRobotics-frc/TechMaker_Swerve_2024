@@ -26,9 +26,9 @@ import frc.robot.vision.VisionSim;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Flywheel flywheel;
+  public final Flywheel flywheel;
   private final FlywheelCommand flywheelCommand;
-  private Pose2d resetPose = new Pose2d();
+  public VisionPose pose;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -93,7 +93,7 @@ public class RobotContainer {
     }
 
     new RegisterAlign(30, drive);
-    VisionPose pose = new VisionPose(drive);
+    pose = new VisionPose(drive);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -150,12 +150,6 @@ public class RobotContainer {
 
     controller.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     controller.povDown().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
-
-    if (controller.povUp().getAsBoolean() == true && controller.povDown().getAsBoolean() == true) {
-      resetPose = drive.getPose();
-    }
-
-    controller.povLeft().onTrue(new InstantCommand(() -> drive.setPose(resetPose)));
   }
 
   /**
