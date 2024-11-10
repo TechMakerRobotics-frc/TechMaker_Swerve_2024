@@ -9,10 +9,14 @@ import frc.robot.Constants.Mode;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FlywheelCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.util.LoggedTunableNumber;
-import frc.robot.util.RegisterAlign;
 import frc.robot.vision.VisionPose;
 import frc.robot.vision.VisionSim;
 
@@ -25,8 +29,13 @@ import frc.robot.vision.VisionSim;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  public final Flywheel flywheel;
+
   private final FlywheelCommand flywheelCommand;
+  private final IntakeCommand intakeCommand;
+
+  public final Flywheel flywheel;
+  public final Intake intake;
+
   public VisionPose pose;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
@@ -52,10 +61,18 @@ public class RobotContainer {
       new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
   private final LoggedTunableNumber lockwheelSpeedOutside =
       new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
+  private final LoggedTunableNumber flywheelSpeedFly =
+      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
+
+  private final LoggedTunableNumber intakeSpeedInside =
+      new LoggedTunableNumber("Intake Speed Inside", 500);
+  private final LoggedTunableNumber intakeSpeedOutside =
+      new LoggedTunableNumber("Intake Speed Outside", 200);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     flywheelCommand = new FlywheelCommand();
+    intakeCommand = new IntakeCommand();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -67,6 +84,7 @@ public class RobotContainer {
                 new ModuleIOSparkAndTalon(2),
                 new ModuleIOSparkAndTalon(3));
         flywheel = new Flywheel(new FlywheelIOVictorSPX());
+        intake = new Intake(new IntakeIOSparkMax());
         break;
 
       case SIM:
@@ -79,6 +97,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
+        intake  = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -91,14 +110,16 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
+        intake = new Intake(new IntakeIO() {});
         break;
     }
-
-    new RegisterAlign(30, drive);
+    
+    //instância do sistema de pose por visão.
     pose = new VisionPose(drive);
 
     // Configure the button bindings
     configureButtonBindings();
+
     if (Constants.currentMode == Mode.SIM) {
       new VisionSim(drive);
     }
@@ -136,6 +157,8 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
 
     // Operator commands
+
+    //flywheel
     OperatorController.y()
         .onTrue(
             flywheelCommand.runOutsideFlywheel(
@@ -150,6 +173,21 @@ public class RobotContainer {
     OperatorController.b()
         .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
+    
+    OperatorController.leftBumper()
+        .onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
+
+    OperatorController.rightBumper()
+        .onTrue(flywheelCommand.stopFlywheels());
+
+    //intake
+    OperatorController.povUp()
+        .onTrue(intakeCommand.runInsideIntake(intakeSpeedInside.get()))
+        .onFalse(intakeCommand.stopIntake());
+
+    OperatorController.povDown()
+        .onTrue(intakeCommand.runOutsideIntake(intakeSpeedOutside.get()))
+        .onFalse(intakeCommand.stopIntake());
   }
 
   /**
@@ -159,6 +197,5 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new PathPlannerAuto("AutoTest1");
-    // return new AlignCommand(2000, drive);
   }
 }

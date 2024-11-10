@@ -54,6 +54,16 @@ public class FlywheelCommand extends Command {
     return new InstantCommand(() -> OutsideFlywheel(velocityFlywheel, velocityLockwheel));
   }
 
+  /**
+   * Método para iniciar a flywheel e mantê-la ativada durante a partida, sem interrompe-la.
+   * 
+   * @param velocity velocidade da flywheel
+   * @return command que ativa flywheel
+   */
+  public Command runFlywheel(double velocity) {
+    return new InstantCommand(() -> flywheel.runVelocity(velocity));
+  }
+
   public void OutsideFlywheel(double velocityFlywheel, double velocityLockwheel) {
     timer.reset();
     timer.start();
