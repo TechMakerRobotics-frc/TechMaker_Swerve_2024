@@ -3,7 +3,6 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
@@ -38,9 +37,13 @@ public class RobotContainer {
 
   // private final Intake intake;
 
-  // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  // Driver Controller
+  private final CommandXboxController DriverController = new CommandXboxController(0);
 
+  // Operator Controller
+  private final CommandXboxController OperatorController = new CommandXboxController(1);
+
+  
   // Dashboard inputs
   private final LoggedTunableNumber flywheelSpeedInside =
       new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
@@ -112,11 +115,11 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> controller.getLeftY(),
-            () -> controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> DriverController.getLeftY(),
+            () -> DriverController.getLeftX(),
+            () -> -DriverController.getRightX()));
 
-    controller
+    DriverController
         .povRight()
         .onTrue(
             Commands.runOnce(
@@ -126,27 +129,27 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller
+    OperatorController
         .y()
         .onTrue(
             flywheelCommand.runOutsideFlywheel(
                 flywheelSpeedOutside.get(), lockwheelSpeedOutside.get()))
         .onFalse(flywheelCommand.stopFlywheels());
-    controller
+    OperatorController
         .a()
         .onTrue(flywheelCommand.runInsideFlywheel(flywheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopFlywheels());
-    controller
+    OperatorController
         .x()
         .onTrue(flywheelCommand.runOutsideLockWheel(lockwheelSpeedOutside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
-    controller
+    OperatorController
         .b()
         .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
 
-    controller.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
-    controller.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    DriverController.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
+    DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     controller.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     controller.povDown().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
