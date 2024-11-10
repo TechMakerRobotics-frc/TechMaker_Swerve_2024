@@ -64,7 +64,7 @@ public class FlywheelCommand extends Command {
     return new InstantCommand(() -> flywheel.runVelocity(velocity));
   }
 
-  public void OutsideFlywheel(double velocityFlywheel, double velocityLockwheel) {
+  private void OutsideFlywheel(double velocityFlywheel, double velocityLockwheel) {
     timer.reset();
     timer.start();
     flywheel.runVelocity(velocityFlywheel);

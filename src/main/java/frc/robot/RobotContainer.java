@@ -17,6 +17,7 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.RegisNamedCommands;
 import frc.robot.vision.VisionPose;
 import frc.robot.vision.VisionSim;
 
@@ -114,11 +115,14 @@ public class RobotContainer {
         break;
     }
     
-    //instância do sistema de pose por visão.
+    // instância do sistema de pose por visão.
     pose = new VisionPose(drive);
 
     // Configure the button bindings
     configureButtonBindings();
+
+    // Register commands to PathPlanner
+    new RegisNamedCommands();
 
     if (Constants.currentMode == Mode.SIM) {
       new VisionSim(drive);
