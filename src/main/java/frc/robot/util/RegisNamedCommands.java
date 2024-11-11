@@ -9,9 +9,7 @@ public class RegisNamedCommands {
   FlywheelCommand flywheel = new FlywheelCommand();
   IntakeCommand intake = new IntakeCommand();
 
-  /**
-   * Register commands in the pathplanner.
-   */
+  /** Register commands in the pathplanner. */
   public RegisNamedCommands() {
     RegisterFlywheel();
     RegisterIntake();

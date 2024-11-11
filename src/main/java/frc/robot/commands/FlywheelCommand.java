@@ -56,7 +56,7 @@ public class FlywheelCommand extends Command {
 
   /**
    * Método para iniciar a flywheel e mantê-la ativada durante a partida, sem interrompe-la.
-   * 
+   *
    * @param velocity velocidade da flywheel
    * @return command que ativa flywheel
    */

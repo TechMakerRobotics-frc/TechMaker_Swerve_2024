@@ -14,23 +14,17 @@ public class IntakeCommand extends Command {
 
   private Intake Intake;
 
-  /**
-   * Construtor da classe IntakeCommand. Inicializa o subsistema de Intake.
-   */
+  /** Construtor da classe IntakeCommand. Inicializa o subsistema de Intake. */
   public IntakeCommand() {
     Intake = new Intake(new IntakeIOSparkMax());
   }
 
-  /**
-   * Método para iniciar o Intake com uma velocidade específica para pegar o elemento.
-   */
+  /** Método para iniciar o Intake com uma velocidade específica para pegar o elemento. */
   public Command runInsideIntake(double velocity) {
     return new InstantCommand(() -> Intake.runVelocity(-velocity));
   }
 
-  /**
-   * Método para iniciar o Intake com uma velocidade específica para tirar o elemento.
-   */
+  /** Método para iniciar o Intake com uma velocidade específica para tirar o elemento. */
   public Command runOutsideIntake(double velocity) {
     return new InstantCommand(() -> Intake.runVelocity(velocity));
   }

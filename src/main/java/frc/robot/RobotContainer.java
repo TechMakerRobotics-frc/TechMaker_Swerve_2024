@@ -6,20 +6,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.commands.AlignCommand;
-import frc.robot.commands.DriveCommands;
-import frc.robot.commands.FlywheelCommand;
-import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.intake.IntakeIOSparkMax;
-import frc.robot.util.LoggedTunableNumber;
-import frc.robot.util.RegisNamedCommands;
-import frc.robot.vision.VisionPose;
-import frc.robot.vision.VisionSim;
+import frc.robot.subsystems.intake.*;
+import frc.robot.util.*;
+import frc.robot.vision.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -54,21 +46,14 @@ public class RobotContainer {
   private final CommandXboxController OperatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private final LoggedTunableNumber flywheelSpeedInside =
-      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
-  private final LoggedTunableNumber flywheelSpeedOutside =
-      new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
-  private final LoggedTunableNumber lockwheelSpeedInside =
-      new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
-  private final LoggedTunableNumber lockwheelSpeedOutside =
-      new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-  private final LoggedTunableNumber flywheelSpeedFly =
-      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
+  private LoggedTunableNumber flywheelSpeedInside;
+  private LoggedTunableNumber flywheelSpeedOutside;
+  private LoggedTunableNumber lockwheelSpeedInside;
+  private LoggedTunableNumber lockwheelSpeedOutside;
+  private LoggedTunableNumber flywheelSpeedFly;
 
-  private final LoggedTunableNumber intakeSpeedInside =
-      new LoggedTunableNumber("Intake Speed Inside", 500);
-  private final LoggedTunableNumber intakeSpeedOutside =
-      new LoggedTunableNumber("Intake Speed Outside", 200);
+  private LoggedTunableNumber intakeSpeedInside;
+  private LoggedTunableNumber intakeSpeedOutside;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -98,7 +83,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
-        intake  = new Intake(new IntakeIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -114,7 +99,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         break;
     }
-    
+
     // instância do sistema de pose por visão.
     pose = new VisionPose(drive);
 
@@ -127,6 +112,15 @@ public class RobotContainer {
     if (Constants.currentMode == Mode.SIM) {
       new VisionSim(drive);
     }
+
+    flywheelSpeedInside = new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
+    flywheelSpeedOutside = new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
+    lockwheelSpeedInside = new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
+    lockwheelSpeedOutside = new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
+    flywheelSpeedFly = new LoggedTunableNumber("Flywheel Speed Fly", 2000);
+
+    intakeSpeedInside = new LoggedTunableNumber("Intake Speed Inside", 500);
+    intakeSpeedOutside = new LoggedTunableNumber("Intake Speed Outside", 200);
   }
 
   /**
@@ -162,7 +156,7 @@ public class RobotContainer {
 
     // Operator commands
 
-    //flywheel
+    // flywheel
     OperatorController.y()
         .onTrue(
             flywheelCommand.runOutsideFlywheel(
@@ -177,14 +171,12 @@ public class RobotContainer {
     OperatorController.b()
         .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
-    
-    OperatorController.leftBumper()
-        .onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
 
-    OperatorController.rightBumper()
-        .onTrue(flywheelCommand.stopFlywheels());
+    OperatorController.leftBumper().onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
 
-    //intake
+    OperatorController.rightBumper().onTrue(flywheelCommand.stopFlywheels());
+
+    // intake
     OperatorController.povUp()
         .onTrue(intakeCommand.runInsideIntake(intakeSpeedInside.get()))
         .onFalse(intakeCommand.stopIntake());
