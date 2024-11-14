@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
@@ -46,19 +47,24 @@ public class RobotContainer {
   private final CommandXboxController OperatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private LoggedTunableNumber flywheelSpeedInside;
-  private LoggedTunableNumber flywheelSpeedOutside;
-  private LoggedTunableNumber lockwheelSpeedInside;
-  private LoggedTunableNumber lockwheelSpeedOutside;
-  private LoggedTunableNumber flywheelSpeedFly;
+  private LoggedTunableNumber flywheelSpeedInside =
+      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
+  private LoggedTunableNumber flywheelSpeedOutside =
+      new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
+  private LoggedTunableNumber lockwheelSpeedInside =
+      new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
+  private LoggedTunableNumber lockwheelSpeedOutside =
+      new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
+  private LoggedTunableNumber flywheelSpeedFly =
+      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
 
-  private LoggedTunableNumber intakeSpeedInside;
-  private LoggedTunableNumber intakeSpeedOutside;
+  private LoggedTunableNumber intakeSpeedInside =
+      new LoggedTunableNumber("Intake Speed Inside", 500);
+  private LoggedTunableNumber intakeSpeedOutside =
+      new LoggedTunableNumber("Intake Speed Outside", 200);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    flywheelCommand = new FlywheelCommand();
-    intakeCommand = new IntakeCommand();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -100,6 +106,9 @@ public class RobotContainer {
         break;
     }
 
+    flywheelCommand = new FlywheelCommand();
+    intakeCommand = new IntakeCommand(intake);
+
     // instância do sistema de pose por visão.
     pose = new VisionPose(drive);
 
@@ -107,20 +116,11 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Register commands to PathPlanner
-    new RegisNamedCommands();
+    new RegisNamedCommands(intake);
 
     if (Constants.currentMode == Mode.SIM) {
       new VisionSim(drive);
     }
-
-    flywheelSpeedInside = new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
-    flywheelSpeedOutside = new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
-    lockwheelSpeedInside = new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
-    lockwheelSpeedOutside = new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-    flywheelSpeedFly = new LoggedTunableNumber("Flywheel Speed Fly", 2000);
-
-    intakeSpeedInside = new LoggedTunableNumber("Intake Speed Inside", 500);
-    intakeSpeedOutside = new LoggedTunableNumber("Intake Speed Outside", 200);
   }
 
   /**
@@ -153,6 +153,8 @@ public class RobotContainer {
     DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     DriverController.povDown()
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
+
+    DriverController.a().whileTrue(new TrajectoryCommand(drive));
 
     // Operator commands
 
