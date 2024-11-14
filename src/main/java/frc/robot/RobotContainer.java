@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
@@ -157,6 +158,8 @@ public class RobotContainer {
     DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     DriverController.povDown()
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
+
+    DriverController.a().whileTrue(new TrajectoryCommand(drive));
 
     // Operator commands
 
