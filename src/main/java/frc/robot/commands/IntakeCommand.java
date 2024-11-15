@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIOSparkMax;
 
 /**
  * Comando para controlar os Intakes (interno e externo) de um robô. Esta classe permite iniciar,
@@ -12,25 +11,25 @@ import frc.robot.subsystems.intake.IntakeIOSparkMax;
  */
 public class IntakeCommand extends Command {
 
-  private Intake Intake;
+  private Intake intake;
 
   /** Construtor da classe IntakeCommand. Inicializa o subsistema de Intake. */
-  public IntakeCommand() {
-    Intake = new Intake(new IntakeIOSparkMax());
+  public IntakeCommand(Intake intake) {
+    this.intake = intake;
   }
 
   /** Método para iniciar o Intake com uma velocidade específica para pegar o elemento. */
   public Command runInsideIntake(double velocity) {
-    return new InstantCommand(() -> Intake.runVelocity(-velocity));
+    return new InstantCommand(() -> intake.runVelocity(-velocity));
   }
 
   /** Método para iniciar o Intake com uma velocidade específica para tirar o elemento. */
   public Command runOutsideIntake(double velocity) {
-    return new InstantCommand(() -> Intake.runVelocity(velocity));
+    return new InstantCommand(() -> intake.runVelocity(velocity));
   }
 
   public Command stopIntake() {
-    return new InstantCommand(() -> Intake.stop());
+    return new InstantCommand(() -> intake.stop());
   }
 
   /**

@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.CommandConstants.FlywheelConstants;
 import frc.robot.subsystems.flywheel.Flywheel;
-import frc.robot.subsystems.flywheel.FlywheelIOVictorSPX;
 import frc.robot.subsystems.flywheel.LockWheel;
 
 /**
@@ -24,8 +23,8 @@ public class FlywheelCommand extends Command {
    * Construtor da classe FlywheelCommand. Inicializa os subsistemas de flywheel e lockWheel, e o
    * temporizador.
    */
-  public FlywheelCommand() {
-    flywheel = new Flywheel(new FlywheelIOVictorSPX());
+  public FlywheelCommand(Flywheel flywheel) {
+    this.flywheel = flywheel;
     lockWheel = new Flywheel(new LockWheel());
     timer = new Timer();
   }

@@ -3,14 +3,19 @@ package frc.robot.util;
 import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.commands.FlywheelCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.intake.Intake;
 
 public class RegisNamedCommands {
 
-  FlywheelCommand flywheel = new FlywheelCommand();
-  IntakeCommand intake = new IntakeCommand();
+  FlywheelCommand flywheel;
+  IntakeCommand intake;
 
   /** Register commands in the pathplanner. */
-  public RegisNamedCommands() {
+  public RegisNamedCommands(Flywheel flywheel, Intake intake) {
+    this.flywheel = new FlywheelCommand(flywheel);
+    this.intake = new IntakeCommand(intake);
+
     RegisterFlywheel();
     RegisterIntake();
   }

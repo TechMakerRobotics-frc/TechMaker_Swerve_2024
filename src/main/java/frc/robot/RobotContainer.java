@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.Mode;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
@@ -26,10 +25,10 @@ public class RobotContainer {
   private final FlywheelCommand flywheelCommand;
   private final IntakeCommand intakeCommand;
 
-  public final Flywheel flywheel;
-  public final Intake intake;
+  private final Flywheel flywheel;
+  private final Intake intake;
 
-  public VisionPose pose;
+  public final VisionPose pose;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -46,19 +45,24 @@ public class RobotContainer {
   private final CommandXboxController OperatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private LoggedTunableNumber flywheelSpeedInside;
-  private LoggedTunableNumber flywheelSpeedOutside;
-  private LoggedTunableNumber lockwheelSpeedInside;
-  private LoggedTunableNumber lockwheelSpeedOutside;
-  private LoggedTunableNumber flywheelSpeedFly;
+  private LoggedTunableNumber flywheelSpeedInside =
+      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
+  private LoggedTunableNumber flywheelSpeedOutside =
+      new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
+  private LoggedTunableNumber lockwheelSpeedInside =
+      new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
+  private LoggedTunableNumber lockwheelSpeedOutside =
+      new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
+  private LoggedTunableNumber flywheelSpeedFly =
+      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
 
-  private LoggedTunableNumber intakeSpeedInside;
-  private LoggedTunableNumber intakeSpeedOutside;
+  private LoggedTunableNumber intakeSpeedInside =
+      new LoggedTunableNumber("Intake Speed Inside", 500);
+  private LoggedTunableNumber intakeSpeedOutside =
+      new LoggedTunableNumber("Intake Speed Outside", 200);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    flywheelCommand = new FlywheelCommand();
-    intakeCommand = new IntakeCommand();
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -71,6 +75,10 @@ public class RobotContainer {
                 new ModuleIOSparkAndTalon(3));
         flywheel = new Flywheel(new FlywheelIOVictorSPX());
         intake = new Intake(new IntakeIOSparkMax());
+        new RegisNamedCommands(flywheel, intake);
+        flywheelCommand = new FlywheelCommand(flywheel);
+        intakeCommand = new IntakeCommand(intake);
+        pose = new VisionPose(drive);
         break;
 
       case SIM:
@@ -84,6 +92,10 @@ public class RobotContainer {
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
         intake = new Intake(new IntakeIOSim());
+        new VisionSim(drive);
+        flywheelCommand = new FlywheelCommand(flywheel);
+        intakeCommand = new IntakeCommand(intake);
+        pose = new VisionPose(drive);
         break;
 
       default:
@@ -97,30 +109,14 @@ public class RobotContainer {
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
         intake = new Intake(new IntakeIO() {});
+        flywheelCommand = new FlywheelCommand(flywheel);
+        intakeCommand = new IntakeCommand(intake);
+        pose = new VisionPose(drive);
         break;
     }
 
-    // instância do sistema de pose por visão.
-    pose = new VisionPose(drive);
-
     // Configure the button bindings
     configureButtonBindings();
-
-    // Register commands to PathPlanner
-    new RegisNamedCommands();
-
-    if (Constants.currentMode == Mode.SIM) {
-      new VisionSim(drive);
-    }
-
-    flywheelSpeedInside = new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
-    flywheelSpeedOutside = new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
-    lockwheelSpeedInside = new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
-    lockwheelSpeedOutside = new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-    flywheelSpeedFly = new LoggedTunableNumber("Flywheel Speed Fly", 2000);
-
-    intakeSpeedInside = new LoggedTunableNumber("Intake Speed Inside", 500);
-    intakeSpeedOutside = new LoggedTunableNumber("Intake Speed Outside", 200);
   }
 
   /**
