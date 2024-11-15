@@ -1,6 +1,7 @@
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -154,7 +155,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("AutoTest1");
-    // return new AlignCommand(2000, drive);
+    PathPlannerPath choreoPath = PathPlannerPath.fromChoreoTrajectory("choreo");
+    Command auto = AutoBuilder.followPath(choreoPath);
+    return auto;
   }
 }
