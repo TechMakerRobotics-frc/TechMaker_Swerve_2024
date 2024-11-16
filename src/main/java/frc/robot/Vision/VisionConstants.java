@@ -13,7 +13,7 @@ public final class VisionConstants {
     public static final double CAMERA_FL_Z = 0.20;
     public static final double CAMERA_FL_ROLL = 0.0;
     public static final double CAMERA_FL_PITCH = 30;
-    public static final double CAMERA_FL_YAW = 25;
+    public static final double CAMERA_FL_YAW = -25;
 
     public static final String CAMERA_FR_NAME = "FRCam";
     public static final double CAMERA_FR_X = 0.265;
@@ -21,7 +21,7 @@ public final class VisionConstants {
     public static final double CAMERA_FR_Z = 0.20;
     public static final double CAMERA_FR_ROLL = 0.0;
     public static final double CAMERA_FR_PITCH = 30;
-    public static final double CAMERA_FR_YAW = -25;
+    public static final double CAMERA_FR_YAW = 25;
 
     public static final String LIMELIGHT_NAME = "Limelight";
     public static final double LIMELIGHT_X = 0.155;
