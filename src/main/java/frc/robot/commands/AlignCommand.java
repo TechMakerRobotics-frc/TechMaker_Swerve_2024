@@ -80,9 +80,10 @@ public class AlignCommand extends Command {
 
       if (!vOmegaController.atSetpoint()
           && !vXController.atSetpoint()
-          && !vYController.atSetpoint())
+          && !vYController.atSetpoint()) {
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
+      }
     }
     isFinished = timer.get() >= timeout;
   }
