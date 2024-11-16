@@ -52,9 +52,11 @@ public class AlignCommand extends Command {
   @Override
   public void initialize() {
     vXController.setSetpoint(0);
+    vXController.setTolerance(3);
     vYController.setSetpoint(2);
+    vYController.setTolerance(3);
     vOmegaController.setSetpoint(180);
-    vOmegaController.setTolerance(10);
+    vOmegaController.setTolerance(3);
     timer.reset();
     timer.start();
     defaultCommand = drive.getDefaultCommand();
@@ -71,16 +73,16 @@ public class AlignCommand extends Command {
       PhotonTrackedTarget t = VisionTagsLimelight.getBestTarget(p);
       printToDashboard();
 
-      vx = vXController.calculate((VisionTagsLimelight.getYaw(t))) * -1;
-      vy = vYController.calculate(VisionTagsLimelight.getBestCamera(t).getX()) * -1;
+      vx = vXController.calculate(VisionTagsLimelight.getYaw(t)) * -1;
+      vy = vYController.calculate(VisionTagsLimelight.getBestCamera(t).getX());
       omega = vOmegaController.calculate(Math.abs(VisionTagsLimelight.getAngle(t)));
-      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t));
+      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t)) * -1;
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vx, -vy, omega, drive.getRotation()));
-      if (vXController.atSetpoint() && vYController.atSetpoint() && vOmegaController.atSetpoint()) {
-        drive.runVelocity(new ChassisSpeeds());
-        limelight.setLED(VisionLEDMode.kBlink);
-      }
+      if (!vOmegaController.atSetpoint()
+          && !vXController.atSetpoint()
+          && !vYController.atSetpoint())
+        drive.runVelocity(
+            ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
     }
     isFinished = timer.get() >= timeout;
   }
