@@ -17,17 +17,20 @@ public class TrajectoryCommand extends Command {
   private final Translation2d endPose;
   private PathPlannerPath currentPath;
   private Translation2d goalTranslation = new Translation2d(5, 5);
-  private Drive drive;
-  private PathConstraints constraints = new PathConstraints(2, 5, 6, 6);
+  private PathConstraints constraints = new PathConstraints(14.5, 5, 6, 6);
   private Rotation2d rotationGoalEndState = new Rotation2d(0);
   private GoalEndState goalEndState = new GoalEndState(0, rotationGoalEndState);
   private Command pathfollower;
 
   public TrajectoryCommand(Drive drive) {
     hasRequirement(drive);
-    this.drive = drive;
     this.startPose = drive.getPose().getTranslation();
     this.endPose = goalTranslation;
+  }
+
+  public TrajectoryCommand() {
+    this.startPose = new Translation2d();
+    this.endPose = new Translation2d();
   }
 
   @Override
@@ -49,15 +52,20 @@ public class TrajectoryCommand extends Command {
     if (currentPath != null) {
       pathfollower.execute();
     }
+
+    SmartDashboard.putBoolean("Path Follower is not null?", pathfollower != null);
+    if (pathfollower != null) {
+      SmartDashboard.putBoolean("Is finished path?", pathfollower.isFinished());
+    }
   }
 
   @Override
   public boolean isFinished() {
-    return (pathfollower == null) || (pathfollower.isFinished());
+    return pathfollower == null;
   }
 
   @Override
   public void end(boolean interrupted) {
-    drive.stop();
+    // drive.stop();
   }
 }
