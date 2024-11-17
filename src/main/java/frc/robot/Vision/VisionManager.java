@@ -2,14 +2,11 @@ package frc.robot.vision;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.vision.VisionConstants.CameraConstants;
-
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.*;
 
-/**
- * Gerencia as funcionalidades relacionadas à visão computacional utilizando a PhotonVision.
- */
+/** Gerencia as funcionalidades relacionadas à visão computacional utilizando a PhotonVision. */
 public class VisionManager {
 
   private final PhotonCamera camera;
