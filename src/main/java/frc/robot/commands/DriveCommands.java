@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.ThrottleMap;
-
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
@@ -32,8 +31,8 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier) {
-      
-      ThrottleMap throttleMap = new ThrottleMap();
+
+    ThrottleMap throttleMap = new ThrottleMap();
 
     return Commands.run(
         () -> {
@@ -46,7 +45,7 @@ public class DriveCommands {
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
           linearMagnitude = throttleMap.applyThrottle(linearMagnitude);
-          omega = throttleMap.applyThrottle(omega);
+          omega = throttleMap.applyThrottleAbs(omega);
 
           // Square values for finer control at low speeds
           linearMagnitude = Math.copySign(linearMagnitude * linearMagnitude, linearMagnitude);
