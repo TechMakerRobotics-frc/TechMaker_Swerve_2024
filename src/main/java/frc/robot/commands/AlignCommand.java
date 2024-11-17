@@ -111,8 +111,6 @@ public class AlignCommand extends Command {
     SmartDashboard.putNumber("vy", vy);
     SmartDashboard.putNumber("Target Angle", VisionTagsLimelight.getAngle(t));
     SmartDashboard.putNumber("Target Distance", VisionTagsLimelight.getDistance(t));
-    SmartDashboard.putNumber(
-        "Target Distance with hypotenuse calc", VisionTagsLimelight.getDistanceHypotenuse());
     SmartDashboard.putNumber("PID VX Error", vXController.getPositionError());
     SmartDashboard.putNumber("PID VY Error", vYController.getPositionError());
     SmartDashboard.putNumber("PID OMEGA Error", vOmegaController.getPositionError());
