@@ -22,4 +22,9 @@ public final class UtilConstants {
     public static final double CAMERA_POSITION_FROM_ROBOT_CENTER_X_METERS = 0.30;
     public static final double CAMERA_POSITION_FROM_ROBOT_CENTER_Y_METERS = 0.30;
   }
+
+  public final class ThrottleConstants {
+    public static final double[] X_VALUES = {0.0, 0.2, 0.5, 0.7, 1.0}; // Entrada (0 a 1)
+    public static final double[] Y_VALUES = {0.0, 0.1, 0.2, 0.3, 0.8}; // Saída desejada
+  } 
 }

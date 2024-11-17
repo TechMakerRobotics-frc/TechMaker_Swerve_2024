@@ -3,6 +3,8 @@ package frc.robot.util;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
+import frc.robot.util.UtilConstants.ThrottleConstants;
+
 /**
  * Classe que implementa um mapeamento de throttle utilizando uma curva de spline.
  * Permite ajustar a resposta dos controles para entrada e saída mais suaves ou
@@ -25,8 +27,8 @@ public class ThrottleMap {
    * @return Um objeto {@link PolynomialSplineFunction} que representa a curva de throttle.
    */
   private PolynomialSplineFunction createThrottleCurve() {
-    double[] xValues = {0.0, 0.2, 0.5, 0.7, 1.0}; // Entrada (0 a 1)
-    double[] yValues = {0.0, 0.1, 0.2, 0.3, 0.8}; // Saída desejada
+    double[] xValues = ThrottleConstants.X_VALUES;
+    double[] yValues = ThrottleConstants.Y_VALUES;
 
     PolynomialFunction[] polynomials = new PolynomialFunction[xValues.length - 1];
 
