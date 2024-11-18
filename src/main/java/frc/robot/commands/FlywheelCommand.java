@@ -6,7 +6,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.CommandConstants.FlywheelConstants;
 import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.flywheel.FlywheelSpeedMap;
 import frc.robot.subsystems.flywheel.LockWheel;
+import frc.robot.vision.VisionManager;
+import frc.robot.vision.VisionTagsLimelight;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 /**
  * Comando para controlar os flywheels (interno e externo) de um robô. Esta classe permite iniciar,
@@ -18,6 +25,8 @@ public class FlywheelCommand extends Command {
   private Flywheel flywheel;
   private Flywheel lockWheel;
   private Timer timer;
+  private VisionManager manager;
+  private final FlywheelSpeedMap speedMap = new FlywheelSpeedMap();
 
   /**
    * Construtor da classe FlywheelCommand. Inicializa os subsistemas de flywheel e lockWheel, e o
@@ -61,6 +70,15 @@ public class FlywheelCommand extends Command {
    */
   public Command runFlywheel(double velocity) {
     return new InstantCommand(() -> flywheel.runVelocity(velocity));
+  }
+
+  public Command runFlywheelWithDistance(PhotonCamera limelight) {
+    PhotonPipelineResult p = manager.getLatestPipeline();
+    if (manager.hasTarget(p)) {
+      manager = new VisionManager(limelight);
+      double speed = speedMap.CalculateFlywheelSpeed(manager.getBestCamera(null).getX());
+      return new InstantCommand(() -> flywheel.runVelocity(speed));
+    } return new InstantCommand();
   }
 
   private void OutsideFlywheel(double velocityFlywheel, double velocityLockwheel) {
