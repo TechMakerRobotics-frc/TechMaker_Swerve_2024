@@ -1,19 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.CommandConstants.FlywheelConstants;
-import frc.robot.subsystems.flywheel.Flywheel;
-import frc.robot.subsystems.flywheel.FlywheelSpeedMap;
-import frc.robot.subsystems.flywheel.LockWheel;
+import frc.robot.subsystems.flywheel.*;
 import frc.robot.vision.VisionManager;
-import frc.robot.vision.VisionTagsLimelight;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 /**
  * Comando para controlar os flywheels (interno e externo) de um robô. Esta classe permite iniciar,
