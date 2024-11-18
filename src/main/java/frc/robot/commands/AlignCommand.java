@@ -83,7 +83,9 @@ public class AlignCommand extends Command {
             ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
       }
     }
-    isFinished = timer.get() >= timeout;
+    isFinished = timer.get() >= timeout ||  (vXController.atSetpoint() && 
+    vYController.atSetpoint() && 
+    vOmegaController.atSetpoint());
   }
 
   @Override
