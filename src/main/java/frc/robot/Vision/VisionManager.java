@@ -1,6 +1,8 @@
 package frc.robot.vision;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.vision.VisionConstants.CameraConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -276,5 +278,17 @@ public class VisionManager {
       return CameraConstants.LIMELIGHT_YAW;
     }
     return 0.0;
+  }
+
+  public Translation3d getCameraTranslation3d() {
+    return new Translation3d(getCameraX(), getCameraY(), getCameraZ());
+  }
+
+  public Rotation3d getCameraRotation3d() {
+    return new Rotation3d(getCameraRoll(), getCameraPitch(), getCameraYaw());
+  }
+
+  public Transform3d getCameraTransform3d() {
+    return new Transform3d(getCameraTranslation3d(), getCameraRotation3d());
   }
 }
