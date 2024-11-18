@@ -86,7 +86,7 @@ public class RobotContainer {
         new RegisNamedCommands(flywheel, intake);
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
 
       case SIM:
@@ -103,7 +103,7 @@ public class RobotContainer {
         visionSim = new VisionSim(drive, flCam, frCam, limelight);
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
 
       default:
@@ -119,7 +119,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
     }
 
