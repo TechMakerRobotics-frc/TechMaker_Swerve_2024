@@ -30,8 +30,16 @@ public interface FlywheelIO {
   /** Run open loop at the specified voltage. */
   public default void setVoltage(double volts) {}
 
+  public default void setVoltageUpMotor(double volts) {}
+
+  public default void setVoltageDownMotor(double volts) {}
+
   /** Run closed loop at the specified velocity. */
   public default void setVelocity(double velocityRadPerSec, double ffVolts) {}
+
+  public default void setVelocityUpMotor(double velocityRadPerSec, double ffVolts) {}
+
+  public default void setVelocityDownMotor(double velocityRadPerSec, double ffVolts) {}
 
   /** Stop in open loop. */
   public default void stop() {}

@@ -73,6 +73,16 @@ public class Flywheel extends SubsystemBase {
     io.setVoltage(volts);
   }
 
+  /** Run open loop at the specified voltage. */
+  public void runVoltsUpMotor(double volts) {
+    io.setVoltageUpMotor(volts);
+  }
+
+  /** Run open loop at the specified voltage. */
+  public void runVoltsDownMotor(double volts) {
+    io.setVoltageDownMotor(volts);
+  }
+
   /** Run closed loop at the specified velocity. */
   public void runVelocity(double velocityRPM) {
     var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
@@ -80,6 +90,24 @@ public class Flywheel extends SubsystemBase {
 
     // Log flywheel setpoint
     Logger.recordOutput("Flywheel/SetpointRPM", velocityRPM);
+  }
+
+  /** Run closed loop at the specified velocity. */
+  public void runVelocityUpMotor(double velocityRPM) {
+    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+    io.setVelocityUpMotor(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
+
+    // Log flywheel setpoint
+    Logger.recordOutput("Flywheel/SetpointRPM.UpMotor", velocityRPM);
+  }
+
+  /** Run closed loop at the specified velocity. */
+  public void runVelocityDownMotor(double velocityRPM) {
+    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+    io.setVelocityDownMotor(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
+
+    // Log flywheel setpoint
+    Logger.recordOutput("Flywheel/SetpointRPM.DownMotor", velocityRPM);
   }
 
   /** Stops the flywheel. */
