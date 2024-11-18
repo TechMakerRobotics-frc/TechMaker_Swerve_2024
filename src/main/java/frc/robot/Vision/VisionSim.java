@@ -38,6 +38,7 @@ public class VisionSim extends SubsystemBase {
 
   /** The simulated camera properties. */
   private SimCameraProperties flCamProp = new SimCameraProperties();
+
   private SimCameraProperties frCamProp = new SimCameraProperties();
   private SimCameraProperties limelightProp = new SimCameraProperties();
 

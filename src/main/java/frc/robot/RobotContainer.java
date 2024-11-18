@@ -151,7 +151,7 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    DriverController.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
+    DriverController.rightBumper().whileTrue(new AlignCommand(drive, limelight, 4, 20000));
     DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));

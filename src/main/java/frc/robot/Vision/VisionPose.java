@@ -14,7 +14,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
  * A classe VisionPose representa o subsistema de visão utilizado para estimar a posição e a
  * orientação do robô usando câmeras PhotonVision e AprilTags.
  */
-public class VisionPose extends SubsystemBase implements VisionPoseIO{
+public class VisionPose extends SubsystemBase implements VisionPoseIO {
 
   private final AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -72,20 +72,27 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO{
     limelightManager = new VisionManager(limelight);
 
     this.drive = drive;
-    
-    
-    photonPoseEstimatorFLCam =
-    new PhotonPoseEstimator(
-        aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, flManager.getCamera(), flManager.getCameraTransform3d());
 
+    photonPoseEstimatorFLCam =
+        new PhotonPoseEstimator(
+            aprilTagFieldLayout,
+            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            flManager.getCamera(),
+            flManager.getCameraTransform3d());
 
     photonPoseEstimatorFRCam =
         new PhotonPoseEstimator(
-            aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frManager.getCamera(), frManager.getCameraTransform3d());
+            aprilTagFieldLayout,
+            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            frManager.getCamera(),
+            frManager.getCameraTransform3d());
 
     photonPoseEstimatorLimelight =
-    new PhotonPoseEstimator(
-        aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, limelightManager.getCamera(), frManager.getCameraTransform3d());
+        new PhotonPoseEstimator(
+            aprilTagFieldLayout,
+            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            limelightManager.getCamera(),
+            frManager.getCameraTransform3d());
   }
 
   @Override
@@ -136,7 +143,8 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO{
 
       count++;
       if (updateDrivePose) {
-        drive.addVisionMeasurement(pose2dFLCam, flManager.getCamera().getLatestResult().getTimestampSeconds());
+        drive.addVisionMeasurement(
+            pose2dFLCam, flManager.getCamera().getLatestResult().getTimestampSeconds());
       }
     }
 
@@ -163,7 +171,8 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO{
 
       count++;
       if (updateDrivePose) {
-        drive.addVisionMeasurement(pose2dFRCam, frManager.getCamera().getLatestResult().getTimestampSeconds());
+        drive.addVisionMeasurement(
+            pose2dFRCam, frManager.getCamera().getLatestResult().getTimestampSeconds());
       }
     }
 
