@@ -76,16 +76,13 @@ public class AlignCommand extends Command {
       omega = vOmegaController.calculate(Math.abs(VisionTagsLimelight.getAngle(t)));
       omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t)) * -1;
 
-      if (!vOmegaController.atSetpoint()
-          && !vXController.atSetpoint()
-          && !vYController.atSetpoint()) {
-        drive.runVelocity(
-            ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
-      }
+      drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
     }
-    isFinished = timer.get() >= timeout ||  (vXController.atSetpoint() && 
-    vYController.atSetpoint() && 
-    vOmegaController.atSetpoint());
+    isFinished =
+        timer.get() >= timeout
+            || (vXController.atSetpoint()
+                && vYController.atSetpoint()
+                && vOmegaController.atSetpoint());
   }
 
   @Override
