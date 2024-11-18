@@ -9,7 +9,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.*;
 
 /** Gerencia as funcionalidades relacionadas à visão computacional utilizando a PhotonVision. */
-public class VisionManager {
+public class VisionManager implements VisionManagerIO {
 
   private final PhotonCamera camera;
 
