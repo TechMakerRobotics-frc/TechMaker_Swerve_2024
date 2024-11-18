@@ -76,7 +76,7 @@ public class AlignCommand extends Command {
       printToDashboard();
 
       vx = vXController.calculate(manager.getYaw(t)) * -1;
-      vy = vYController.calculate(manager.getBestCamera(t).getX());
+      vy = vYController.calculate(manager.getDistance(t));
       omega = vOmegaController.calculate(Math.abs(manager.getAngle(t)));
       omega = Math.copySign(omega, manager.getAngle(t)) * -1;
 
