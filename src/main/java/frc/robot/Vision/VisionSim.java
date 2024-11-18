@@ -13,7 +13,7 @@ import org.photonvision.simulation.*;
 
 public class VisionSim extends SubsystemBase {
   /** The drive subsystem used by this class. */
-  Drive drive;
+  private final Drive drive;
 
   /** A vision system sim labelled as "main" in NetworkTables. */
   private static VisionSystemSim visionSim = new VisionSystemSim("main");
@@ -37,10 +37,9 @@ public class VisionSim extends SubsystemBase {
   private AprilTagFieldLayout tagLayout;
 
   /** The simulated camera properties. */
-  SimCameraProperties flCamProp = new SimCameraProperties();
-
-  SimCameraProperties frCamProp = new SimCameraProperties();
-  SimCameraProperties limelightProp = new SimCameraProperties();
+  private SimCameraProperties flCamProp = new SimCameraProperties();
+  private SimCameraProperties frCamProp = new SimCameraProperties();
+  private SimCameraProperties limelightProp = new SimCameraProperties();
 
   private final VisionManager managerFL;
   private final VisionManager managerFR;
