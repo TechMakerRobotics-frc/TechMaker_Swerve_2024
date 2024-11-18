@@ -2,20 +2,14 @@ package frc.robot.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
 import java.io.IOException;
+import org.photonvision.PhotonCamera;
 import org.photonvision.estimation.TargetModel;
-import org.photonvision.simulation.PhotonCameraSim;
-import org.photonvision.simulation.SimCameraProperties;
-import org.photonvision.simulation.VisionSystemSim;
-import org.photonvision.simulation.VisionTargetSim;
+import org.photonvision.simulation.*;
 
 public class VisionSim extends SubsystemBase {
   /** The drive subsystem used by this class. */
@@ -43,22 +37,36 @@ public class VisionSim extends SubsystemBase {
   private AprilTagFieldLayout tagLayout;
 
   /** The simulated camera properties. */
-  SimCameraProperties cameraProp = new SimCameraProperties();
+  SimCameraProperties flCamProp = new SimCameraProperties();
 
-  PhotonCameraSim cameraSim = new PhotonCameraSim(VisionTagsFLCam.getCamera(), cameraProp);
+  SimCameraProperties frCamProp = new SimCameraProperties();
+  SimCameraProperties limelightProp = new SimCameraProperties();
 
-  /**
-   * Our camera is mounted 0.1 meters forward and 0.5 meters up from the robot pose, (Robot pose is
-   * considered the center of rotation at the floor level, or Z = 0)
-   */
-  Translation3d robotToCameraTrl = new Translation3d(0.1, 0, 0.5);
+  private final VisionManager managerFL;
+  private final VisionManager managerFR;
+  private final VisionManager managerLimelight;
 
-  /** and pitched 15 degrees up. */
-  Rotation3d robotToCameraRot = new Rotation3d(0, Math.toRadians(-15), 0);
+  private final PhotonCameraSim cameraFLSim;
+  private final PhotonCameraSim cameraFRSim;
+  private final PhotonCameraSim limelightSim;
 
-  Transform3d robotToCamera = new Transform3d(robotToCameraTrl, robotToCameraRot);
+  private final Transform3d robotToFLCam;
+  private final Transform3d robotToFRCam;
+  private final Transform3d robotToLimelight;
 
-  public VisionSim(Drive drive) {
+  public VisionSim(Drive drive, PhotonCamera FLCam, PhotonCamera FRCam, PhotonCamera limelight) {
+    managerFL = new VisionManager(FLCam);
+    managerFR = new VisionManager(FRCam);
+    managerLimelight = new VisionManager(limelight);
+
+    cameraFLSim = new PhotonCameraSim(managerFL.getCamera(), flCamProp);
+    cameraFRSim = new PhotonCameraSim(managerFR.getCamera(), frCamProp);
+    limelightSim = new PhotonCameraSim(managerLimelight.getCamera(), limelightProp);
+
+    robotToFLCam = managerFL.getCameraTransform3d();
+    robotToFRCam = managerFR.getCameraTransform3d();
+    robotToLimelight = managerLimelight.getCameraTransform3d();
+
     this.drive = drive;
     try {
       // Carrega o layout dos AprilTags a partir do recurso especificado
@@ -77,20 +85,34 @@ public class VisionSim extends SubsystemBase {
     visionSim.addAprilTags(tagLayout);
 
     // A 640 x 480 camera with a 100 degree diagonal FOV.
-    cameraProp.setCalibration(640, 480, Rotation2d.fromDegrees(100));
+    flCamProp.setCalibration(640, 480, Rotation2d.fromDegrees(100));
+    frCamProp.setCalibration(640, 480, Rotation2d.fromDegrees(100));
+    limelightProp.setCalibration(640, 480, Rotation2d.fromDegrees(100));
 
     // Approximate detection noise with average and standard deviation error in pixels.
-    cameraProp.setCalibError(0.25, 0.08);
+    flCamProp.setCalibError(0.25, 0.08);
+    frCamProp.setCalibError(0.25, 0.08);
+    limelightProp.setCalibError(0.25, 0.08);
 
     // Set the camera image capture framerate (Note: this is limited by robot loop rate).
-    cameraProp.setFPS(20);
+    flCamProp.setFPS(20);
+    frCamProp.setFPS(20);
+    limelightProp.setFPS(20);
 
     // The average and standard deviation in milliseconds of image data latency.
-    cameraProp.setAvgLatencyMs(35);
-    cameraProp.setLatencyStdDevMs(5);
+    flCamProp.setAvgLatencyMs(35);
+    flCamProp.setLatencyStdDevMs(5);
+
+    frCamProp.setAvgLatencyMs(35);
+    frCamProp.setLatencyStdDevMs(5);
+
+    limelightProp.setAvgLatencyMs(35);
+    limelightProp.setLatencyStdDevMs(5);
 
     // Add this camera to the vision system simulation with the given robot-to-camera transform.
-    visionSim.addCamera(cameraSim, robotToCamera);
+    visionSim.addCamera(cameraFLSim, robotToFLCam);
+    visionSim.addCamera(cameraFRSim, robotToFRCam);
+    visionSim.addCamera(limelightSim, robotToLimelight);
   }
 
   @Override

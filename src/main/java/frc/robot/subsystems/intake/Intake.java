@@ -20,7 +20,6 @@ public class Intake extends SubsystemBase {
   private final DigitalInput insideSensor = new DigitalInput(0);
   private final DigitalInput outsideSensor = new DigitalInput(1);
 
-
   /** Creates a new Intake. */
   public Intake(IntakeIO io) {
     this.io = io;
@@ -101,7 +100,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * Returns true if the sensor has an object.
-   * 
+   *
    * @return get sensor
    */
   public boolean insideSensorIsTrue() {
@@ -110,7 +109,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * Returns true if the sensor has an object.
-   * 
+   *
    * @return get sensor
    */
   public boolean outsideSensorIsTrue() {

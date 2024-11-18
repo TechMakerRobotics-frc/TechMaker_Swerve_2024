@@ -11,6 +11,8 @@ import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.util.*;
 import frc.robot.vision.*;
+import frc.robot.vision.VisionConstants.CameraConstants;
+import org.photonvision.PhotonCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,6 +31,12 @@ public class RobotContainer {
   private final Intake intake;
 
   public final VisionPose pose;
+
+  private final PhotonCamera flCam = new PhotonCamera(CameraConstants.CAMERA_FL_NAME);
+  private final PhotonCamera frCam = new PhotonCamera(CameraConstants.CAMERA_FR_NAME);
+  private final PhotonCamera limelight = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
+
+  public VisionSim visionSim;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -92,7 +100,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
         intake = new Intake(new IntakeIOSim());
-        new VisionSim(drive);
+        visionSim = new VisionSim(drive, flCam, frCam, limelight);
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
         pose = new VisionPose(drive);
