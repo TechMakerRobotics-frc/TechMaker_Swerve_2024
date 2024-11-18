@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -16,6 +17,9 @@ public class Intake extends SubsystemBase {
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private final SimpleMotorFeedforward ffModel;
   private final SysIdRoutine sysId;
+  private final DigitalInput insideSensor = new DigitalInput(0);
+  private final DigitalInput outsideSensor = new DigitalInput(1);
+
 
   /** Creates a new Intake. */
   public Intake(IntakeIO io) {
@@ -93,5 +97,23 @@ public class Intake extends SubsystemBase {
   /** Returns the current velocity in radians per second. */
   public double getCharacterizationVelocity() {
     return inputs.velocityRadPerSec;
+  }
+
+  /**
+   * Returns true if the sensor has an object.
+   * 
+   * @return get sensor
+   */
+  public boolean insideSensorIsTrue() {
+    return insideSensor.get();
+  }
+
+  /**
+   * Returns true if the sensor has an object.
+   * 
+   * @return get sensor
+   */
+  public boolean outsideSensorIsTrue() {
+    return outsideSensor.get();
   }
 }
