@@ -4,25 +4,39 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.*;
 
 public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private final SimpleMotorFeedforward ffModel;
   private final SysIdRoutine sysId;
-  private final DigitalInput insideSensor = new DigitalInput(0);
-  private final DigitalInput outsideSensor = new DigitalInput(1);
+  private final DigitalInput insideSensor = new DigitalInput(IntakeConstants.INSIDE_SENSOR_CHANNEL);
+  private final DigitalInput outsideSensor =
+      new DigitalInput(IntakeConstants.OUTSIDE_SENSOR_CHANNEL);
+  private final DoubleSolenoid solenoidLeft;
+  private final DoubleSolenoid solenoidRight;
 
   /** Creates a new Intake. */
   public Intake(IntakeIO io) {
     this.io = io;
+
+    solenoidLeft =
+        new DoubleSolenoid(
+            IntakeConstants.SOLENOID_MODULE_CAN_ID,
+            IntakeConstants.SOLENOID_MODULE_TYPE,
+            IntakeConstants.SOLENOID_LEFT_FORWARD_CHANNEL,
+            IntakeConstants.SOLENOID_LEFT_REVERSE_CHANNEL);
+    solenoidRight =
+        new DoubleSolenoid(
+            IntakeConstants.SOLENOID_MODULE_CAN_ID,
+            IntakeConstants.SOLENOID_MODULE_TYPE,
+            IntakeConstants.SOLENOID_RIGHT_FORWARD_CHANNEL,
+            IntakeConstants.SOLENOID_RIGHT_REVERSE_CHANNEL);
 
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
@@ -114,5 +128,23 @@ public class Intake extends SubsystemBase {
    */
   public boolean outsideSensorIsTrue() {
     return outsideSensor.get();
+  }
+
+  /** Ativa o solenoide para o estado forward. */
+  public void extend() {
+    solenoidLeft.set(DoubleSolenoid.Value.kForward);
+    solenoidRight.set(DoubleSolenoid.Value.kForward);
+  }
+
+  /** Ativa o solenoide para o estado reverse. */
+  public void retract() {
+    solenoidLeft.set(DoubleSolenoid.Value.kReverse);
+    solenoidRight.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  /** Desativa o solenoide. */
+  public void off() {
+    solenoidLeft.set(DoubleSolenoid.Value.kOff);
+    solenoidRight.set(DoubleSolenoid.Value.kOff);
   }
 }

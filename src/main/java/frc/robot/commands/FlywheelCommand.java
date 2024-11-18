@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.CommandConstants.FlywheelConstants;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.vision.VisionManager;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
@@ -72,7 +71,8 @@ public class FlywheelCommand extends Command {
       manager = new VisionManager(limelight);
       double speed = speedMap.CalculateFlywheelSpeed(manager.getBestCamera(null).getX());
       return new InstantCommand(() -> flywheel.runVelocity(speed));
-    } return new InstantCommand();
+    }
+    return new InstantCommand();
   }
 
   private void OutsideFlywheel(double velocityFlywheel, double velocityLockwheel) {
