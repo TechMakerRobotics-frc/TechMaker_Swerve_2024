@@ -70,6 +70,8 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
+    Logger.recordOutput("Intake/SolenoidLeftState", solenoidLeft.get().toString());
+    Logger.recordOutput("Intake/SolenoidRightState", solenoidRight.get().toString());
   }
 
   /** Run open loop at the specified voltage. */
