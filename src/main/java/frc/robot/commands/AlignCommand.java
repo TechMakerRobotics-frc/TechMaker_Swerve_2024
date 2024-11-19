@@ -50,7 +50,7 @@ public class AlignCommand extends Command {
   @Override
   public void initialize() {
     vXController.setSetpoint(0);
-    vXController.setTolerance(3);
+    vXController.setTolerance(0.5);
     vYController.setSetpoint(2);
     vYController.setTolerance(3);
     vOmegaController.setSetpoint(180);

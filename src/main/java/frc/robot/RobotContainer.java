@@ -65,7 +65,7 @@ public class RobotContainer {
       new LoggedTunableNumber("Flywheel Speed Fly", 2000);
 
   private LoggedTunableNumber intakeSpeedInside =
-      new LoggedTunableNumber("Intake Speed Inside", 500);
+      new LoggedTunableNumber("Intake Speed Inside", 200);
   private LoggedTunableNumber intakeSpeedOutside =
       new LoggedTunableNumber("Intake Speed Outside", 200);
 
@@ -176,9 +176,9 @@ public class RobotContainer {
         .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
 
-    OperatorController.leftBumper().onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
+    // OperatorController.leftBumper().onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
 
-    OperatorController.rightBumper().onTrue(flywheelCommand.stopFlywheels());
+    // OperatorController.rightBumper().onTrue(flywheelCommand.stopFlywheels());
 
     // intake
     OperatorController.povUp()
@@ -188,6 +188,9 @@ public class RobotContainer {
     OperatorController.povDown()
         .onTrue(intakeCommand.runOutsideIntake(intakeSpeedOutside.get()))
         .onFalse(intakeCommand.stopIntake());
+
+    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
+    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.retract()));
   }
 
   /**

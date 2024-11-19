@@ -18,25 +18,17 @@ public class Intake extends SubsystemBase {
   private final DigitalInput insideSensor = new DigitalInput(IntakeConstants.INSIDE_SENSOR_CHANNEL);
   private final DigitalInput outsideSensor =
       new DigitalInput(IntakeConstants.OUTSIDE_SENSOR_CHANNEL);
-  private final DoubleSolenoid solenoidLeft;
-  private final DoubleSolenoid solenoidRight;
+  private final DoubleSolenoid solenoid;
 
   /** Creates a new Intake. */
   public Intake(IntakeIO io) {
     this.io = io;
-
-    solenoidLeft =
+    solenoid =
         new DoubleSolenoid(
             IntakeConstants.SOLENOID_MODULE_CAN_ID,
             IntakeConstants.SOLENOID_MODULE_TYPE,
-            IntakeConstants.SOLENOID_LEFT_FORWARD_CHANNEL,
-            IntakeConstants.SOLENOID_LEFT_REVERSE_CHANNEL);
-    solenoidRight =
-        new DoubleSolenoid(
-            IntakeConstants.SOLENOID_MODULE_CAN_ID,
-            IntakeConstants.SOLENOID_MODULE_TYPE,
-            IntakeConstants.SOLENOID_RIGHT_FORWARD_CHANNEL,
-            IntakeConstants.SOLENOID_RIGHT_REVERSE_CHANNEL);
+            IntakeConstants.SOLENOID_FORWARD_CHANNEL,
+            IntakeConstants.SOLENOID_REVERSE_CHANNEL);
 
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
@@ -70,8 +62,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Intake", inputs);
-    Logger.recordOutput("Intake/SolenoidLeftState", solenoidLeft.get().toString());
-    Logger.recordOutput("Intake/SolenoidRightState", solenoidRight.get().toString());
+    Logger.recordOutput("Intake/SolenoidRightState", solenoid.get().toString());
   }
 
   /** Run open loop at the specified voltage. */
@@ -134,19 +125,16 @@ public class Intake extends SubsystemBase {
 
   /** Ativa o solenoide para o estado forward. */
   public void extend() {
-    solenoidLeft.set(DoubleSolenoid.Value.kForward);
-    solenoidRight.set(DoubleSolenoid.Value.kForward);
+    solenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   /** Ativa o solenoide para o estado reverse. */
   public void retract() {
-    solenoidLeft.set(DoubleSolenoid.Value.kReverse);
-    solenoidRight.set(DoubleSolenoid.Value.kReverse);
+    solenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   /** Desativa o solenoide. */
   public void off() {
-    solenoidLeft.set(DoubleSolenoid.Value.kOff);
-    solenoidRight.set(DoubleSolenoid.Value.kOff);
+    solenoid.set(DoubleSolenoid.Value.kOff);
   }
 }

@@ -14,8 +14,8 @@
 
 - **Localization**: The robot performs automatic field-relative localization using **AprilTags**, improving navigation and consistency in autonomous modes.
 
-- **Control System**:  
-  - Implemented **ThrottleMap** for customizable acceleration curves, ensuring smoother and more controlled driving.  
+- **Control System**:
+  - Implemented **ThrottleMap** for customizable acceleration curves, ensuring smoother and more controlled driving.
   - PID-controlled alignment with vision targets, enabling accurate positioning.
 
 - **Real-Time Trajectory Adjustment**: Our system supports **on-the-fly trajectory generation**, adapting to dynamic conditions during a match.

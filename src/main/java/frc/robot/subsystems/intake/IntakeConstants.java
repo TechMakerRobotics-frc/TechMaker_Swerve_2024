@@ -11,8 +11,6 @@ public final class IntakeConstants {
   // Constantes para os solenoides
   public static final int SOLENOID_MODULE_CAN_ID = 19;
   public static final PneumaticsModuleType SOLENOID_MODULE_TYPE = PneumaticsModuleType.REVPH;
-  public static final int SOLENOID_LEFT_FORWARD_CHANNEL = 0;
-  public static final int SOLENOID_LEFT_REVERSE_CHANNEL = 1;
-  public static final int SOLENOID_RIGHT_FORWARD_CHANNEL = 2;
-  public static final int SOLENOID_RIGHT_REVERSE_CHANNEL = 3;
+  public static final int SOLENOID_FORWARD_CHANNEL = 6;
+  public static final int SOLENOID_REVERSE_CHANNEL = 7;
 }
