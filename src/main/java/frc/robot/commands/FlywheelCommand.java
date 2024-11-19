@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.CommandConstants.FlywheelConstants;
 import frc.robot.subsystems.flywheel.*;
@@ -66,10 +67,14 @@ public class FlywheelCommand extends Command {
   }
 
   public Command runFlywheelWithDistance(PhotonCamera limelight) {
+    manager = new VisionManager(limelight);
     PhotonPipelineResult p = manager.getLatestPipeline();
     if (manager.hasTarget(p)) {
-      manager = new VisionManager(limelight);
-      double speed = speedMap.CalculateFlywheelSpeed(manager.getBestCamera(null).getX());
+      double speed =
+          speedMap.CalculateFlywheelSpeed(manager.getBestCamera(manager.getBestTarget(p)).getX());
+      SmartDashboard.putNumber(
+          "Distance to tag - Flywheel Distance",
+          manager.getBestCamera(manager.getBestTarget(p)).getX());
       return new InstantCommand(() -> flywheel.runVelocity(speed));
     }
     return new InstantCommand();

@@ -176,6 +176,10 @@ public class RobotContainer {
         .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
         .onFalse(flywheelCommand.stopLockWheel());
 
+    OperatorController.rightBumper()
+        .whileTrue(new FlywheelDistanceCommand(limelight, flywheel))
+        .onFalse(flywheelCommand.stopFlywheels());
+
     // OperatorController.leftBumper().onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
 
     // OperatorController.rightBumper().onTrue(flywheelCommand.stopFlywheels());
