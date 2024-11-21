@@ -16,7 +16,10 @@ package frc.robot.subsystems.flywheel;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class FlywheelIOVictorSPX implements FlywheelIO {
   private static final double GEAR_RATIO = 1.5;
@@ -24,10 +27,12 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
   private final WPI_VictorSPX leader = new WPI_VictorSPX(15);
   private final WPI_VictorSPX follower = new WPI_VictorSPX(16);
 
-  private double currentVelocity = 0;
+  private double currentVelocityRotations = 0;
   private double appliedVolts = 0;
   private double leaderCurrent = 0;
   private double followerCurrent = 0;
+
+  private Encoder encoder = new Encoder(2 , 3);
 
   public FlywheelIOVictorSPX() {
     leader.configFactoryDefault();
@@ -42,6 +47,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
     follower.enableVoltageCompensation(true);
 
     leader.configOpenloopRamp(0.1); // Slope for ramping up voltage
+    encoder.reset();
   }
 
   /**
@@ -51,8 +57,9 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
   public void updateInputs(FlywheelIOInputs inputs) {
     // VictorSPX doesn't provide direct sensor input for position/velocity,
     // so this is an approximation.
-    inputs.positionRad = 0; // Add encoder-based position reading if applicable
-    inputs.velocityRadPerSec = Units.rotationsToRadians(currentVelocity) / GEAR_RATIO;
+    currentVelocityRotations = (encoder.getRate() / 8192) * 60;
+    inputs.positionRad = encoder.get(); // Add encoder-based position reading if applicable
+    inputs.velocityRadPerSec = Units.rotationsToRadians(currentVelocityRotations) / GEAR_RATIO;
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = new double[] {leaderCurrent, followerCurrent};
   }
@@ -81,7 +88,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
     // VictorSPX doesn't support velocity control directly without an external sensor, so we'll
     // emulate with percent output.
     double targetRPM = Units.radiansToRotations(velocityRadPerSec) * 60.0;
-    currentVelocity = targetRPM / GEAR_RATIO;
+    currentVelocityRotations = targetRPM / GEAR_RATIO;
     leader.set(ControlMode.PercentOutput, ffVolts / 12.0); // Open loop control
     follower.set(ControlMode.PercentOutput, ffVolts / 12.0);
     appliedVolts = ffVolts;
@@ -92,7 +99,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
     // VictorSPX doesn't support velocity control directly without an external sensor, so we'll
     // emulate with percent output.
     double targetRPM = Units.radiansToRotations(velocityRadPerSec) * 60.0;
-    currentVelocity = targetRPM / GEAR_RATIO;
+    currentVelocityRotations = targetRPM / GEAR_RATIO;
     leader.set(ControlMode.PercentOutput, ffVolts / 12.0); // Open loop control
     appliedVolts = ffVolts;
   }
@@ -102,7 +109,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
     // VictorSPX doesn't support velocity control directly without an external sensor, so we'll
     // emulate with percent output.
     double targetRPM = Units.radiansToRotations(velocityRadPerSec) * 60.0;
-    currentVelocity = targetRPM / GEAR_RATIO;
+    currentVelocityRotations = targetRPM / GEAR_RATIO;
     follower.set(ControlMode.PercentOutput, ffVolts / 12.0); // Open loop control
     appliedVolts = ffVolts;
   }

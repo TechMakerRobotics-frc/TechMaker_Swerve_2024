@@ -54,7 +54,7 @@ public class RobotContainer {
 
   // Dashboard inputs
   private LoggedTunableNumber flywheelSpeedInside =
-      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
+      new LoggedTunableNumber("Flywheel Speed Inside", 700.0);
   private LoggedTunableNumber flywheelSpeedOutside =
       new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
   private LoggedTunableNumber lockwheelSpeedInside =
@@ -194,7 +194,7 @@ public class RobotContainer {
         .onFalse(intakeCommand.stopIntake());
 
     OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
-    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.retract()));
+    OperatorController.povRight().onTrue(new InstantCommand(() -> intake.retract()));
   }
 
   /**
