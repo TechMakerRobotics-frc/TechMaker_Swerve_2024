@@ -62,8 +62,8 @@ public class RobotContainer {
       new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
   private LoggedTunableNumber lockwheelSpeedOutside =
       new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-  private LoggedTunableNumber flywheelSpeedFly =
-      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
+  /*private LoggedTunableNumber flywheelSpeedFly =
+      new LoggedTunableNumber("Flywheel Speed Fly", 2000);*/
 
   private LoggedTunableNumber intakeSpeedInside =
       new LoggedTunableNumber("Intake Speed Inside", 200);
@@ -159,7 +159,7 @@ public class RobotContainer {
     DriverController.povDown()
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
 
-    DriverController.a().whileTrue(new TrajectoryCommand(drive));
+    //DriverController.a().whileTrue(new TrajectoryCommand(drive));
 
     // Operator commands
 
