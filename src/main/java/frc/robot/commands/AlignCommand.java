@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.AlignConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.vision.VisionTagsLimelight;
+import frc.robot.vision.VisionManager;
+
+import org.photonvision.PhotonCamera;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -27,6 +29,7 @@ public class AlignCommand extends Command {
           AlignConstants.V_OMEGA_SPEAKER_D);
 
   private final Timer timer = new Timer();
+  private final VisionManager manager;
   private double timeout, vx, vy, omega;
   // private int usedTag;
   private Command defaultCommand;
@@ -41,7 +44,8 @@ public class AlignCommand extends Command {
    * @param drive the Drive subsystem used by this command
    * @param usedTag the used apriltag to align
    */
-  public AlignCommand(int usedTag, double timeout, Drive drive) {
+  public AlignCommand(Drive drive, PhotonCamera limelight, int usedTag, double timeout) {
+    manager = new VisionManager(limelight);
     this.drive = drive;
     this.timeout = timeout;
     // this.usedTag = usedTag;
@@ -59,22 +63,22 @@ public class AlignCommand extends Command {
     timer.start();
     defaultCommand = drive.getDefaultCommand();
     drive.removeDefaultCommand();
-    if (VisionTagsLimelight.getCamera() != null) {
-      VisionTagsLimelight.getCamera().setLED(VisionLEDMode.kOn);
+    if (manager.getCamera() != null) {
+      manager.getCamera().setLED(VisionLEDMode.kOn);
     }
   }
 
   @Override
   public void execute() {
-    PhotonPipelineResult p = VisionTagsLimelight.getLatestPipeline();
-    if (VisionTagsLimelight.hasTarget(p)) {
-      PhotonTrackedTarget t = VisionTagsLimelight.getBestTarget(p);
+    PhotonPipelineResult p = manager.getLatestPipeline();
+    if (manager.hasTarget(p)) {
+      PhotonTrackedTarget t = manager.getBestTarget(p);
       printToDashboard();
 
-      vx = vXController.calculate(VisionTagsLimelight.getYaw(t)) * -1;
-      vy = vYController.calculate(VisionTagsLimelight.getBestCamera(t).getX());
-      omega = vOmegaController.calculate(Math.abs(VisionTagsLimelight.getAngle(t)));
-      omega = Math.copySign(omega, VisionTagsLimelight.getAngle(t)) * -1;
+      vx = vXController.calculate(manager.getYaw(t)) * -1;
+      vy = vYController.calculate(manager.getDistance(t));
+      omega = vOmegaController.calculate(Math.abs(manager.getAngle(t)));
+      omega = Math.copySign(omega, manager.getAngle(t)) * -1;
 
       drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, omega, drive.getRotation()));
     }
@@ -94,20 +98,20 @@ public class AlignCommand extends Command {
   public void end(boolean interrupted) {
     drive.runVelocity(new ChassisSpeeds());
     drive.setDefaultCommand(defaultCommand);
-    VisionTagsLimelight.getCamera().setLED(VisionLEDMode.kOff);
+    manager.getCamera().setLED(VisionLEDMode.kOff);
   }
 
   /** Prints vision targeting information to the SmartDashboard. */
   public void printToDashboard() {
-    PhotonPipelineResult p = VisionTagsLimelight.getLatestPipeline();
-    PhotonTrackedTarget t = VisionTagsLimelight.getBestTarget(p);
-    SmartDashboard.putNumber("Tag Yaw", VisionTagsLimelight.getYaw(t));
-    SmartDashboard.putNumber("Current Tag", VisionTagsLimelight.getTargetId(t));
+    PhotonPipelineResult p = manager.getLatestPipeline();
+    PhotonTrackedTarget t = manager.getBestTarget(p);
+    SmartDashboard.putNumber("Tag Yaw", manager.getYaw(t));
+    SmartDashboard.putNumber("Current Tag", manager.getTargetId(t));
     SmartDashboard.putNumber("omega", omega);
     SmartDashboard.putNumber("vx", vx);
     SmartDashboard.putNumber("vy", vy);
-    SmartDashboard.putNumber("Target Angle", VisionTagsLimelight.getAngle(t));
-    SmartDashboard.putNumber("Target Distance", VisionTagsLimelight.getDistance(t));
+    SmartDashboard.putNumber("Target Angle", manager.getAngle(t));
+    SmartDashboard.putNumber("Target Distance", manager.getDistance(t));
     SmartDashboard.putNumber("PID VX Error", vXController.getPositionError());
     SmartDashboard.putNumber("PID VY Error", vYController.getPositionError());
     SmartDashboard.putNumber("PID OMEGA Error", vOmegaController.getPositionError());

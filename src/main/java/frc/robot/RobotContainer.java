@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
@@ -61,8 +62,8 @@ public class RobotContainer {
       new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
   private LoggedTunableNumber lockwheelSpeedOutside =
       new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-  private LoggedTunableNumber flywheelSpeedFly =
-      new LoggedTunableNumber("Flywheel Speed Fly", 2000);
+  /*private LoggedTunableNumber flywheelSpeedFly =
+      new LoggedTunableNumber("Flywheel Speed Fly", 2000);*/
 
   private LoggedTunableNumber intakeSpeedInside =
       new LoggedTunableNumber("Intake Speed Inside", 200);
@@ -86,7 +87,7 @@ public class RobotContainer {
         new RegisNamedCommands(flywheel, intake);
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
 
       case SIM:
@@ -103,7 +104,7 @@ public class RobotContainer {
         visionSim = new VisionSim(drive, flCam, frCam, limelight);
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
 
       default:
@@ -119,7 +120,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
-        pose = new VisionPose(drive);
+        pose = new VisionPose(drive, flCam, frCam, limelight);
         break;
     }
 
@@ -151,12 +152,14 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    DriverController.rightBumper().whileTrue(new AlignCommand(4, 20000, drive));
+    DriverController.rightBumper().whileTrue(new AlignCommand(drive, limelight, 4, 20000));
     DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     DriverController.povDown()
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
+
+    //DriverController.a().whileTrue(new TrajectoryCommand(drive));
 
     // Operator commands
 
