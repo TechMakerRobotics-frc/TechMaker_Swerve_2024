@@ -4,6 +4,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
@@ -37,7 +38,11 @@ public class RobotContainer {
   private final PhotonCamera frCam = new PhotonCamera(CameraConstants.CAMERA_FR_NAME);
   private final PhotonCamera limelight = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
 
+  public final LedsControl leds;
+
   public VisionSim visionSim;
+
+  private int currentLedState = 0; // Índice inicial para o estado do LED
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -55,7 +60,7 @@ public class RobotContainer {
 
   // Dashboard inputs
   private LoggedTunableNumber flywheelSpeedInside =
-      new LoggedTunableNumber("Flywheel Speed Inside", 700.0);
+      new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
   private LoggedTunableNumber flywheelSpeedOutside =
       new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
   private LoggedTunableNumber lockwheelSpeedInside =
@@ -63,7 +68,7 @@ public class RobotContainer {
   private LoggedTunableNumber lockwheelSpeedOutside =
       new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
   /*private LoggedTunableNumber flywheelSpeedFly =
-      new LoggedTunableNumber("Flywheel Speed Fly", 2000);*/
+  new LoggedTunableNumber("Flywheel Speed Fly", 2000);*/
 
   private LoggedTunableNumber intakeSpeedInside =
       new LoggedTunableNumber("Intake Speed Inside", 200);
@@ -88,6 +93,7 @@ public class RobotContainer {
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
         pose = new VisionPose(drive, flCam, frCam, limelight);
+        leds = new LedsControl();
         break;
 
       case SIM:
@@ -105,6 +111,7 @@ public class RobotContainer {
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
         pose = new VisionPose(drive, flCam, frCam, limelight);
+        leds = new LedsControl();
         break;
 
       default:
@@ -121,6 +128,7 @@ public class RobotContainer {
         flywheelCommand = new FlywheelCommand(flywheel);
         intakeCommand = new IntakeCommand(intake);
         pose = new VisionPose(drive, flCam, frCam, limelight);
+        leds = new LedsControl();
         break;
     }
 
@@ -159,7 +167,7 @@ public class RobotContainer {
     DriverController.povDown()
         .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
 
-    //DriverController.a().whileTrue(new TrajectoryCommand(drive));
+    // DriverController.a().whileTrue(new TrajectoryCommand(drive));
 
     // Operator commands
 
@@ -197,7 +205,26 @@ public class RobotContainer {
         .onFalse(intakeCommand.stopIntake());
 
     OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
-    OperatorController.povRight().onTrue(new InstantCommand(() -> intake.retract()));
+    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.retract()));
+
+    // leds
+    OperatorController.leftBumper()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  // Obtenha a lista de estados disponíveis
+                  Constants.LedState[] states = Constants.LedState.values();
+
+                  // Atualiza o estado atual
+                  currentLedState = (currentLedState + 1) % states.length;
+
+                  // Altera para o próximo estado
+                  leds.setState(states[currentLedState]);
+
+                  // Mensagem de debug (opcional)
+                  SmartDashboard.putString(
+                      "Led state", "LED alterado para: " + states[currentLedState]);
+                }));
   }
 
   /**

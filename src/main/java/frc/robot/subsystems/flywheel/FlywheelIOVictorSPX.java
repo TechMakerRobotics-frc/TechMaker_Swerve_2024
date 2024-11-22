@@ -16,8 +16,6 @@ package frc.robot.subsystems.flywheel;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -32,7 +30,7 @@ public class FlywheelIOVictorSPX implements FlywheelIO {
   private double leaderCurrent = 0;
   private double followerCurrent = 0;
 
-  private Encoder encoder = new Encoder(2 , 3);
+  private Encoder encoder = new Encoder(2, 3);
 
   public FlywheelIOVictorSPX() {
     leader.configFactoryDefault();

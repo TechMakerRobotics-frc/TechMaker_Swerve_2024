@@ -13,7 +13,7 @@ public class FlywheelSpeedMap {
   private PolynomialSplineFunction createSpeedCurve() {
     // Valores de exemplo de distância (em metros) e velocidades da flywheel (em RPM)
     double[] distanceValues = {
-       1.13, 1.20, 1.5, 1.7, 1.8, 1.9, 2.20, 3
+      1.13, 1.20, 1.5, 1.7, 1.8, 1.9, 2.20, 3
     }; // Distâncias de referência em metros
     double[] speedValues = {
       750, 780, 790, 800, 801, 850.0, 920, 950
