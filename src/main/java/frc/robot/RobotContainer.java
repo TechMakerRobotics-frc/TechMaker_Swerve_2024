@@ -205,7 +205,9 @@ public class RobotContainer {
         .onFalse(intakeCommand.stopIntake());
 
     OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
-    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.retract()));
+    OperatorController.povRight().onTrue(new InstantCommand(() -> intake.retract()));
+
+    OperatorController.leftStick().onTrue(new AlignBall(intake));
 
     // leds
     OperatorController.leftBumper()
