@@ -76,21 +76,21 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
     photonPoseEstimatorFLCam =
         new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             flManager.getCamera(),
             flManager.getCameraTransform3d());
 
     photonPoseEstimatorFRCam =
         new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             frManager.getCamera(),
             frManager.getCameraTransform3d());
 
     photonPoseEstimatorLimelight =
         new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             limelightManager.getCamera(),
             frManager.getCameraTransform3d());
   }

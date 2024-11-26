@@ -112,7 +112,7 @@ public class Intake extends SubsystemBase {
    */
   @AutoLogOutput
   public boolean insideSensorIsTrue() {
-    return insideSensor.get();
+    return !insideSensor.get();
   }
 
   /**
@@ -122,7 +122,7 @@ public class Intake extends SubsystemBase {
    */
   @AutoLogOutput
   public boolean outsideSensorIsTrue() {
-    return outsideSensor.get();
+    return !outsideSensor.get();
   }
 
   /** Ativa o solenoide para o estado forward. */
