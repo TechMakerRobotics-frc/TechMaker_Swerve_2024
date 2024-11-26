@@ -205,7 +205,7 @@ public class RobotContainer {
         .onFalse(intakeCommand.stopIntake());
 
     OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
-    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.retract()));
+    OperatorController.povRight().onTrue(new InstantCommand(() -> intake.retract()));
 
     // leds
     OperatorController.leftBumper()
@@ -228,11 +228,11 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
+   * Use this to pass the autonomous command to the main {@link Robot} class.''
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("AutoTest1");
+    return new PathPlannerAuto("Auto");
   }
 }

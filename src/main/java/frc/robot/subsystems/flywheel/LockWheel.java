@@ -16,7 +16,7 @@ public class LockWheel implements FlywheelIO {
 
   public LockWheel() {
     motor.configFactoryDefault();
-    motor.setNeutralMode(NeutralMode.Coast);
+    motor.setNeutralMode(NeutralMode.Brake);
     motor.configVoltageCompSaturation(12.0);
     motor.enableVoltageCompensation(true);
     motor.configOpenloopRamp(0.1); // Slope for ramping up voltage

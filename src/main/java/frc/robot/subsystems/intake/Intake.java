@@ -110,6 +110,7 @@ public class Intake extends SubsystemBase {
    *
    * @return get sensor
    */
+  @AutoLogOutput
   public boolean insideSensorIsTrue() {
     return insideSensor.get();
   }
@@ -119,6 +120,7 @@ public class Intake extends SubsystemBase {
    *
    * @return get sensor
    */
+  @AutoLogOutput
   public boolean outsideSensorIsTrue() {
     return outsideSensor.get();
   }

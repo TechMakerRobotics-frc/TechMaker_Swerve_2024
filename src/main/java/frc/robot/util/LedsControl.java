@@ -13,7 +13,7 @@ public class LedsControl extends SubsystemBase {
 
   public LedsControl() {
     // Inicializa o LED no canal 0
-    led = new AddressableLED(0);
+    led = new AddressableLED(1);
 
     // Cria um buffer de 60 LEDs
     ledBuffer = new AddressableLEDBuffer(60);
@@ -33,6 +33,7 @@ public class LedsControl extends SubsystemBase {
   public void periodic() {
     // Atualiza os LEDs a cada ciclo (exemplo: arco-íris)
     led.setData(ledBuffer);
+    rainbow();
   }
 
   /** Método para criar o efeito arco-íris */
