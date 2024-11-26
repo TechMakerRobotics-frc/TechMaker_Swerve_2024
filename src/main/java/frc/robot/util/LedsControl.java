@@ -6,34 +6,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LedState;
 
 public class LedsControl extends SubsystemBase {
-  private final AddressableLED led;
-  private final AddressableLEDBuffer ledBuffer;
+  private AddressableLED led = new AddressableLED(9);
+  private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(240);
   private int rainbowFirstPixelHue;
   private int currentPixel = 0; // Para efeitos em sequência
 
   public LedsControl() {
-    // Inicializa o LED no canal 0
-    led = new AddressableLED(1);
-
-    // Cria um buffer de 60 LEDs
-    ledBuffer = new AddressableLEDBuffer(60);
-
     // Define o comprimento do LED
     led.setLength(ledBuffer.getLength());
 
-    // Define os dados iniciais e inicia os LEDs
     led.setData(ledBuffer);
-    led.start();
 
+    led.start();
     // Inicializa a variável para o arco-íris
     rainbowFirstPixelHue = 0;
   }
 
+  public void init() {}
+
   @Override
   public void periodic() {
     // Atualiza os LEDs a cada ciclo (exemplo: arco-íris)
+    // rainbow();
+
     led.setData(ledBuffer);
-    rainbow();
   }
 
   /** Método para criar o efeito arco-íris */
