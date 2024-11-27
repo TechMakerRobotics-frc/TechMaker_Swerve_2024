@@ -12,11 +12,20 @@ import frc.robot.subsystems.intake.Intake;
 public class IntakeCommand extends Command {
 
   private Intake intake;
+  private Command defaultCommand;
 
   /** Construtor da classe IntakeCommand. Inicializa o subsistema de Intake. */
   public IntakeCommand(Intake intake) {
     this.intake = intake;
   }
+
+  
+  @Override
+  public void initialize() {
+    defaultCommand = intake.getDefaultCommand();
+    intake.removeDefaultCommand();
+  }
+
 
   /** Método para iniciar o Intake com uma velocidade específica para pegar o elemento. */
   public Command runInsideIntake(double velocity) {
@@ -40,6 +49,7 @@ public class IntakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     stopIntake();
+    intake.setDefaultCommand(defaultCommand);
   }
 
   /**
