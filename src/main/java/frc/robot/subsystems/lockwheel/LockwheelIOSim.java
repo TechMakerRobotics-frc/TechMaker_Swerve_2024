@@ -1,12 +1,12 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.lockwheel;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.robot.util.subsystemSim.IntakeSim;
+import frc.robot.util.subsystemSim.LockwheelSim;
 
-public class IntakeIOSim implements IntakeIO {
-  private IntakeSim sim = new IntakeSim(DCMotor.getNEO(1), 1.5, 0.004);
+public class LockwheelIOSim implements LockwheelIO {
+  private LockwheelSim sim = new LockwheelSim(DCMotor.getNEO(1), 1.5, 0.004);
   private PIDController pid = new PIDController(0.0, 0.0, 0.0);
 
   private boolean closedLoop = false;
@@ -14,7 +14,7 @@ public class IntakeIOSim implements IntakeIO {
   private double appliedVolts = 0.0;
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(LockwheelIOInputs inputs) {
     if (closedLoop) {
       appliedVolts =
           MathUtil.clamp(pid.calculate(sim.getAngularVelocityRadPerSec()) + ffVolts, -12.0, 12.0);

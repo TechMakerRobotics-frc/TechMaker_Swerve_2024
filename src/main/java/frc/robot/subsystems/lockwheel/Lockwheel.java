@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.lockwheel;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -10,23 +10,18 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.*;
 
-public class Intake extends SubsystemBase {
-  private final IntakeIO io;
-  private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+public class Lockwheel extends SubsystemBase {
+  private final LockwheelIO io;
+  private final LockwheelIOInputsAutoLogged inputs = new LockwheelIOInputsAutoLogged();
   private final SimpleMotorFeedforward ffModel;
   private final SysIdRoutine sysId;
-  private final DoubleSolenoid solenoid;
+  private final DigitalInput frontSensor =
+      new DigitalInput(LockwheelConstants.FRONT_SENSOR_CHANNEL);
+  private final DigitalInput backSensor = new DigitalInput(LockwheelConstants.BACK_SENSOR_CHANNEL);
 
-  /** Creates a new Intake. */
-  public Intake(IntakeIO io) {
+  /** Creates a new lockwheel. */
+  public Lockwheel(LockwheelIO io) {
     this.io = io;
-    solenoid =
-        new DoubleSolenoid(
-            IntakeConstants.SOLENOID_MODULE_CAN_ID,
-            IntakeConstants.SOLENOID_MODULE_TYPE,
-            IntakeConstants.SOLENOID_FORWARD_CHANNEL,
-            IntakeConstants.SOLENOID_REVERSE_CHANNEL);
-
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
     switch (Constants.currentMode) {
@@ -51,15 +46,14 @@ public class Intake extends SubsystemBase {
                 null,
                 null,
                 null,
-                (state) -> Logger.recordOutput("Intake/SysIdState", state.toString())),
+                (state) -> Logger.recordOutput("Lockwheel/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVolts(voltage.in(Volts)), null, this));
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Intake", inputs);
-    Logger.recordOutput("Intake/SolenoidRightState", solenoid.get().toString());
+    Logger.processInputs("Lockwheel", inputs);
   }
 
   /** Run open loop at the specified voltage. */
@@ -72,11 +66,19 @@ public class Intake extends SubsystemBase {
     var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
     io.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
 
-    // Log intake setpoint
-    Logger.recordOutput("Intake/SetpointRPM", velocityRPM);
+    // Log lockwheel setpoint
+    Logger.recordOutput("Lockwheel/SetpointRPM", velocityRPM);
   }
 
-  /** Stops the intake. */
+  public void rotateForward() {
+    runVelocity(LockwheelConstants.VELOCITY_ROTATE_FORWARD);
+  }
+
+  public void rotateBackward() {
+    runVelocity(LockwheelConstants.VELOCITY_ROTATE_BACKWARD);
+  }
+
+  /** Stops the lockwheel. */
   public void stop() {
     io.stop();
   }
@@ -102,18 +104,23 @@ public class Intake extends SubsystemBase {
     return inputs.velocityRadPerSec;
   }
 
-  /** Ativa o solenoide para o estado forward. */
-  public void extend() {
-    solenoid.set(DoubleSolenoid.Value.kForward);
+  /**
+   * Returns true if the sensor has an object.
+   *
+   * @return get sensor
+   */
+  @AutoLogOutput
+  public boolean frontSensorIsTrue() {
+    return !frontSensor.get();
   }
 
-  /** Ativa o solenoide para o estado reverse. */
-  public void retract() {
-    solenoid.set(DoubleSolenoid.Value.kReverse);
-  }
-
-  /** Desativa o solenoide. */
-  public void off() {
-    solenoid.set(DoubleSolenoid.Value.kOff);
+  /**
+   * Returns true if the sensor has an object.
+   *
+   * @return get sensor
+   */
+  @AutoLogOutput
+  public boolean backSensorIsTrue() {
+    return !backSensor.get();
   }
 }

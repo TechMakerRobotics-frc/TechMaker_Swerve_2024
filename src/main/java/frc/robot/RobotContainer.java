@@ -7,10 +7,25 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.*;
+import frc.robot.commands.drive.AlignCommand;
+import frc.robot.commands.drive.DriveCommands;
+import frc.robot.commands.flywheel.FlywheelDistanceCommand;
+import frc.robot.commands.flywheel.InsideFlywheelCommand;
+import frc.robot.commands.flywheel.OutsideFlywheelCommand;
+import frc.robot.commands.flywheel.StopFlywheelCommand;
+import frc.robot.commands.intake.ExtendIntakeCommand;
+import frc.robot.commands.intake.InsideIntakeCommand;
+import frc.robot.commands.intake.OutsideIntakeCommand;
+import frc.robot.commands.intake.RetractIntakeCommand;
+import frc.robot.commands.intake.StopIntakeCommand;
+import frc.robot.commands.lockwheel.AlignBall;
+import frc.robot.commands.lockwheel.InsideLockwheelCommand;
+import frc.robot.commands.lockwheel.OutsideLockwheelCommand;
+import frc.robot.commands.lockwheel.StopLockwheelCommand;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.lockwheel.*;
 import frc.robot.util.*;
 import frc.robot.vision.*;
 import frc.robot.vision.VisionConstants.CameraConstants;
@@ -26,11 +41,9 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
 
-  private final FlywheelCommand flywheelCommand;
-  private final IntakeCommand intakeCommand;
-
   private final Flywheel flywheel;
   private final Intake intake;
+  private final Lockwheel lockwheel;
 
   public final VisionPose pose;
 
@@ -42,7 +55,7 @@ public class RobotContainer {
 
   public VisionSim visionSim;
 
-  private int currentLedState = 0; // Índice inicial para o estado do LED
+  private int currentLedState = 0; // indice inicial para o estado do LED
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -59,21 +72,24 @@ public class RobotContainer {
   private final CommandXboxController OperatorController = new CommandXboxController(1);
 
   // Dashboard inputs
+
+  // tunable flywheel velocity
   private LoggedTunableNumber flywheelSpeedInside =
       new LoggedTunableNumber("Flywheel Speed Inside", 300.0);
   private LoggedTunableNumber flywheelSpeedOutside =
       new LoggedTunableNumber("Flywheel Speed Outside", 3000.0);
-  private LoggedTunableNumber lockwheelSpeedInside =
-      new LoggedTunableNumber("Lockwheel Speed Inside", 3000.0);
-  private LoggedTunableNumber lockwheelSpeedOutside =
-      new LoggedTunableNumber("Lockwheel Speed Outside", 3000.0);
-  /*private LoggedTunableNumber flywheelSpeedFly =
-  new LoggedTunableNumber("Flywheel Speed Fly", 2000);*/
 
+  // tunable intake velocity
   private LoggedTunableNumber intakeSpeedInside =
       new LoggedTunableNumber("Intake Speed Inside", 200);
   private LoggedTunableNumber intakeSpeedOutside =
       new LoggedTunableNumber("Intake Speed Outside", 200);
+
+  // tunable lockwheel velocity
+  private LoggedTunableNumber lockwheelSpeedInside =
+      new LoggedTunableNumber("Flywheel Speed Inside", 1000);
+  private LoggedTunableNumber lockwheelSpeedOutside =
+      new LoggedTunableNumber("Flywheel Speed Outside", 1000);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -89,9 +105,8 @@ public class RobotContainer {
                 new ModuleIOSparkAndTalon(3));
         flywheel = new Flywheel(new FlywheelIOVictorSPX());
         intake = new Intake(new IntakeIOSparkMax());
-        new RegisNamedCommands(flywheel, intake);
-        flywheelCommand = new FlywheelCommand(flywheel);
-        intakeCommand = new IntakeCommand(intake);
+        lockwheel = new Lockwheel(new LockwheelIOVictorSPX());
+        new RegisNamedCommands(flywheel, limelight, intake, lockwheel);
         pose = new VisionPose(drive, flCam, frCam, limelight);
         leds = new LedsControl();
         break;
@@ -107,9 +122,8 @@ public class RobotContainer {
                 new ModuleIOSim());
         flywheel = new Flywheel(new FlywheelIOSim());
         intake = new Intake(new IntakeIOSim());
+        lockwheel = new Lockwheel(new LockwheelIOSim());
         visionSim = new VisionSim(drive, flCam, frCam, limelight);
-        flywheelCommand = new FlywheelCommand(flywheel);
-        intakeCommand = new IntakeCommand(intake);
         pose = new VisionPose(drive, flCam, frCam, limelight);
         leds = new LedsControl();
         break;
@@ -125,8 +139,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         flywheel = new Flywheel(new FlywheelIO() {});
         intake = new Intake(new IntakeIO() {});
-        flywheelCommand = new FlywheelCommand(flywheel);
-        intakeCommand = new IntakeCommand(intake);
+        lockwheel = new Lockwheel(new LockwheelIO() {});
         pose = new VisionPose(drive, flCam, frCam, limelight);
         leds = new LedsControl();
         break;
@@ -174,41 +187,36 @@ public class RobotContainer {
 
     // flywheel
     OperatorController.y()
-        .onTrue(
-            flywheelCommand.runOutsideFlywheel(
-                flywheelSpeedOutside.get(), lockwheelSpeedOutside.get()))
-        .onFalse(flywheelCommand.stopFlywheels());
+        .onTrue(new OutsideFlywheelCommand(flywheel, flywheelSpeedOutside.get()))
+        .onFalse(new StopFlywheelCommand(flywheel));
     OperatorController.a()
-        .onTrue(flywheelCommand.runInsideFlywheel(flywheelSpeedInside.get()))
-        .onFalse(flywheelCommand.stopFlywheels());
-    OperatorController.x()
-        .onTrue(flywheelCommand.runOutsideLockWheel(lockwheelSpeedOutside.get()))
-        .onFalse(flywheelCommand.stopLockWheel());
-    OperatorController.b()
-        .onTrue(flywheelCommand.runInsideLockWheel(lockwheelSpeedInside.get()))
-        .onFalse(flywheelCommand.stopLockWheel());
+        .onTrue(new InsideFlywheelCommand(flywheel, flywheelSpeedInside.get()))
+        .onFalse(new StopFlywheelCommand(flywheel));
 
     OperatorController.rightBumper()
         .whileTrue(new FlywheelDistanceCommand(limelight, flywheel))
-        .onFalse(flywheelCommand.stopFlywheels());
-
-    // OperatorController.leftBumper().onTrue(flywheelCommand.runFlywheel(flywheelSpeedFly.get()));
-
-    // OperatorController.rightBumper().onTrue(flywheelCommand.stopFlywheels());
+        .onFalse(new StopFlywheelCommand(flywheel));
 
     // intake
     OperatorController.povUp()
-        .onTrue(intakeCommand.runInsideIntake(intakeSpeedInside.get()))
-        .onFalse(intakeCommand.stopIntake());
-
+        .onTrue(new InsideIntakeCommand(intake, intakeSpeedInside.get()))
+        .onFalse(new StopIntakeCommand(intake));
     OperatorController.povDown()
-        .onTrue(intakeCommand.runOutsideIntake(intakeSpeedOutside.get()))
-        .onFalse(intakeCommand.stopIntake());
+        .onTrue(new OutsideIntakeCommand(intake, intakeSpeedOutside.get()))
+        .onFalse(new StopIntakeCommand(intake));
 
-    OperatorController.povLeft().onTrue(new InstantCommand(() -> intake.extend()));
-    OperatorController.povRight().onTrue(new InstantCommand(() -> intake.retract()));
+    OperatorController.povLeft().onTrue(new ExtendIntakeCommand(intake));
+    OperatorController.povRight().onTrue(new RetractIntakeCommand(intake));
 
-    OperatorController.leftStick().onTrue(new AlignBall(intake));
+    OperatorController.leftStick().onTrue(new AlignBall(lockwheel));
+
+    // lockwheel
+    OperatorController.x()
+        .onTrue(new OutsideLockwheelCommand(lockwheel, lockwheelSpeedInside.get()))
+        .onFalse(new StopLockwheelCommand(lockwheel));
+    OperatorController.b()
+        .onTrue(new InsideLockwheelCommand(lockwheel, lockwheelSpeedOutside.get()))
+        .onFalse(new StopLockwheelCommand(lockwheel));
 
     // leds
     OperatorController.leftBumper()

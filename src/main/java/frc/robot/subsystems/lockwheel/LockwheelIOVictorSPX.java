@@ -1,11 +1,11 @@
-package frc.robot.subsystems.flywheel;
+package frc.robot.subsystems.lockwheel;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.math.util.Units;
 
-public class LockWheel implements FlywheelIO {
+public class LockwheelIOVictorSPX implements LockwheelIO {
   private static final double GEAR_RATIO = 1.5;
 
   private final WPI_VictorSPX motor = new WPI_VictorSPX(17);
@@ -14,7 +14,7 @@ public class LockWheel implements FlywheelIO {
   private double appliedVolts = 0;
   private double currentAmps = 0;
 
-  public LockWheel() {
+  public LockwheelIOVictorSPX() {
     motor.configFactoryDefault();
     motor.setNeutralMode(NeutralMode.Brake);
     motor.configVoltageCompSaturation(12.0);
@@ -26,16 +26,10 @@ public class LockWheel implements FlywheelIO {
    * @param inputs
    */
   @Override
-  public void updateInputs(FlywheelIOInputs inputs) {
-    // VictorSPX does not provide direct sensor input like TalonFX,
-    // but you can implement it if using external encoders.
-    inputs.positionRad = 0; // Add encoder-based position reading if applicable
+  public void updateInputs(LockwheelIOInputs inputs) {
     inputs.velocityRadPerSec = Units.rotationsToRadians(currentVelocity) / GEAR_RATIO;
     inputs.appliedVolts = appliedVolts;
-    inputs.currentAmps =
-        new double[] {
-          currentAmps
-        }; // VictorSPX doesn't measure current directly, external sensor needed.
+    inputs.currentAmps = new double[] {currentAmps};
   }
 
   @Override
@@ -57,11 +51,5 @@ public class LockWheel implements FlywheelIO {
   @Override
   public void stop() {
     motor.set(ControlMode.PercentOutput, 0);
-  }
-
-  @Override
-  public void configurePID(double kP, double kI, double kD) {
-    // VictorSPX doesn't support onboard PID, this would need to be handled by external code (e.g.,
-    // in the robot loop).
   }
 }
