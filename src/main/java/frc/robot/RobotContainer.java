@@ -1,35 +1,23 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.drive.AlignCommand;
-import frc.robot.commands.drive.DriveCommands;
-import frc.robot.commands.flywheel.FlywheelDistanceCommand;
-import frc.robot.commands.flywheel.InsideFlywheelCommand;
-import frc.robot.commands.flywheel.OutsideFlywheelCommand;
-import frc.robot.commands.flywheel.StopFlywheelCommand;
-import frc.robot.commands.intake.ExtendIntakeCommand;
-import frc.robot.commands.intake.InsideIntakeCommand;
-import frc.robot.commands.intake.OutsideIntakeCommand;
-import frc.robot.commands.intake.RetractIntakeCommand;
-import frc.robot.commands.intake.StopIntakeCommand;
-import frc.robot.commands.lockwheel.AlignBall;
-import frc.robot.commands.lockwheel.InsideLockwheelCommand;
-import frc.robot.commands.lockwheel.OutsideLockwheelCommand;
-import frc.robot.commands.lockwheel.StopLockwheelCommand;
+
+import frc.robot.commands.drive.*;
+import frc.robot.commands.flywheel.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.lockwheel.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.lockwheel.*;
 import frc.robot.util.*;
 import frc.robot.vision.*;
-import frc.robot.vision.VisionConstants.CameraConstants;
-import org.photonvision.PhotonCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,11 +33,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Lockwheel lockwheel;
 
-  public final VisionPose pose;
-
-  private final PhotonCamera flCam = new PhotonCamera(CameraConstants.CAMERA_FL_NAME);
-  private final PhotonCamera frCam = new PhotonCamera(CameraConstants.CAMERA_FR_NAME);
-  private final PhotonCamera limelight = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
+  private final VisionPose visionPose;
 
   public final LedsControl leds;
 
@@ -106,8 +90,8 @@ public class RobotContainer {
         flywheel = new Flywheel(new FlywheelIOVictorSPX());
         intake = new Intake(new IntakeIOSparkMax());
         lockwheel = new Lockwheel(new LockwheelIOVictorSPX());
-        new RegisNamedCommands(flywheel, limelight, intake, lockwheel);
-        pose = new VisionPose(drive, flCam, frCam, limelight);
+        visionPose = new VisionPose();
+        new RegisNamedCommands(flywheel, intake, lockwheel, visionPose);
         leds = new LedsControl();
         break;
 
@@ -123,8 +107,8 @@ public class RobotContainer {
         flywheel = new Flywheel(new FlywheelIOSim());
         intake = new Intake(new IntakeIOSim());
         lockwheel = new Lockwheel(new LockwheelIOSim());
-        visionSim = new VisionSim(drive, flCam, frCam, limelight);
-        pose = new VisionPose(drive, flCam, frCam, limelight);
+        visionPose = new VisionPose();
+        visionSim = new VisionSim(drive, visionPose.getFLManager().getCamera(), visionPose.getFRManager().getCamera(), visionPose.getTargetManager().getCamera());
         leds = new LedsControl();
         break;
 
@@ -140,7 +124,7 @@ public class RobotContainer {
         flywheel = new Flywheel(new FlywheelIO() {});
         intake = new Intake(new IntakeIO() {});
         lockwheel = new Lockwheel(new LockwheelIO() {});
-        pose = new VisionPose(drive, flCam, frCam, limelight);
+        visionPose = new VisionPose();
         leds = new LedsControl();
         break;
     }
@@ -174,7 +158,7 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    DriverController.rightBumper().whileTrue(new AlignCommand(drive, limelight, 4, 20000));
+    DriverController.rightBumper().whileTrue(new AlignCommand(drive, visionPose, 20000));
     DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
@@ -194,7 +178,7 @@ public class RobotContainer {
         .onFalse(new StopFlywheelCommand(flywheel));
 
     OperatorController.rightBumper()
-        .whileTrue(new FlywheelDistanceCommand(limelight, flywheel))
+        .whileTrue(new FlywheelDistanceCommand(flywheel, visionPose))
         .onFalse(new StopFlywheelCommand(flywheel));
 
     // intake

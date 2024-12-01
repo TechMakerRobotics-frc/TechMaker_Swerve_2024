@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.flywheel.FlywheelSpeedMap;
 import frc.robot.vision.VisionManager;
-import org.photonvision.PhotonCamera;
+import frc.robot.vision.VisionPose;
+
 import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Command to align the robot using vision targets detected by PhotonVision. */
@@ -15,9 +16,9 @@ public class FlywheelDistanceCommand extends Command {
   private final FlywheelSpeedMap speedMap = new FlywheelSpeedMap();
   private final Flywheel flywheel;
 
-  public FlywheelDistanceCommand(PhotonCamera limelight, Flywheel flywheel) {
+  public FlywheelDistanceCommand(Flywheel flywheel, VisionPose visionPose) {
     this.flywheel = flywheel;
-    manager = new VisionManager(limelight);
+    manager = visionPose.getTargetManager();
   }
 
   @Override

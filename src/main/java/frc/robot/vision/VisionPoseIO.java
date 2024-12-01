@@ -1,7 +1,5 @@
 package frc.robot.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
@@ -17,7 +15,7 @@ public interface VisionPoseIO {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return Um {@link Optional} contendo a pose estimada do robô, se disponível.
    */
-  Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam(Pose2d prevEstimatedRobotPose);
+  Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam();
 
   /**
    * Atualiza a pose estimada global usando a câmera FR.
@@ -25,7 +23,7 @@ public interface VisionPoseIO {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return Um {@link Optional} contendo a pose estimada do robô, se disponível.
    */
-  Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam(Pose2d prevEstimatedRobotPose);
+  Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam();
 
   /**
    * Atualiza a pose estimada global usando a câmera Limelight.
@@ -33,26 +31,5 @@ public interface VisionPoseIO {
    * @param prevEstimatedRobotPose A última pose estimada do robô.
    * @return Um {@link Optional} contendo a pose estimada do robô, se disponível.
    */
-  Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight(Pose2d prevEstimatedRobotPose);
-
-  /**
-   * Obtém a pose 3D estimada pela câmera FL.
-   *
-   * @return A pose 3D estimada, se disponível; caso contrário, retorna {@code null}.
-   */
-  Pose3d getRobotPoseFLCam();
-
-  /**
-   * Obtém a pose 3D estimada pela câmera FR.
-   *
-   * @return A pose 3D estimada, se disponível; caso contrário, retorna {@code null}.
-   */
-  Pose3d getRobotPoseFRCam();
-
-  /**
-   * Obtém a pose 3D estimada pela câmera Limelight.
-   *
-   * @return A pose 3D estimada, se disponível; caso contrário, retorna {@code null}.
-   */
-  Pose3d getRobotPoseLimelight();
+  Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight();
 }

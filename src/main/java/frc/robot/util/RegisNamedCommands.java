@@ -1,48 +1,40 @@
 package frc.robot.util;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.commands.flywheel.FlywheelDistanceCommand;
-import frc.robot.commands.flywheel.InsideFlywheelCommand;
-import frc.robot.commands.flywheel.OutsideFlywheelCommand;
-import frc.robot.commands.flywheel.StopFlywheelCommand;
-import frc.robot.commands.intake.ExtendIntakeCommand;
-import frc.robot.commands.intake.InsideIntakeCommand;
-import frc.robot.commands.intake.OutsideIntakeCommand;
-import frc.robot.commands.intake.RetractIntakeCommand;
-import frc.robot.commands.intake.StopIntakeCommand;
-import frc.robot.commands.lockwheel.AlignBall;
-import frc.robot.commands.lockwheel.InsideLockwheelCommand;
-import frc.robot.commands.lockwheel.OutsideLockwheelCommand;
-import frc.robot.commands.lockwheel.StopLockwheelCommand;
+import frc.robot.commands.flywheel.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.lockwheel.*;
 import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lockwheel.Lockwheel;
-import org.photonvision.PhotonCamera;
+import frc.robot.vision.VisionPose;
 
 public class RegisNamedCommands {
 
   private Flywheel flywheel;
   private Intake intake;
   private Lockwheel lockwheel;
+  private VisionPose visionPose;
 
   /** Register commands in the pathplanner. */
   public RegisNamedCommands(
-      Flywheel flywheel, PhotonCamera camera, Intake intake, Lockwheel lockwheel) {
+      Flywheel flywheel, Intake intake, Lockwheel lockwheel, VisionPose visionPose) {
     this.flywheel = flywheel;
     this.intake = intake;
     this.lockwheel = lockwheel;
+    this.visionPose = visionPose;
 
-    RegisterFlywheel(camera);
+    RegisterFlywheel();
     RegisterIntake();
     RegisterLockwheel();
   }
 
-  private void RegisterFlywheel(PhotonCamera camera) {
+  private void RegisterFlywheel() {
     NamedCommands.registerCommand("Outside Flywheel", new OutsideFlywheelCommand(flywheel, 1000));
     NamedCommands.registerCommand("Inside Flywheel", new InsideFlywheelCommand(flywheel, 1000));
     NamedCommands.registerCommand("Stop Flywheels", new StopFlywheelCommand(flywheel));
     NamedCommands.registerCommand(
-        "Flywheel Distance", new FlywheelDistanceCommand(camera, flywheel));
+        "Flywheel Distance", new FlywheelDistanceCommand(flywheel, visionPose));
   }
 
   private void RegisterIntake() {

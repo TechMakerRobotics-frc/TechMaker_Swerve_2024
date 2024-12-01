@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CommandConstants.AlignConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.vision.VisionManager;
+import frc.robot.vision.VisionPose;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -29,6 +31,7 @@ public class AlignCommand extends Command {
 
   private final Timer timer = new Timer();
   private final VisionManager manager;
+  private final VisionPose visionPose;
   private double timeout, vx, vy, omega;
   // private int usedTag;
   private Command defaultCommand;
@@ -43,11 +46,11 @@ public class AlignCommand extends Command {
    * @param drive the Drive subsystem used by this command
    * @param usedTag the used apriltag to align
    */
-  public AlignCommand(Drive drive, PhotonCamera limelight, int usedTag, double timeout) {
-    manager = new VisionManager(limelight);
+  public AlignCommand(Drive drive, VisionPose visionPose, double timeout) {
+    this.visionPose = visionPose;
+    manager = visionPose.getTargetManager();
     this.drive = drive;
     this.timeout = timeout;
-    // this.usedTag = usedTag;
   }
 
   @Override
