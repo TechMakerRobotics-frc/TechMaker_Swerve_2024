@@ -46,7 +46,7 @@ public class AlignCommand extends Command {
    */
   public AlignCommand(Drive drive, VisionPose visionPose, double timeout) {
     this.visionPose = visionPose;
-    manager = visionPose.getTargetManager();
+    manager = this.visionPose.getTargetManager();
     this.drive = drive;
     this.timeout = timeout;
   }
