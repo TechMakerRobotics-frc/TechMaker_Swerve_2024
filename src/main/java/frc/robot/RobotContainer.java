@@ -33,6 +33,8 @@ public class RobotContainer {
 
   private final VisionPose visionPose;
 
+  private final PerpetualPoseCommand poseCommand;
+
   public final LedsControl leds;
 
   public VisionSim visionSim;
@@ -89,8 +91,10 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkMax());
         lockwheel = new Lockwheel(new LockwheelIOVictorSPX());
         visionPose = new VisionPose();
+        poseCommand = new PerpetualPoseCommand(drive, visionPose);
         new RegisNamedCommands(flywheel, intake, lockwheel, visionPose);
         leds = new LedsControl();
+
         break;
 
       case SIM:
@@ -106,6 +110,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         lockwheel = new Lockwheel(new LockwheelIOSim());
         visionPose = new VisionPose();
+        poseCommand = new PerpetualPoseCommand(drive, visionPose);
         visionSim =
             new VisionSim(
                 drive,
@@ -128,6 +133,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         lockwheel = new Lockwheel(new LockwheelIO() {});
         visionPose = new VisionPose();
+        poseCommand = new PerpetualPoseCommand(drive, visionPose);
         leds = new LedsControl();
         break;
     }
@@ -164,9 +170,8 @@ public class RobotContainer {
     DriverController.rightBumper().whileTrue(new AlignCommand(drive, visionPose, 20000));
     DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    /*DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
-    DriverController.povDown()
-        .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));*/
+    DriverController.povUp().onTrue(new OnUpdatePoseCommand(poseCommand));
+    DriverController.povDown().onTrue(new OffUpdatePoseCommand(poseCommand));
 
     // DriverController.a().whileTrue(new TrajectoryCommand(drive));
 

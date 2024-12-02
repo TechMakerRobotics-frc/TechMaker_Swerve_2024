@@ -1,8 +1,6 @@
 package frc.robot.vision;
 
 import edu.wpi.first.apriltag.*;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.vision.VisionConstants.CameraConstants;
 import java.util.Optional;
@@ -30,8 +28,6 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
   private final PhotonCamera flCam = new PhotonCamera(CameraConstants.CAMERA_FL_NAME);
   private final PhotonCamera frCam = new PhotonCamera(CameraConstants.CAMERA_FR_NAME);
   private final PhotonCamera limelight = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
-
-  private boolean updatePose;
 
   /** Construtor da classe VisionPose. * */
   public VisionPose() {
@@ -62,9 +58,7 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
   }
 
   @Override
-  public void periodic() {
-    if (updatePose) {}
-  }
+  public void periodic() {}
 
   /** Obtém a pose estimada global usando a câmera FL. */
   @AutoLogOutput(key = "Odometry/FLCamPose3d")
@@ -94,9 +88,5 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
 
   public VisionManager getTargetManager() {
     return limelightManager;
-  }
-
-  public void updateOdometryPose(boolean update) {
-    this.updatePose = update;
   }
 }

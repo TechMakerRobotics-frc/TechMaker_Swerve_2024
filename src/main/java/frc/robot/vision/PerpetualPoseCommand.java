@@ -4,26 +4,26 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 
-public class UpdatePoseCommand extends Command {
+public class PerpetualPoseCommand extends Command {
 
-  private Drive drive;
-  private VisionPose visionPose;
+  private final Drive drive;
+  private final VisionPose visionPose;
   private Pose3d robotPosefromFLCam;
   private Pose3d robotPosefromFRCam;
   private Pose3d robotPosefromLimelight;
 
-  public UpdatePoseCommand(Drive drive, VisionPose visionPose) {
+  private boolean shouldUpdatePose = true;
+
+  public PerpetualPoseCommand(Drive drive, VisionPose visionPose) {
     this.drive = drive;
     this.visionPose = visionPose;
-    addRequirements(visionPose);
   }
 
   @Override
-  public void initialize() {}
-
-  @Override
   public void execute() {
-    robotPosefromLimelight = visionPose.getEstimatedGlobalPoseLimelight().get().estimatedPose;
+    if (!shouldUpdatePose) {
+      return;
+    }
 
     if (visionPose.getEstimatedGlobalPoseFLCam().isPresent()) {
       robotPosefromFLCam = visionPose.getEstimatedGlobalPoseFLCam().get().estimatedPose;
@@ -40,9 +40,18 @@ public class UpdatePoseCommand extends Command {
     }
 
     if (visionPose.getEstimatedGlobalPoseLimelight().isPresent()) {
+      robotPosefromLimelight = visionPose.getEstimatedGlobalPoseLimelight().get().estimatedPose;
       drive.addVisionMeasurement(
           robotPosefromLimelight.toPose2d(),
           visionPose.getTargetManager().getCamera().getLatestResult().getTimestampSeconds());
     }
+  }
+
+  public void setShouldUpdatePose(boolean shouldUpdatePose) {
+    this.shouldUpdatePose = shouldUpdatePose;
+  }
+
+  public boolean isShouldUpdatePose() {
+    return shouldUpdatePose;
   }
 }
