@@ -1,13 +1,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
 import frc.robot.commands.drive.*;
 import frc.robot.commands.flywheel.*;
 import frc.robot.commands.intake.*;
@@ -108,7 +106,12 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         lockwheel = new Lockwheel(new LockwheelIOSim());
         visionPose = new VisionPose();
-        visionSim = new VisionSim(drive, visionPose.getFLManager().getCamera(), visionPose.getFRManager().getCamera(), visionPose.getTargetManager().getCamera());
+        visionSim =
+            new VisionSim(
+                drive,
+                visionPose.getFLManager().getCamera(),
+                visionPose.getFRManager().getCamera(),
+                visionPose.getTargetManager().getCamera());
         leds = new LedsControl();
         break;
 
@@ -161,9 +164,9 @@ public class RobotContainer {
     DriverController.rightBumper().whileTrue(new AlignCommand(drive, visionPose, 20000));
     DriverController.leftBumper().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
+    /*DriverController.povUp().onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(true)));
     DriverController.povDown()
-        .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));
+        .onTrue(new InstantCommand(() -> VisionPose.updateOdometryPose(false)));*/
 
     // DriverController.a().whileTrue(new TrajectoryCommand(drive));
 

@@ -8,13 +8,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Inside Intake"
+            "pathName": "PathBalls"
           }
         }
       ]
