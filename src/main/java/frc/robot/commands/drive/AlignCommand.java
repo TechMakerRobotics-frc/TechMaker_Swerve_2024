@@ -53,10 +53,13 @@ public class AlignCommand extends Command {
 
   @Override
   public void initialize() {
+    vXController.reset();
     vXController.setSetpoint(0);
     vXController.setTolerance(0.5);
+    vYController.reset();
     vYController.setSetpoint(2);
     vYController.setTolerance(3);
+    vOmegaController.reset();
     vOmegaController.setSetpoint(180);
     vOmegaController.setTolerance(3);
     timer.reset();
