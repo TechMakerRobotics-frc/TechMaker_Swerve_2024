@@ -6,7 +6,7 @@ import frc.robot.subsystems.drive.Drive;
 
 public class UpdatePoseCommand extends Command {
 
-    private Drive drive;
+  private Drive drive;
   private VisionPose visionPose;
   private Pose3d robotPosefromFLCam;
   private Pose3d robotPosefromFRCam;
@@ -19,29 +19,30 @@ public class UpdatePoseCommand extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
     robotPosefromLimelight = visionPose.getEstimatedGlobalPoseLimelight().get().estimatedPose;
 
-
     if (visionPose.getEstimatedGlobalPoseFLCam().isPresent()) {
       robotPosefromFLCam = visionPose.getEstimatedGlobalPoseFLCam().get().estimatedPose;
-        drive.addVisionMeasurement(
-            robotPosefromFLCam.toPose2d(), visionPose.getFLManager().getCamera().getLatestResult().getTimestampSeconds());
+      drive.addVisionMeasurement(
+          robotPosefromFLCam.toPose2d(),
+          visionPose.getFLManager().getCamera().getLatestResult().getTimestampSeconds());
     }
 
     if (visionPose.getEstimatedGlobalPoseFRCam().isPresent()) {
       robotPosefromFRCam = visionPose.getEstimatedGlobalPoseFRCam().get().estimatedPose;
-        drive.addVisionMeasurement(
-            robotPosefromFRCam.toPose2d(), visionPose.getFRManager().getCamera().getLatestResult().getTimestampSeconds());
+      drive.addVisionMeasurement(
+          robotPosefromFRCam.toPose2d(),
+          visionPose.getFRManager().getCamera().getLatestResult().getTimestampSeconds());
     }
 
     if (visionPose.getEstimatedGlobalPoseLimelight().isPresent()) {
-        drive.addVisionMeasurement(
-            robotPosefromLimelight.toPose2d(), visionPose.getTargetManager().getCamera().getLatestResult().getTimestampSeconds());
+      drive.addVisionMeasurement(
+          robotPosefromLimelight.toPose2d(),
+          visionPose.getTargetManager().getCamera().getLatestResult().getTimestampSeconds());
     }
   }
 }

@@ -6,7 +6,6 @@ import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.flywheel.FlywheelSpeedMap;
 import frc.robot.vision.VisionManager;
 import frc.robot.vision.VisionPose;
-
 import org.photonvision.targeting.PhotonPipelineResult;
 
 /** Command to align the robot using vision targets detected by PhotonVision. */

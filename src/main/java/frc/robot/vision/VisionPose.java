@@ -4,9 +4,7 @@ import edu.wpi.first.apriltag.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.vision.VisionConstants.CameraConstants;
-
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.*;
@@ -65,30 +63,22 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
 
   @Override
   public void periodic() {
-    if(updatePose) {
-
-    }
+    if (updatePose) {}
   }
 
-  /**
-   * Obtém a pose estimada global usando a câmera FL.
-   */
+  /** Obtém a pose estimada global usando a câmera FL. */
   @AutoLogOutput(key = "Odometry/FLCamPose3d")
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFLCam() {
     return photonPoseEstimatorFLCam.update();
   }
 
-  /**
-   * Obtém a pose estimada global usando a câmera FR.
-   */
+  /** Obtém a pose estimada global usando a câmera FR. */
   @AutoLogOutput(key = "Odometry/FRCamPose3d")
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFRCam() {
     return photonPoseEstimatorFRCam.update();
   }
 
-  /**
-   * Obtém a pose estimada global usando a câmera Limelight.
-   */
+  /** Obtém a pose estimada global usando a câmera Limelight. */
   @AutoLogOutput(key = "Odometry/LimelightPose3d")
   public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLimelight() {
     return photonPoseEstimatorLimelight.update();
