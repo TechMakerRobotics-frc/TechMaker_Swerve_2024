@@ -31,6 +31,8 @@ public final class VisionConstants {
     public static final double LIMELIGHT_PITCH = 25;
     public static final double LIMELIGHT_YAW = 180;
 
+    public static final String CENTRAL_CAM_NAME = "Central Cam";
+
     public static final Transform3d ROBOT_TO_FL_CAM =
         new Transform3d(
             new Translation3d(CAMERA_FL_X, CAMERA_FL_Y, CAMERA_FL_Z),

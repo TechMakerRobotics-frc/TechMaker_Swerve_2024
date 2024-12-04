@@ -24,16 +24,19 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
   private final VisionManager flManager;
   private final VisionManager frManager;
   private final VisionManager limelightManager;
+  private final VisionManager centralManager;
 
   private final PhotonCamera flCam = new PhotonCamera(CameraConstants.CAMERA_FL_NAME);
   private final PhotonCamera frCam = new PhotonCamera(CameraConstants.CAMERA_FR_NAME);
   private final PhotonCamera limelight = new PhotonCamera(CameraConstants.LIMELIGHT_NAME);
+  private final PhotonCamera centralCam = new PhotonCamera(CameraConstants.CENTRAL_CAM_NAME);
 
   /** Construtor da classe VisionPose. * */
   public VisionPose() {
     flManager = new VisionManager(flCam);
     frManager = new VisionManager(frCam);
     limelightManager = new VisionManager(limelight);
+    centralManager = new VisionManager(flCam);
 
     photonPoseEstimatorFLCam =
         new PhotonPoseEstimator(
@@ -88,5 +91,9 @@ public class VisionPose extends SubsystemBase implements VisionPoseIO {
 
   public VisionManager getTargetManager() {
     return limelightManager;
+  }
+
+  public VisionManager getCentralManager() {
+    return centralManager;
   }
 }
