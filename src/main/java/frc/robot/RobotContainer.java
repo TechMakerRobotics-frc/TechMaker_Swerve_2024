@@ -168,7 +168,6 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     DriverController.rightBumper().whileTrue(new AlignToTag(drive, visionPose, 20000));
-    DriverController.leftBumper().whileTrue(new AlignToBall(drive, visionPose, 20000));
 
     DriverController.povUp().onTrue(new OnUpdatePoseCommand(poseCommand));
     DriverController.povDown().onTrue(new OffUpdatePoseCommand(poseCommand));

@@ -14,12 +14,12 @@ public final class CommandConstants {
     public static final double V_OMEGA_P = 0.008;
     public static final double V_OMEGA_I = 0.0;
     public static final double V_OMEGA_D = 0.0;
-    
+
     public static final double VX_BALL_P = 0.02;
     public static final double VX_BALL_I = 0.0;
     public static final double VX_BALL_D = 0.001;
 
-    public static final double VY_BALL_P = 0.015; 
+    public static final double VY_BALL_P = 0.015;
     public static final double VY_BALL_I = 0.0;
     public static final double VY_BALL_D = 0.001;
   }

@@ -35,7 +35,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final Mode currentMode = Mode.SIM;
+  public static final Mode currentMode = Mode.REAL;
 
   /** States representing the available LED colors or effects. */
   public static enum LedState {

@@ -16,16 +16,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 /** Command to align the robot using vision targets detected by PhotonVision. */
 public class AlignToTag extends Command {
   private static PIDController vXController =
-      new PIDController(
-          AlignConstants.VX_P, AlignConstants.VX_I, AlignConstants.VX_D);
+      new PIDController(AlignConstants.VX_P, AlignConstants.VX_I, AlignConstants.VX_D);
   private static PIDController vYController =
-      new PIDController(
-          AlignConstants.VY_P, AlignConstants.VY_I, AlignConstants.VY_D);
+      new PIDController(AlignConstants.VY_P, AlignConstants.VY_I, AlignConstants.VY_D);
   private static PIDController vOmegaController =
       new PIDController(
-          AlignConstants.V_OMEGA_P,
-          AlignConstants.V_OMEGA_I,
-          AlignConstants.V_OMEGA_D);
+          AlignConstants.V_OMEGA_P, AlignConstants.V_OMEGA_I, AlignConstants.V_OMEGA_D);
 
   private final Timer timer = new Timer();
   private final VisionManager manager;
