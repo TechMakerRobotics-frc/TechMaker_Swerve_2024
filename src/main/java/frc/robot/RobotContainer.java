@@ -158,6 +158,11 @@ public class RobotContainer {
             () -> -DriverController.getLeftX(),
             () -> -DriverController.getRightX()));
 
+    flywheel.setDefaultCommand(
+        FlywheelSpeedCommand.JoystickSpeed(flywheel, OperatorController.getRightTriggerAxis()));
+
+    System.out.println("Trigger Axis: " + OperatorController.getRightTriggerAxis());
+
     DriverController.povRight()
         .onTrue(
             Commands.runOnce(
@@ -199,7 +204,7 @@ public class RobotContainer {
     OperatorController.povLeft().onTrue(new ExtendIntakeCommand(intake));
     OperatorController.povRight().onTrue(new RetractIntakeCommand(intake));
 
-    OperatorController.leftStick().onTrue(new AlignBall(lockwheel));
+    OperatorController.leftBumper().onTrue(new AlignBall(lockwheel));
 
     // lockwheel
     OperatorController.x()
@@ -210,7 +215,7 @@ public class RobotContainer {
         .onFalse(new StopLockwheelCommand(lockwheel));
 
     // leds
-    OperatorController.leftBumper()
+    OperatorController.leftStick()
         .onTrue(
             Commands.runOnce(
                 () -> {

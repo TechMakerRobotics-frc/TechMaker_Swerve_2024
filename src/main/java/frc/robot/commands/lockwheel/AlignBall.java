@@ -28,9 +28,9 @@ public class AlignBall extends Command {
       isFinished = true;
       lockwheel.stop();
     } else if (frontSensor) {
-      lockwheel.rotateBackward();
-    } else if (backSensor) {
       lockwheel.rotateForward();
+    } else if (backSensor) {
+      lockwheel.rotateBackward();
     } else {
       isFinished = true;
     }

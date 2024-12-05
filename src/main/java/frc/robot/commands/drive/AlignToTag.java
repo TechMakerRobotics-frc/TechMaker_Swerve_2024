@@ -51,7 +51,7 @@ public class AlignToTag extends Command {
   public void initialize() {
     vXController.reset();
     vXController.setSetpoint(0);
-    vXController.setTolerance(0.5);
+    vXController.setTolerance(3);
     vYController.reset();
     vYController.setSetpoint(2);
     vYController.setTolerance(3);
@@ -74,18 +74,14 @@ public class AlignToTag extends Command {
       PhotonTrackedTarget t = manager.getBestTarget(p);
       printToDashboard();
 
-      vx = vXController.calculate(manager.getYaw(t)) * -1;
+      vx = vXController.calculate(manager.getYaw(t));
       vy = vYController.calculate(manager.getDistance(t));
       omega = vOmegaController.calculate(Math.abs(manager.getAngle(t)));
       omega = Math.copySign(omega, manager.getAngle(t)) * -1;
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(vy, vx, omega, drive.getRotation()));
+      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, vx, drive.getRotation()));
     }
-    isFinished =
-        timer.get() >= timeout
-            || (vXController.atSetpoint()
-                && vYController.atSetpoint()
-                && vOmegaController.atSetpoint());
+    isFinished = timer.get() >= timeout || vXController.atSetpoint();
   }
 
   @Override
@@ -95,7 +91,7 @@ public class AlignToTag extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    drive.runVelocity(new ChassisSpeeds());
+    drive.stop();
     drive.setDefaultCommand(defaultCommand);
     manager.getCamera().setLED(VisionLEDMode.kOff);
   }
