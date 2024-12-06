@@ -161,8 +161,6 @@ public class RobotContainer {
     flywheel.setDefaultCommand(
         FlywheelSpeedCommand.JoystickSpeed(flywheel, OperatorController.getRightTriggerAxis()));
 
-    System.out.println("Trigger Axis: " + OperatorController.getRightTriggerAxis());
-
     DriverController.povRight()
         .onTrue(
             Commands.runOnce(
