@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6941949247698247,
+        "x": 3.726954829489304,
+        "y": 1.6001778845422896
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.441024432517902,
         "y": 1.5977197020735088
       },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.497613968111385,
-        "y": 1.4520875439778422
-      },
       "prevControl": {
-        "x": 5.157805599221498,
-        "y": 2.0346161763605064
+        "x": 3.046977719198182,
+        "y": 1.5813459486170318
       },
       "nextControl": {
-        "x": 5.837422337001272,
-        "y": 0.8695589115951781
+        "x": 3.5001824456843993,
+        "y": 1.6001778845422896
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.087431693989071,
-        "y": 2.338016505726477
+        "x": 5.432677542456631,
+        "y": 1.6987745731531179
       },
       "prevControl": {
-        "x": 6.966071562242682,
-        "y": 1.2215032936597057
+        "x": 5.214229305313132,
+        "y": 1.468190322834981
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,20 +47,43 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.45,
-      "rotationDegrees": -15.909356988438777,
+      "rotationDegrees": -1.4306832854133573,
       "rotateFast": true
     },
     {
       "waypointRelativePos": 1.5,
-      "rotationDegrees": -64.81056937058982,
+      "rotationDegrees": -0.4939710035195459,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
+      "name": "Event",
+      "waypointRelativePos": 0.15,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Extend Intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Inside Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 1.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -68,7 +91,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Extend Intake"
+                "name": "Align Ball"
               }
             }
           ]

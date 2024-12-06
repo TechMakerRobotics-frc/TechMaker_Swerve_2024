@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
@@ -69,9 +68,9 @@ public class RobotContainer {
 
   // tunable intake velocity
   private LoggedTunableNumber intakeSpeedInside =
-      new LoggedTunableNumber("Intake Speed Inside", 200);
+      new LoggedTunableNumber("Intake Speed Inside", 600);
   private LoggedTunableNumber intakeSpeedOutside =
-      new LoggedTunableNumber("Intake Speed Outside", 200);
+      new LoggedTunableNumber("Intake Speed Outside", 600);
 
   // tunable lockwheel velocity
   private LoggedTunableNumber lockwheelSpeedInside =
@@ -249,6 +248,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Auto");
+    return null; // new PathPlannerAuto("Auto");
   }
 }
