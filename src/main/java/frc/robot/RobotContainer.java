@@ -95,8 +95,8 @@ public class RobotContainer {
         lockwheel = new Lockwheel(new LockwheelIOVictorSPX());
         visionPose = new VisionPose();
         poseCommand = new PerpetualPoseCommand(drive, visionPose);
-        new RegisNamedCommands(flywheel, intake, lockwheel, visionPose);
         leds = new Leds();
+        new RegisNamedCommands(flywheel, intake, lockwheel, visionPose, drive, leds);
 
         break;
 
