@@ -5,11 +5,12 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.flywheel.*;
 import frc.robot.commands.intake.*;
-import frc.robot.commands.lockwheel.*;
 import frc.robot.commands.leds.*;
+import frc.robot.commands.lockwheel.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
@@ -43,7 +44,7 @@ public class RobotContainer {
   private int currentLedState = 0; // indice inicial para o estado do LED
 
   private final Command[] ledCommands;
-
+  private Trigger ShootWithControl;
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
   // receber os valores pid atualizados e, no momento da sua instanciação aqui, deverá passar "pid"
@@ -141,16 +142,19 @@ public class RobotContainer {
         break;
     }
 
-    ledCommands = new Command[] {
-        new LedRed(leds), 
-        new LedGreen(leds), 
-        new LedBlue(leds), 
-        new LedOff(leds), 
-        new LedWhite(leds), 
-        new LedYellow(leds), 
-        new LedCian(leds),
-        new LedRainbow(leds)
-    };
+    ShootWithControl = new Trigger(() -> (OperatorController.getRightTriggerAxis() > 0.1));
+
+    ledCommands =
+        new Command[] {
+          new LedRed(leds),
+          new LedGreen(leds),
+          new LedBlue(leds),
+          new LedOff(leds),
+          new LedWhite(leds),
+          new LedYellow(leds),
+          new LedCian(leds),
+          new LedRainbow(leds)
+        };
 
     // Configure the button bindings
     configureButtonBindings();
@@ -171,8 +175,8 @@ public class RobotContainer {
             () -> -DriverController.getLeftX(),
             () -> -DriverController.getRightX()));
 
-    flywheel.setDefaultCommand(
-        FlywheelSpeedCommand.JoystickSpeed(flywheel, OperatorController.getRightTriggerAxis()));
+    ShootWithControl.whileTrue(
+        new FlywheelSpeedCommand(flywheel, OperatorController.getRightTriggerAxis()));
 
     DriverController.povRight()
         .onTrue(
@@ -228,15 +232,15 @@ public class RobotContainer {
     // leds
     OperatorController.leftStick()
         .onTrue(
-            Commands.runOnce(() -> {
-                // Alterna o comando atual para o próximo na lista
-                currentLedState = (currentLedState + 1) % ledCommands.length;
-                Command nextCommand = ledCommands[currentLedState];
+            Commands.runOnce(
+                () -> {
+                  // Alterna o comando atual para o próximo na lista
+                  currentLedState = (currentLedState + 1) % ledCommands.length;
+                  Command nextCommand = ledCommands[currentLedState];
 
-                // Executa o próximo comando
-                nextCommand.schedule();
-            })
-        );
+                  // Executa o próximo comando
+                  nextCommand.schedule();
+                }));
   }
 
   /**

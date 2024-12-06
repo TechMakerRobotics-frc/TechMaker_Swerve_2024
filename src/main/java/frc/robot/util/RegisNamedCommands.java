@@ -1,7 +1,6 @@
 package frc.robot.util;
 
 import com.pathplanner.lib.auto.NamedCommands;
-
 import frc.robot.commands.drive.AlignToTag;
 import frc.robot.commands.flywheel.*;
 import frc.robot.commands.intake.*;
@@ -25,7 +24,12 @@ public class RegisNamedCommands {
 
   /** Register commands in the pathplanner. */
   public RegisNamedCommands(
-      Flywheel flywheel, Intake intake, Lockwheel lockwheel, VisionPose visionPose, Drive drive, Leds leds) {
+      Flywheel flywheel,
+      Intake intake,
+      Lockwheel lockwheel,
+      VisionPose visionPose,
+      Drive drive,
+      Leds leds) {
     this.flywheel = flywheel;
     this.intake = intake;
     this.lockwheel = lockwheel;

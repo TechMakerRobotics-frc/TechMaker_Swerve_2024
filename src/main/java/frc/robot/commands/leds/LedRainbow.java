@@ -27,5 +27,4 @@ public class LedRainbow extends Command {
     rainbowFirstPixelHue += 3;
     rainbowFirstPixelHue %= 180;
   }
-
 }

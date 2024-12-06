@@ -1,18 +1,25 @@
 package frc.robot.commands.flywheel;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.flywheel.Flywheel;
 
-public class FlywheelSpeedCommand {
+public class FlywheelSpeedCommand extends Command {
 
-  private FlywheelSpeedCommand() {}
+  private final Flywheel flywheel;
+  private double ControllerInput;
 
-  public static Command JoystickSpeed(Flywheel flywheel, double ControllerInput) {
-    return Commands.run(
-        () -> {
-          flywheel.runVelocity(ControllerInput * 1500);
-        },
-        flywheel);
+  public FlywheelSpeedCommand(Flywheel flywheel, double ControllerInput) {
+    this.flywheel = flywheel;
+    this.ControllerInput = ControllerInput;
+  }
+
+  @Override
+  public void execute() {
+    flywheel.runVelocity(ControllerInput * 1500);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    flywheel.stop();
   }
 }
