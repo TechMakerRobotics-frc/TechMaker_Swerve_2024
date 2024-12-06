@@ -36,28 +36,4 @@ public final class Constants {
   }
 
   public static final Mode currentMode = Mode.REAL;
-
-  /** States representing the available LED colors or effects. */
-  public static enum LedState {
-    /** LED color: Red. */
-    RED,
-
-    /** LED color: Green. */
-    GREEN,
-
-    /** LED color: Blue. */
-    BLUE,
-
-    /** LED color: Yellow. */
-    YELLOW,
-
-    /** LED color: Cyan. */
-    CIAN,
-
-    /** LED color: Magenta. */
-    MAGENTA,
-
-    /** LED effect: Rainbow animation. */
-    RAINBOW
-  }
 }

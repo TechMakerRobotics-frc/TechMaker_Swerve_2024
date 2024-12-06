@@ -10,9 +10,11 @@ import frc.robot.commands.drive.*;
 import frc.robot.commands.flywheel.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.lockwheel.*;
+import frc.robot.commands.leds.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.flywheel.*;
 import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.lockwheel.*;
 import frc.robot.util.*;
 import frc.robot.vision.*;
@@ -35,11 +37,13 @@ public class RobotContainer {
 
   private final PerpetualPoseCommand poseCommand;
 
-  public final LedsControl leds;
+  public final Leds leds;
 
   public VisionSim visionSim;
 
   private int currentLedState = 0; // indice inicial para o estado do LED
+
+  private final Command[] ledCommands;
 
   // Usar isso caso necessário o uso do TunningPID, basta criar um parâmetro TunningPID na classe
   // que deverá
@@ -93,7 +97,7 @@ public class RobotContainer {
         visionPose = new VisionPose();
         poseCommand = new PerpetualPoseCommand(drive, visionPose);
         new RegisNamedCommands(flywheel, intake, lockwheel, visionPose);
-        leds = new LedsControl();
+        leds = new Leds();
 
         break;
 
@@ -117,7 +121,7 @@ public class RobotContainer {
                 visionPose.getFLManager().getCamera(),
                 visionPose.getFRManager().getCamera(),
                 visionPose.getTargetManager().getCamera());
-        leds = new LedsControl();
+        leds = new Leds();
         break;
 
       default:
@@ -134,9 +138,20 @@ public class RobotContainer {
         lockwheel = new Lockwheel(new LockwheelIO() {});
         visionPose = new VisionPose();
         poseCommand = new PerpetualPoseCommand(drive, visionPose);
-        leds = new LedsControl();
+        leds = new Leds();
         break;
     }
+
+    ledCommands = new Command[] {
+        new LedRed(leds), 
+        new LedGreen(leds), 
+        new LedBlue(leds), 
+        new LedOff(leds), 
+        new LedWhite(leds), 
+        new LedYellow(leds), 
+        new LedCian(leds),
+        new LedRainbow(leds)
+    };
 
     // Configure the button bindings
     configureButtonBindings();
@@ -149,7 +164,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    leds.init();
     // driver commands
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -215,21 +229,15 @@ public class RobotContainer {
     // leds
     OperatorController.leftStick()
         .onTrue(
-            Commands.runOnce(
-                () -> {
-                  // Obtenha a lista de estados disponíveis
-                  Constants.LedState[] states = Constants.LedState.values();
+            Commands.runOnce(() -> {
+                // Alterna o comando atual para o próximo na lista
+                currentLedState = (currentLedState + 1) % ledCommands.length;
+                Command nextCommand = ledCommands[currentLedState];
 
-                  // Atualiza o estado atual
-                  currentLedState = (currentLedState + 1) % states.length;
-
-                  // Altera para o próximo estado
-                  leds.setState(states[currentLedState]);
-
-                  // Mensagem de debug (opcional)
-                  SmartDashboard.putString(
-                      "Led state", "LED alterado para: " + states[currentLedState]);
-                }));
+                // Executa o próximo comando
+                nextCommand.schedule();
+            })
+        );
   }
 
   /**

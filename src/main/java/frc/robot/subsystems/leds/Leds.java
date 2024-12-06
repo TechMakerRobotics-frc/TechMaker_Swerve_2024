@@ -1,17 +1,16 @@
-package frc.robot.util;
+package frc.robot.subsystems.leds;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LedState;
 
-public class LedsControl extends SubsystemBase {
+public class Leds extends SubsystemBase {
   private AddressableLED led = new AddressableLED(9);
   private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(240);
   private int rainbowFirstPixelHue;
   private int currentPixel = 0; // Para efeitos em sequência
 
-  public LedsControl() {
+  public Leds() {
     // Define o comprimento do LED
     led.setLength(ledBuffer.getLength());
 
@@ -22,13 +21,8 @@ public class LedsControl extends SubsystemBase {
     rainbowFirstPixelHue = 0;
   }
 
-  public void init() {}
-
   @Override
   public void periodic() {
-    // Atualiza os LEDs a cada ciclo (exemplo: arco-íris)
-    // rainbow();
-
     led.setData(ledBuffer);
   }
 
@@ -42,34 +36,8 @@ public class LedsControl extends SubsystemBase {
     rainbowFirstPixelHue %= 180;
   }
 
-  /** Define todos os LEDs para uma cor vermelha */
-  public void setAllRed() {
-    setAllColorHSV(0, 255, 255); // Hue 0 = vermelho
-  }
-
-  /** Define todos os LEDs para uma cor verde */
-  public void setAllGreen() {
-    setAllColorHSV(120, 255, 255); // Hue 120 = verde
-  }
-
-  /** Define todos os LEDs para uma cor azul */
-  public void setAllBlue() {
-    setAllColorHSV(240, 255, 255); // Hue 240 = azul
-  }
-
-  /** Define todos os LEDs para uma cor amarela */
-  public void setAllYellow() {
-    setAllColorHSV(60, 255, 255); // Hue 60 = amarelo
-  }
-
-  /** Define todos os LEDs para uma cor ciano */
-  public void setAllCyan() {
-    setAllColorHSV(180, 255, 255); // Hue 180 = ciano
-  }
-
-  /** Define todos os LEDs para uma cor magenta */
-  public void setAllMagenta() {
-    setAllColorHSV(300, 255, 255); // Hue 300 = magenta
+  public void setHSV(int index, int h, int s, int v) {
+    ledBuffer.setHSV(index, h, s, v);
   }
 
   /** Define todos os LEDs para uma cor RGB */
@@ -125,29 +93,7 @@ public class LedsControl extends SubsystemBase {
     led.setData(ledBuffer);
   }
 
-  public void setState(LedState state) {
-    switch (state) {
-      case RED:
-        setAllRed();
-        break;
-      case GREEN:
-        setAllGreen();
-        break;
-      case BLUE:
-        setAllBlue();
-        break;
-      case YELLOW:
-        setAllYellow();
-        break;
-      case CIAN:
-        setAllCyan();
-        break;
-      case MAGENTA:
-        setAllMagenta();
-        break;
-      case RAINBOW:
-        rainbow();
-        break;
-    }
+  public AddressableLEDBuffer getLedBuffer() {
+    return ledBuffer;
   }
 }
