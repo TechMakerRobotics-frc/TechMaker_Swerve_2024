@@ -15,35 +15,35 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** Command to align the robot using vision targets detected by PhotonVision. */
 public class AlignToTag extends Command {
-  private static PIDController vXController =
+  private static final PIDController vXController =
       new PIDController(AlignConstants.VX_P, AlignConstants.VX_I, AlignConstants.VX_D);
-  private static PIDController vYController =
+  private static final PIDController vYController =
       new PIDController(AlignConstants.VY_P, AlignConstants.VY_I, AlignConstants.VY_D);
-  private static PIDController vOmegaController =
+  private static final PIDController vOmegaController =
       new PIDController(
           AlignConstants.V_OMEGA_P, AlignConstants.V_OMEGA_I, AlignConstants.V_OMEGA_D);
 
   private final Timer timer = new Timer();
   private final VisionManager manager;
   private final VisionPose visionPose;
-  private double timeout, vx, vy, omega;
-  // private int usedTag;
-  private Command defaultCommand;
-  private Drive drive;
+  private final double timeout;
+  private final Drive drive;
 
+  private Command defaultCommand;
   private boolean isFinished = false;
+  private double vx, vy, omega;
 
   /**
-   * Constructs a new AlignCommand.
+   * Constructs a new AlignToTag command.
    *
-   * @param timeout the time in seconds before the command times out
    * @param drive the Drive subsystem used by this command
-   * @param usedTag the used apriltag to align
+   * @param visionPose the VisionPose providing target and pose information
+   * @param timeout the time in seconds before the command times out
    */
   public AlignToTag(Drive drive, VisionPose visionPose, double timeout) {
-    this.visionPose = visionPose;
-    manager = this.visionPose.getTargetManager();
     this.drive = drive;
+    this.visionPose = visionPose;
+    this.manager = this.visionPose.getTargetManager();
     this.timeout = timeout;
   }
 
@@ -58,10 +58,13 @@ public class AlignToTag extends Command {
     vOmegaController.reset();
     vOmegaController.setSetpoint(180);
     vOmegaController.setTolerance(3);
+
     timer.reset();
     timer.start();
+
     defaultCommand = drive.getDefaultCommand();
     drive.removeDefaultCommand();
+
     if (manager.getCamera() != null) {
       manager.getCamera().setLED(VisionLEDMode.kOn);
     }
@@ -69,19 +72,25 @@ public class AlignToTag extends Command {
 
   @Override
   public void execute() {
-    PhotonPipelineResult p = manager.getLatestPipeline();
-    if (manager.hasTarget(p)) {
-      PhotonTrackedTarget t = manager.getBestTarget(p);
-      printToDashboard();
+    PhotonPipelineResult pipelineResult = manager.getLatestPipeline();
+    if (manager.hasTarget(pipelineResult)) {
+      PhotonTrackedTarget target = manager.getBestTarget(pipelineResult);
+      if (target != null) {
+        vx = vXController.calculate(manager.getYaw(target));
 
-      vx = vXController.calculate(manager.getYaw(t));
-      vy = vYController.calculate(manager.getDistance(t));
-      omega = vOmegaController.calculate(Math.abs(manager.getAngle(t)));
-      omega = Math.copySign(omega, manager.getAngle(t)) * -1;
+        // Apply calculated velocities to the drivetrain
+        drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, vx, drive.getRotation()));
 
-      drive.runVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, vx, drive.getRotation()));
+        // Update dashboard with target and control information
+        printToDashboard(target);
+      } else {
+        SmartDashboard.putString("Vision Error", "Nenhum alvo válido encontrado.");
+      }
+    } else {
+      SmartDashboard.putString("Vision Error", "Nenhum alvo detectado.");
     }
-    isFinished = timer.get() >= timeout || vXController.atSetpoint();
+
+    isFinished = vXController.atSetpoint();
   }
 
   @Override
@@ -93,20 +102,27 @@ public class AlignToTag extends Command {
   public void end(boolean interrupted) {
     drive.stop();
     drive.setDefaultCommand(defaultCommand);
-    manager.getCamera().setLED(VisionLEDMode.kOff);
+
+    if (manager.getCamera() != null) {
+      manager.getCamera().setLED(VisionLEDMode.kOff);
+    }
+
+    timer.stop();
   }
 
-  /** Prints vision targeting information to the SmartDashboard. */
-  public void printToDashboard() {
-    PhotonPipelineResult p = manager.getLatestPipeline();
-    PhotonTrackedTarget t = manager.getBestTarget(p);
-    SmartDashboard.putNumber("Tag Yaw", manager.getYaw(t));
-    SmartDashboard.putNumber("Current Tag", manager.getTargetId(t));
+  /**
+   * Prints vision targeting and PID control information to the SmartDashboard.
+   *
+   * @param target the best vision target detected
+   */
+  public void printToDashboard(PhotonTrackedTarget target) {
+    SmartDashboard.putNumber("Tag Yaw", manager.getYaw(target));
+    SmartDashboard.putNumber("Current Tag", manager.getTargetId(target));
     SmartDashboard.putNumber("omega", omega);
     SmartDashboard.putNumber("vx", vx);
     SmartDashboard.putNumber("vy", vy);
-    SmartDashboard.putNumber("Target Angle", manager.getAngle(t));
-    SmartDashboard.putNumber("Target Distance", manager.getDistance(t));
+    SmartDashboard.putNumber("Target Angle", manager.getAngle(target));
+    SmartDashboard.putNumber("Target Distance", manager.getDistance(target));
     SmartDashboard.putNumber("PID VX Error", vXController.getPositionError());
     SmartDashboard.putNumber("PID VY Error", vYController.getPositionError());
     SmartDashboard.putNumber("PID OMEGA Error", vOmegaController.getPositionError());

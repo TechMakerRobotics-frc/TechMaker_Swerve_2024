@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6699236223008809,
-      "y": 3.0682391749947553
+      "x": 0.5528152568430658,
+      "y": 2.7871790978959985
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PathBalls"
+            "pathName": "Reto"
           }
         }
       ]

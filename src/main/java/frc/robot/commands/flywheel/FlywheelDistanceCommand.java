@@ -14,6 +14,7 @@ public class FlywheelDistanceCommand extends Command {
   private final VisionManager manager;
   private final FlywheelSpeedMap speedMap = new FlywheelSpeedMap();
   private final Flywheel flywheel;
+  private boolean isFinised;
 
   public FlywheelDistanceCommand(Flywheel flywheel, VisionPose visionPose) {
     this.flywheel = flywheel;
@@ -30,16 +31,17 @@ public class FlywheelDistanceCommand extends Command {
           "Distance to tag - Flywheel Distance",
           manager.getBestCamera(manager.getBestTarget(p)).getX());
       flywheel.runVelocity(speed);
+      if (flywheel.getVelocityRPM() >= speed) {
+        isFinised = true;
+      }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinised;
   }
 
   @Override
-  public void end(boolean interrupted) {
-    flywheel.stop();
-  }
+  public void end(boolean interrupted) {}
 }
