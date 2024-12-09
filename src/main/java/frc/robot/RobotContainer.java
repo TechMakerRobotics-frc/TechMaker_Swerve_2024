@@ -75,9 +75,9 @@ public class RobotContainer {
 
   // tunable lockwheel velocity
   private LoggedTunableNumber lockwheelSpeedInside =
-      new LoggedTunableNumber("Flywheel Speed Inside", 1000);
+      new LoggedTunableNumber("Flywheel Speed Inside", 800);
   private LoggedTunableNumber lockwheelSpeedOutside =
-      new LoggedTunableNumber("Flywheel Speed Outside", 1000);
+      new LoggedTunableNumber("Flywheel Speed Outside", 800);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

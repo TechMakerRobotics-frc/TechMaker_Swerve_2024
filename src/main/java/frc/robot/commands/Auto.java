@@ -8,9 +8,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drive.AlignToTag;
-import frc.robot.commands.flywheel.FlywheelDistanceCommand;
-import frc.robot.commands.leds.LedRed;
-import frc.robot.commands.lockwheel.OutsideLockwheelCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.leds.Leds;
@@ -26,14 +23,6 @@ public class Auto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    addCommands(
-        new PathPlannerAuto("Reto"),
-        new WaitCommand(4),
-        new AlignToTag(drive, vp, 0),
-        new WaitCommand(2),
-        new FlywheelDistanceCommand(fw, vp),
-        new WaitCommand(2),
-        new LedRed(leds),
-        new OutsideLockwheelCommand(lw, 10000));
+    addCommands(new PathPlannerAuto("Reto"), new WaitCommand(4), new AlignToTag(drive, vp, 0));
   }
 }
